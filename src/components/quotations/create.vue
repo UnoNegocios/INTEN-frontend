@@ -1,0 +1,409 @@
+<template>
+    <v-card>
+        <v-card-title class="pb-0 pt-1" >
+            <v-icon style="background: #e7e8e9; padding: 10px!important; border-radius: 50%;" class="mr-4">mdi-file-document-outline</v-icon>
+            <span >Nueva {{quole}}</span>
+            <v-spacer></v-spacer>
+            <!--v-col cols="12" sm="6" md="3">
+                <v-autocomplete  :rules="[v => !!v || 'Campo requerido']" v-if="permissions('assignQuotations')" clearable v-model="quotation.user_id" :items="usersLists" label="Vendedor" item-text="name" item-value="id">
+                    <template slot="no-data" class="pa-2">No existen usuarios relacionados.</template>                      
+                </v-autocomplete>
+                <v-autocomplete v-else-if="quotation.user_id=currentUser.id" disabled v-model="quotation.user_id" :items="usersLists" label="Vendedor" item-text="name" item-value="id">                
+                </v-autocomplete>
+            </v-col-->
+            <v-col cols="12" sm="6" md="2" class="pb-0 mb-0">
+                <v-checkbox v-model="quotation.pos_sale" label="Mostrador"></v-checkbox>
+            </v-col>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text class="pb-0">
+            <v-container>
+                <v-row class="py-6">
+                    <v-col class="pt-0" cols="12" sm="6" md="4">
+                        <v-autocomplete v-model="quotation.client_id" :items="clientsList" :loading="isLoadingClients" :search-input.sync="searchClients" hide-no-data item-value="id" item-text="name" label="Cliente" placeholder="Escribe para buscar" attach>
+                            <template v-slot:item="{item, attrs, on}">
+                                <v-list-item v-on="on" v-bind="attrs">
+                                    <v-list-item-content>
+                                        <v-list-item-title v-if="item.name!=null">
+                                            {{item.name}}
+                                        </v-list-item-title>
+                                        <v-list-item-title v-else-if="item.razon_social!=null">
+                                            {{item.razon_social}}
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </template> 
+                        </v-autocomplete>
+                    </v-col>
+                    <v-col class="pt-0" cols="12" sm="6" md="4">
+                        <v-menu v-model="datePicker" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="290px" >
+                            <template v-slot:activator="{ on }">
+                                <v-text-field :rules="[v => !!v || 'Campo requerido']" clearable required v-model="quotation.activation_date" label="Fecha de Activación" prepend-icon="mdi-calendar" readonly v-on="on"></v-text-field>
+                            </template>
+                            <v-date-picker color="primary" v-model="quotation.activation_date" @input="datePicker = false"></v-date-picker>
+                        </v-menu>
+                    </v-col>
+                    <v-col class="pt-0" cols="12" sm="6" md="4">
+                        <v-autocomplete clearable v-model="quotation.activation_time" prepend-icon="mdi-clock-outline" :items="hours" label="Hora de Activación">               
+                        </v-autocomplete>
+                    </v-col> 
+                </v-row>
+                <!--ALAN-->
+                <v-row class="pb-6 mt-0 pt-0">
+                     <v-col class="pt-0" cols="12" sm="6" md="4">
+                        <v-text-field :rules="[v => !!v || 'Campo requerido']" v-model="quotation.imei" label="IMEI"></v-text-field>
+                    </v-col>
+                    <v-col class="pt-0" cols="12" sm="6" md="4">
+                        <v-text-field :rules="[v => !!v || 'Campo requerido']" v-model="quotation.nir" label="NIR"></v-text-field>
+                    </v-col>
+                     <v-col class="pt-0" cols="12" sm="6" md="4">
+                        <v-text-field :rules="[v => !!v || 'Campo requerido']" v-model="quotation.sim" label="SIM"></v-text-field>
+                    </v-col>
+                </v-row>
+                <!--ALAN-->
+                <v-row style="background-color: #94949417;" class="px-2 ma-0 py-2 " v-for="(item,k) in quotation.items" :key="k">
+                    <v-col ols="12" sm ="4" md="1" class="py-0 my-0">
+                        <v-text-field type=number v-model="item.quantity" label="Cantidad"></v-text-field><!--:disabled="yanohay(item.quantity, item.item, k)" -->
+                    </v-col>
+                    <v-col ols="12" sm ="8" md="6" class="py-0 my-0">
+                         <v-autocomplete v-model="item.item" :items="devicesList" :loading="isLoadingDevices" :search-input.sync="searchDevices" hide-no-data item-value="id" item-text="name" label="Producto" placeholder="Escribe para buscar" attach> 
+                            <template v-slot:item="{item, attrs, on}">
+                                <v-list-item v-on="on" v-bind="attrs">
+                                    <v-list-item-content>
+                                        <v-list-item-title>
+                                            {{item.name}} | {{(item.price*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}
+                                            <!--div>
+                                                <span style="font-size:12px;">Categoría:</span>
+                                                <template v-for="(category, index) in item.categories">
+                                                    <v-chip  v-bind:key="index" small class="ml-2"  style="font-size:8px;">{{categoryName(category)}}</v-chip>
+                                                </template>
+                                            </div>
+                                            <div>
+                                                <span style="font-size:14px;">Inventario:
+                                                    <strong v-if="item.inventory[0]<1" style="color:red!important;">{{item.inventory[0]}}</strong>
+                                                    <strong v-else style="color:green!important;">{{item.inventory[0]}}</strong>
+                                                </span>
+                                            </div-->
+                                        </v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </template> 
+                        </v-autocomplete>
+                    </v-col>
+                    <v-col cols="12" sm ="8" md="4" class="py-0 my-0" v-if="item.item!=''">
+                        <v-text-field v-model="item.price" prefix="$" suffix="c/u" label="Precio Ajustado"></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm ="4" md="1">
+                        <v-icon @click="remove(k)" v-show="k || ( !k && quotation.items.length > 1)" color="red">mdi-close</v-icon>
+                        <v-icon @click="add(k)" v-show="k == quotation.items.length-1" color="primary">mdi-plus</v-icon>
+                    </v-col>
+                </v-row>
+
+                <v-row class="mt-1 px-6">
+                    <v-col cols="12" sm="6" md="6">
+                        <v-container fluid>
+                            <v-textarea v-model="quotation.description" label="Descripcion"></v-textarea>
+                        </v-container>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                        <v-autocomplete clearable  v-model="quotation.payment_method" :items="paymentMethods" item-value="id" item-text="method" label="Metodo de Pago">
+                        <template slot="no-data" class="pa-2">No existen Metodos de Pago relacionados.</template>
+                        </v-autocomplete>
+                        <v-text-field class="my-4" disabled v-if="quotation.subtotal=totalQuotation" v-model="quotation.subtotal" prefix="$" label="Monto en Pesos"></v-text-field>
+                    </v-col>
+                </v-row>
+                
+            </v-container>
+        </v-card-text>
+        <v-row class="ma-0 pa-0">
+            <v-col cols="12" sm="12" md="6">
+                <v-menu top offset-x class="hidden-md-and-down">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn style="font-size:12px;" text v-bind="attrs" v-on="on">
+                            <v-icon class="mr-2">mdi-attachment</v-icon> Adjuntar archivo
+                        </v-btn>
+                    </template>
+                    <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions" :useCustomSlot="true" v-on:vdropzone-success="uploadSuccess" v-on:vdropzone-error="uploadError" v-on:vdropzone-removed-file="fileRemoved"/>
+                </v-menu>
+            </v-col>
+            <v-col cols="12" sm="12" md="6">
+                <v-card-actions>
+                    <v-spacer class="hidden-md-and-down"></v-spacer>
+
+                    <v-btn color="blue darken-1" text @click="close">
+                        Cancelar
+                    </v-btn>
+                    <v-btn color="blue darken-1" text @click="save"  :loading="gris" :disabled="gris">
+                        Guardar
+                    </v-btn>
+                </v-card-actions>
+            </v-col>
+        </v-row>
+
+        <!-- Crear empresa -->
+        <v-dialog v-model="createCompanyDialog" max-width="700px">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn bottom color="#e74919" dark fab fixed right v-bind="attrs" v-on="on">
+                <v-icon color="white">  mdi-plus </v-icon>
+            </v-btn> 
+          </template>
+          <createCompany @closeCreateDialogCompany="closeCreateDialogCompany"/>
+        </v-dialog>
+        <v-snackbar :color="snackbar.color" v-model="snackbar.show">
+            {{ snackbar.message }}
+        </v-snackbar>
+    </v-card>
+</template>
+
+<script>
+    import vue2Dropzone from "vue2-dropzone";
+    import "vue2-dropzone/dist/vue2Dropzone.min.css";
+    import CreateCompany from "../clients/companies/create"
+    import axios from "axios";
+    export default {
+        props:{
+            message:Array
+        },
+        components: {
+            vueDropzone: vue2Dropzone,
+            'createCompany':CreateCompany,
+        },   
+        data: () => ({
+            snackbar: {
+                show: false,
+                message: null,
+                color: null
+            },
+            gris:false,
+            company:'',
+            status:'',
+            datePicker:'',
+            datePicker2:'',
+            createContactDialog: false,
+            createCompanyDialog: false,
+            datePicker:'',
+            dropzoneOptions: {
+                url: "https://unowipes.com/api/v1/quotation/files",
+                addRemoveLinks: true,
+                maxFiles: 1
+            },
+            quotation:{
+                client_id:'',
+                pdf:'',
+                description:'',
+                items:[{
+                    quantity:1,
+                    device_id:'',
+                    value:'',
+                    price:'',
+                    weight:'',
+                }],
+                status:'quotation',
+                pos_sale:false,
+                created_by_user_id:'',
+                last_updated_by_user_id:'',
+                imei:'',
+                nir:'',
+                sim:'',
+                payment_method:'',
+                activation_date:'',
+                activation_time:'',
+
+            },
+            rules: {
+                required: value => !!value || 'Campo requerido',
+            },
+            valid: true,
+            isLoadingClients: false,
+            isLoadingDevices: false,
+            searchClients: null,
+            searchDevices: null,
+            entries:{
+                clients: [],
+                devices: []
+            },
+        }),
+        watch: {
+            searchClients(val){
+                if (this.clientsList.length > 0) return
+                if (this.isLoadingClients) return
+                this.isLoadingClients= true
+                axios.get(process.env.VUE_APP_BACKEND + 'api/v1/client/search?filter[name]='+val)
+                .then(res => {
+                    this.entries.clients = res.data.data
+                }).finally(() => (this.isLoadingClients = false))
+            },
+            searchDevices(val){
+                if (this.devicesList.length > 0) return
+                if (this.isLoadingDevices) return
+                this.isLoadingDevices= true
+                axios.get(process.env.VUE_APP_BACKEND + 'api/v1/device/search?filter[name]='+val)
+                .then(res => {
+                    this.entries.devices = res.data.data
+                }).finally(() => (this.isLoadingDevices = false))
+            },
+        },
+        computed: {
+            clientsList(){
+                return this.entries.clients.map(id => {
+                    return{
+                        id:id.id,
+                        name:id.name,
+                        razon_social:id.razon_social
+                    }
+                })
+            },
+            devicesList(){
+                return this.entries.devices
+            },
+            usersLists(){
+                return this.$store.state.user.users;
+            }, 
+            paymentMethods(){
+                return this.$store.state.payment_method.payment_methods;
+            },
+            totalQuotation(){
+                var total=0
+                if(this.quotation.items.length!=0){
+                for(var i=0; i<this.quotation.items.length; i++){
+                    if(this.quotation.items[i].price!=undefined){
+                        total = total+(this.quotation.items[i].price*this.quotation.items[i].quantity)
+                    }
+                }
+                return total
+                }
+            }, 
+            currentUser:{
+                get(){
+                    return this.$store.state.currentUser.user
+                }
+            },
+            quole(){
+                if(this.status=='vendido'){
+                    return 'Venta'
+                }else if(this.status=='quotation'){
+                    return 'Cotización'
+                } 
+            },
+            hours(){
+                var arr = [], i, j;
+                for(i=0; i<24; i++) {
+                    for(j=0; j<4; j++) {
+                        arr.push(this.cero(i) + ":" + (j===0 ? "00" : 15*j) + ":00");
+                    }
+                }
+                return arr
+            },
+        },
+        created(){
+            this.company=this.message[0]
+            this.status=this.message[1]
+            if(this.company!=undefined){
+                this.quotation.client_id=Number(this.company)
+            }
+            
+        },
+        methods: {
+            cero(i){
+                if(i<10){
+                    return '0' + i
+                }else{
+                    return i
+                }
+            },
+            permissions(permission){
+                if(this.currentUser.id==1){
+                    return true
+                }else if(this.currentUser.permissions!=undefined){
+                    if(this.currentUser.permissions.includes(permission)){
+                        return true
+                    }else{
+                        return false
+                    }
+                }else{
+                    return false
+                }
+            },
+            uploadSuccess(file, response) {
+                console.log('File Successfully Uploaded with file name: ' + response.file);
+                this.fileName = response.file;
+                this.quotation.pdf = this.fileName;
+            },
+            uploadError(file, message) {
+                console.log('An Error Occurred');
+            },
+            fileRemoved() {
+                
+            },
+            add(index) {
+                this.quotation.items.push({ quantity: 1, item: '', value:'' });
+            },
+            remove(index) {
+                this.quotation.items.splice(index, 1);
+            },
+            close () {
+                this.gris = false
+                this.quotation = Object.assign({}, this.defaultItem)
+
+                this.quotation.client_id=null
+                this.quotation.status='quotation'
+                this.quotation.items=[{
+                    quantity:1,
+                    item:'',
+                    value:'',
+                    price:'',
+                    weight:''
+                }]
+                this.quotation.pos_sale=false
+
+                if(this.company!=undefined){
+                    this.quotation.client_id=Number(this.company)
+                }
+                this.$nextTick(() => {
+                    this.$emit("closeCreateDialogQuotation", false);
+                })
+            },
+            save(){
+                for(var i=0; i<this.quotation.items.length; i++){
+                    this.quotation.items[i].weight = this.devicesList.filter(item=>item.id == this.quotation.items[i].item).map(item=>item.weight)[0]*this.quotation.items[i].quantity
+                    this.quotation.items[i].value = this.devicesList.filter(item=>item.id == this.quotation.items[i].item).map(item=>item.price)[0]
+                    this.quotation.items[i].cost = this.devicesList.filter(item=>item.id == this.quotation.items[i].item).map(item=>item.cost)[0]
+                }
+                this.quotation.created_by_user_id = this.currentUser.id
+                this.quotation.last_updated_by_user_id = this.currentUser.id
+                this.quotation.status = this.status
+                this.$nextTick(() => {
+                    axios.post("https://unowipes.com/api/v1/sales",Object.assign(this.quotation)).then(response=>{
+                        this.close()
+                    }).catch(error => {
+                        this.snackbar = {
+                            message: error.response.data.message,
+                            color: 'error',
+                            show: true
+                        }
+                        this.gris = false
+                    })
+                })
+            },
+            closeCreateDialogCompany: function(params) {
+                this.createCompanyDialog = params;
+                this.$store.dispatch('company/getCompanies')
+            },
+        },
+    }
+</script>
+<style lang="css" scoped>
+    .v-text-field >>> label{
+        font-size: 14px!important;
+    }
+    .v-input__icon--prepend-inner i::before {
+        font-size: 18px!important;
+        color:#1976D2;
+    }
+    .v-text-field input, .v-label {
+        font-size: 14px;
+    }
+    .v-picker__title.primary{
+        display:none;
+    }
+</style>
