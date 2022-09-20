@@ -80,7 +80,7 @@
 //import InfiniteLoading from 'vue-infinite-loading';
 import axios from "axios";
 import EmojiPicker from "vue-emoji-picker";
-import leadDetail from '../dashboard/detail.vue'
+import leadDetail from '../leads/detail.vue'
 export default {
     data() {
         return {

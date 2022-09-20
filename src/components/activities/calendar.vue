@@ -103,7 +103,7 @@
             </div>
             <v-card-text class="px-6 pt-1" style="color:#3c4043;">
               <v-list-item v-if="selectedEvent.client!=undefined" :to="{ path: '/clients/client/'+ selectedEvent.client.id}" class="pa-0"><v-icon small class="mr-2 mb-1">mdi-domain</v-icon><strong>Cliente: </strong>{{client(selectedEvent.client)}}</v-list-item>
-              <v-list-item v-if="selectedEvent.lead!=undefined" :to="{ path: '/leads/lead/'+ selectedEvent.lead.id}" class="pa-0"><v-icon small class="mr-2 mb-1">mdi-domain</v-icon><strong>Prospecto: </strong>{{selectedEvent.lead.name}}</v-list-item>
+              <v-list-item v-if="selectedEvent.lead!=undefined" :to="{ path: '/leads/'+ selectedEvent.lead.id}" class="pa-0"><v-icon small class="mr-2 mb-1">mdi-domain</v-icon><strong>Prospecto: </strong>{{selectedEvent.lead.name}}</v-list-item>
               <div class="py-1"></div>
               <div v-if="selectedEvent.lead==undefined">
                 <v-icon small class="mr-2 mb-1">mdi-account</v-icon><strong>Contacto: </strong>{{selectedEvent.contact}}

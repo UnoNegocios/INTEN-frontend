@@ -36,13 +36,13 @@ const actions = {
     getSales( {commit}, request){
         if(localStorage.getItem('filtersSales')==undefined&&localStorage.getItem('filtersSales')==null){
             axios
-            .get("https://unowipes.com/api/v2/sales?page=" + request.pageNumber + "&sort=" + request.sort)
+            .get("https://unowipes.com/api/v1/sales?page=" + request.pageNumber + "&sort=" + request.sort)
             .then(response => {
                 commit('setSales', response.data);
             });
         }else{
             axios
-            .get("https://unowipes.com/api/v2/sales?"+ JSON.parse(localStorage.getItem('filtersSales')) + "&page=" + request.pageNumber + "&sort=" + request.sort)
+            .get("https://unowipes.com/api/v1/sales?"+ JSON.parse(localStorage.getItem('filtersSales')) + "&page=" + request.pageNumber + "&sort=" + request.sort)
             .then(response=>{
                 commit('setSales', response.data );
             })

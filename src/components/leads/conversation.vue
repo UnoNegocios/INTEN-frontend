@@ -166,7 +166,7 @@
 //import InfiniteLoading from 'vue-infinite-loading';
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
-import leadDetail from '../dashboard/detail.vue'
+import leadDetail from '../leads/detail.vue'
 import axios from "axios";
 import EmojiPicker from "vue-emoji-picker";
 export default {
