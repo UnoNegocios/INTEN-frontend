@@ -114,7 +114,7 @@
             <v-card-actions>
               <div style="font-size:12px;"><strong>Vendedor: </strong> {{selectedEvent.user}}</div>
               <v-spacer></v-spacer>
-              <v-btn @click="status(selectedEvent.id, selectedEvent.client.id)" elevation="0" v-if="selectedEvent.status!='Completed'" style="text-transform:capitalize; letter-spacing:0;" class="px-5 mb-2 mr-2" color="primary">Terminar</v-btn>
+              <v-btn @click="status(selectedEvent.id, selectedEvent.client)" elevation="0" v-if="selectedEvent.status!='Completed'" style="text-transform:capitalize; letter-spacing:0;" class="px-5 mb-2 mr-2" color="primary">Terminar</v-btn>
             </v-card-actions>
           </v-card>
         </v-menu>
@@ -421,7 +421,8 @@
         }
         this.createDialog = false;
       },
-      status(activity_id, client_id){
+      status(activity_id, client){
+        this.newActivityClient = client
         var editedItem={
           id:activity_id,
           status:'Completed',
@@ -429,7 +430,6 @@
         this.$nextTick(() => {
           axios.patch("https://unowipes.com/api/v1/activities/" + activity_id,Object.assign(editedItem)).then(response=>{
             this.sheet2 = true
-            this.newActivityClient = client_id.toString()
             this.updateActivities()
           }).catch(error => {
               this.snackbar = {

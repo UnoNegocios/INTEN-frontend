@@ -184,6 +184,7 @@ export default {
         mapItems(items){
             return items.map(id=>{
                 return{
+                    id:id.id,
                     name: id.name,
                     macro: id.macro,
                     type: id.type,
@@ -229,7 +230,9 @@ export default {
             }
         },
         edit(id){
+            console.log(id)
             this.editedItem = this.$store.state.item.items.filter(item=>item.id == id)[0]
+            console.log(this.editDialog)
             this.editDialog = true
         },
         closeDialogItem: function(params) {

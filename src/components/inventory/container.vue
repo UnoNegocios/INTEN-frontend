@@ -392,7 +392,8 @@ export default {
         },
         edit(id){
             this.editedItem = this.$store.state.item.items.filter(item=>item.id == id)[0]
-            this.editDialog = true
+            console.log(this.editedItem)
+            //this.editDialog = true
         },
         closeDialogItem: function(params) {
             this.editDialog = params;

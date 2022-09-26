@@ -66,7 +66,7 @@
                         <v-text-field type=number v-model="item.quantity" label="Cantidad"></v-text-field><!--:disabled="yanohay(item.quantity, item.item, k)" -->
                     </v-col>
                     <v-col ols="12" sm ="8" md="6" class="py-0 my-0">
-                         <v-autocomplete v-model="item.item" :items="devicesList" :loading="isLoadingDevices" :search-input.sync="searchDevices" hide-no-data item-value="id" item-text="name" label="Producto" placeholder="Escribe para buscar" attach> 
+                         <v-autocomplete v-model="item.item" :items="devicesList" item-value="id" item-text="name" label="Producto"> 
                             <template v-slot:item="{item, attrs, on}">
                                 <v-list-item v-on="on" v-bind="attrs">
                                     <v-list-item-content>
@@ -225,22 +225,13 @@
         }),
         watch: {
             searchClients(val){
-                if (this.clientsList.length > 0) return
+                //if (this.clientsList.length > 0) return
                 if (this.isLoadingClients) return
                 this.isLoadingClients= true
                 axios.get(process.env.VUE_APP_BACKEND + 'api/v1/client/search?filter[name]='+val)
                 .then(res => {
                     this.entries.clients = res.data.data
                 }).finally(() => (this.isLoadingClients = false))
-            },
-            searchDevices(val){
-                if (this.devicesList.length > 0) return
-                if (this.isLoadingDevices) return
-                this.isLoadingDevices= true
-                axios.get(process.env.VUE_APP_BACKEND + 'api/v1/device/search?filter[name]='+val)
-                .then(res => {
-                    this.entries.devices = res.data.data
-                }).finally(() => (this.isLoadingDevices = false))
             },
         },
         computed: {
@@ -254,7 +245,7 @@
                 })
             },
             devicesList(){
-                return this.entries.devices
+                return this.$store.state.item.items
             },
             usersLists(){
                 return this.$store.state.user.users;

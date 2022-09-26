@@ -2,7 +2,7 @@
     <v-card>
         <!-- Titulo del dialogo -->
         <v-card-title>
-            <span>Crear Producto</span>
+            <span>Editar Producto</span>
         </v-card-title>
 
         <v-divider></v-divider>
@@ -129,7 +129,7 @@ export default {
         },
         save () {
             this.$nextTick(() => {
-                axios.patch("https://unowipes.com/api/v1/devices",Object.assign(this.editedItem)).then(response=>{
+                axios.patch("https://unowipes.com/api/v1/devices/" + this.editedItem.id,Object.assign(this.editedItem)).then(response=>{
                     this.close()
                 }).catch(error => {
                     this.snackbar = {

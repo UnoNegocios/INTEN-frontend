@@ -164,8 +164,9 @@ export default {
         },
     }),
     watch: {
+
         searchLeads(val){
-            if (this.leadLists.length > 0) return
+            //if (this.leadLists.length > 0) return
             if (this.isLoadingLead) return
             this.isLoadingLead = true
             axios.get(process.env.VUE_APP_BACKEND + 'api/v1/lead/search?filter[name]='+val)
@@ -174,7 +175,7 @@ export default {
             }).finally(() => (this.isLoadingLead = false))
         },
         searchCompanies(val){
-            if (this.companyLists.length > 0) return
+            //if (this.companyLists.length > 0) return
             if (this.isLoadingCompany) return
             this.isLoadingCompany = true
             axios.get(process.env.VUE_APP_BACKEND + 'api/v1/client/search?filter[name]='+val)
@@ -183,7 +184,7 @@ export default {
             }).finally(() => (this.isLoadingCompany = false))
         },
         searchContacts(val){
-            if (this.contactList.length > 0) return
+            //if (this.contactList.length > 0) return
             if (this.isLoadingContact) return
             this.isLoadingContact = true
 
@@ -322,9 +323,7 @@ export default {
             this.calendar.date = this.calendar.only_date + ' ' + this.calendar.only_time
             this.$nextTick(() => {
                 axios.post("https://unowipes.com/api/v1/activities",Object.assign(this.calendar)).then(response=>{
-                    this.$nextTick(() => {
-                        this.$emit("closeCreateDialogCalendar", response.data.data);
-                    })
+                    this.close()
                 }).catch(error => {
                     this.snackbar = {
                         message: error.response.data.message,
