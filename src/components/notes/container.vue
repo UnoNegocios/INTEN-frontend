@@ -21,7 +21,7 @@
 
                 <v-row class="ma-2 mb-3">
                   <v-col class="pa-0" cols="10">
-                    <v-list-item-title>{{companyName(note.company_id)}} | {{contact(note.contact_id)}}</v-list-item-title>
+                    <v-list-item-title>{{companyName(note.client_id)}} <!--| {{contact(note.contact_id)}}--></v-list-item-title>
                   </v-col>
                   <v-col class="pa-0" cols="1">
                     <v-icon v-if="note.seen==false" @click="editItem(note)" small>mdi-check-all</v-icon>
@@ -117,7 +117,7 @@
       notesLists() {
           var response = this.notes;
           if(this.company!=''&&this.company!=undefined&&this.company!=null){
-              response = response.filter(note=>note.company_id == this.company.id)
+              response = response.filter(note=>note.client_id == this.company.id)
           }
           return this.limit ? response.slice(0,this.limit) : this.response
       },
@@ -127,13 +127,14 @@
       },
       notesStore(){
         if(this.company!=undefined){
-          return this.$store.state.note.notes.filter(note=>note.company_id==this.company)
+          return this.$store.state.note.notes.filter(note=>note.client_id==this.company)
         }else{
           return this.$store.state.note.notes
         }
       }
     },
     created(){
+      this.$store.dispatch('company/getCompanies')
       this.$store.dispatch('note/getNotes')
     },
     methods:{
@@ -152,7 +153,7 @@
       },
       editItem(item){
         item.seen = true
-        axios.put("https://unowipes.com/api/v1/note/update",Object.assign(item)).then(response=>{
+        axios.put("https://unowipes.com/api/v1/notes/" + item.id,Object.assign(item)).then(response=>{
             this.$store.dispatch('note/getNotes')
         }).catch(error => {
             this.snackbar = {
@@ -163,7 +164,7 @@
         })
       },
       deleteNote(){
-        axios.delete("https://unowipes.com/api/v1/note/delete/"+this.deleteId).then(response => {
+        axios.delete("https://unowipes.com/api/v1/notes/"+this.deleteId).then(response => {
           this.deleteId = ''
           this.sheet = false
           this.$store.dispatch('note/getNotes')
@@ -203,14 +204,15 @@
         return this.$store.state.contact.contacts.filter(contact=>contact.id == id).map(contact => contact.name + ' ' + contact.last)[0]
       },
       companyName(id){
-        return this.$store.state.company.companies.filter(company=>company.id == id).map(company => company.name)[0]
+        var company_name = this.$store.state.company.companies.filter(company=>company.id == id).map(company => company.name)[0]
+        return company_name
       },
       filtersNotes: function(params) {
         var filterNotes = this.notesStore
-        if(this.company == undefined && params.company_id!=''&&params.company_id!=undefined&&params.company_id!=null){
-          var uno = filterNotes.filter(note=>note.company_id == params.company_id[0])
-          for(var i=1; i<params.company_id.length; i++){
-            uno=uno.concat(filterNotes.filter(note=>note.company_id == params.company_id[i]))   
+        if(this.company == undefined && params.client_id!=''&&params.client_id!=undefined&&params.client_id!=null){
+          var uno = filterNotes.filter(note=>note.client_id == params.client_id[0])
+          for(var i=1; i<params.client_id.length; i++){
+            uno=uno.concat(filterNotes.filter(note=>note.client_id == params.client_id[i]))   
           }
           filterNotes = this.removeDuplicates(uno, "id");
         }

@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getNotes( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/note")
+        .get("https://unowipes.com/api/v1/notes")
         .then(response => {
             commit('setNotes', response.data);
         });

@@ -584,11 +584,13 @@ export default {
         },
         closeDialogEditQuotation: function(params) {
             this.editDialog = false;
-            this.$store.dispatch('quotation/getQuotations')
+            //this.$store.dispatch('quotation/getQuotations')
+            this.getDataFromApi()
         },
         closeCreateDialogQuotation: function(params) {
             this.createDialog = false;
-            this.$store.dispatch('quotation/getQuotations')
+            //this.$store.dispatch('quotation/getQuotations')
+            this.getDataFromApi()
         },
         closeDialogEmailQuotation: function(params) {
             this.emailDialog = false;

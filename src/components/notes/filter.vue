@@ -28,7 +28,7 @@
                 </v-menu>
             </div>
 
-            <v-autocomplete v-if="company==undefined" @keydown.enter="filter()" v-model="note.company_id" :items="companyLists" item-text="name" item-value="id" attach chips label="Empresa" multiple>
+            <v-autocomplete v-if="company==undefined" @keydown.enter="filter()" v-model="note.client_id" :items="companyLists" item-text="name" item-value="id" attach chips label="Empresa" multiple>
                 <template slot="no-data" class="pa-2">No existen empresas relacionadas.</template>  
             </v-autocomplete>
 
@@ -41,7 +41,7 @@
                         </v-list-item-action>
                         <v-list-item-content>
                             <v-list-item-title>
-                                {{item.name}} <v-chip v-if="note.company_id==null || note.company_id.length>1 || note.company_id.length==0" small class="ml-2"  style="font-size:8px;">{{companyName(item.company_id)}}</v-chip>
+                                {{item.name}} <v-chip v-if="note.client_id==null || note.client_id.length>1 || note.client_id.length==0" small class="ml-2"  style="font-size:8px;">{{companyName(item.client_id)}}</v-chip>
                             </v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
@@ -73,7 +73,7 @@
         menuFrom:false,
         menuFrom2:false,
         note:{
-            company_id:null,
+            client_id:null,
             contact_id:'',
             from_user_id:'',
             to_user_id:'',
@@ -88,14 +88,14 @@
             return this.$store.state.company.companies;
         },
         contactLists(){
-            if(this.note.company_id!=null){
-                if(this.note.company_id.length==0){
+            if(this.note.client_id!=null){
+                if(this.note.client_id.length==0){
                     return this.$store.state.contact.contacts
                 }
                 else{
-                    var cuatro = this.$store.state.contact.contacts.filter(contact=>contact.company_id == this.note.company_id[0]);
-                    for(var i=1; i<this.note.company_id.length; i++){
-                        cuatro=cuatro.concat(this.$store.state.contact.contacts.filter(contact=>contact.company_id == this.note.company_id[i]))   
+                    var cuatro = this.$store.state.contact.contacts.filter(contact=>contact.client_id == this.note.client_id[0]);
+                    for(var i=1; i<this.note.client_id.length; i++){
+                        cuatro=cuatro.concat(this.$store.state.contact.contacts.filter(contact=>contact.client_id == this.note.client_id[i]))   
                     }
                     return  cuatro
                 }

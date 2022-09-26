@@ -16,16 +16,30 @@
         <v-card-text class="pb-0">
             <v-container>
                 <v-row>
-                    <v-col class="py-0" cols="12" sm="6" md="6">
-                        <v-autocomplete clearable v-model="note.company_id" :items="companyLists" label="Empresa" item-text="name" item-value="id">
+                    <!--v-col class="py-0" cols="12" sm="6" md="6">
+                        <v-autocomplete clearable v-model="note.client_id" :items="companyLists" label="Empresa" item-text="name" item-value="id">
                             <template slot="no-data"><div class="px-4 py-1">No existen empresas relacionadas. <v-btn rounded class="mx-3" color="primary" @click="createCompanyDialog=true" x-small>Crear</v-btn></div></template>                       
                         </v-autocomplete>
                     </v-col>
                     <v-col class="py-0" cols="12" sm="6" md="6">
-                        <v-autocomplete :disabled="note.company_id==null" clearable v-model="note.contact_id" :items="contactLists" label="Contacto" item-text="name" item-value="id">
+                        <v-autocomplete :disabled="note.client_id==null" clearable v-model="note.contact_id" :items="contactLists" label="Contacto" item-text="name" item-value="id">
                             <template slot="no-data"><div class="px-4 py-1">No existen contactos relacionados. <v-btn rounded class="mx-3" color="primary" @click="createContactDialog=true" x-small>Crear</v-btn></div></template>                   
                         </v-autocomplete>
-                    </v-col> 
+                    </v-col--> 
+                    <v-autocomplete v-model="note.client_id" :items="clientsList" :loading="isLoadingClients" :search-input.sync="searchClients" hide-no-data item-value="id" item-text="name" label="Cliente" placeholder="Escribe para buscar" attach>
+                        <template v-slot:item="{item, attrs, on}">
+                            <v-list-item v-on="on" v-bind="attrs">
+                                <v-list-item-content>
+                                    <v-list-item-title v-if="item.name!=null">
+                                        {{item.name}}
+                                    </v-list-item-title>
+                                    <v-list-item-title v-else-if="item.razon_social!=null">
+                                        {{item.razon_social}}
+                                    </v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </template> 
+                    </v-autocomplete>
                 </v-row>
                 <v-container fluid>
                     <v-textarea v-model="note.comment" label="Descripcion"></v-textarea>
@@ -44,7 +58,7 @@
 
         <!-- Crear Contacto -->
         <v-dialog v-model="createContactDialog" max-width="600px">
-            <createContact v-bind:company="note.company_id" @closeCreateDialogContact="closeCreateDialogContact"/>
+            <createContact v-bind:company="note.client_id" @closeCreateDialogContact="closeCreateDialogContact"/>
         </v-dialog>
         <!-- Crear empresa -->
         <v-dialog v-model="createCompanyDialog" max-width="700px">
@@ -84,7 +98,7 @@ import CreateCompany from "../clients/companies/create"
             createContactDialog: false,
             createCompanyDialog: false,
             note:{
-                company_id:null,
+                client_id:null,
                 contact_id:'',
                 from_user_id:'',
                 to_user_id:'',
@@ -94,8 +108,33 @@ import CreateCompany from "../clients/companies/create"
             rules: {
                 required: value => !!value || 'Campo requerido',
             },
+            isLoadingClients: false,
+            searchClients: null,
+            entries:{
+                clients: []
+            },
         }),
+        watch: {
+            searchClients(val){
+                if (this.clientsList.length > 0) return
+                if (this.isLoadingClients) return
+                this.isLoadingClients= true
+                axios.get(process.env.VUE_APP_BACKEND + 'api/v1/client/search?filter[name]='+val)
+                .then(res => {
+                    this.entries.clients = res.data.data
+                }).finally(() => (this.isLoadingClients = false))
+            },
+        },
     computed: {
+        clientsList(){
+            return this.entries.clients.map(id => {
+                return{
+                    id:id.id,
+                    name:id.name,
+                    razon_social:id.razon_social
+                }
+            })
+        },
         valid(){
             if(this.note.to_user_id!=''&&this.note.to_user_id!=undefined&&this.note.to_user_id!=null){
                 return true
@@ -107,7 +146,7 @@ import CreateCompany from "../clients/companies/create"
             return this.$store.state.company.companies;
         },
         contactLists(){
-            return this.$store.state.contact.contacts.filter(contact=>contact.company_id == this.note.company_id)
+            return this.$store.state.contact.contacts.filter(contact=>contact.client_id == this.note.client_id)
         }, 
         usersLists(){
             return this.$store.state.user.users;
@@ -123,7 +162,7 @@ import CreateCompany from "../clients/companies/create"
     },
     created(){
         if(this.company!=undefined){
-            this.note.company_id=Number(this.company)
+            this.note.client_id=Number(this.company)
         }
         
     },
@@ -152,7 +191,7 @@ import CreateCompany from "../clients/companies/create"
         close () {
             this.note = Object.assign({}, this.defaultItem)
             if(this.company!=undefined){
-                this.note.company_id=Number(this.company)
+                this.note.client_id=Number(this.company)
             }
             this.gris = false
             this.$nextTick(() => {
@@ -164,7 +203,7 @@ import CreateCompany from "../clients/companies/create"
             this.note.seen = false
             this.gris = true
             this.$nextTick(() => {
-                axios.post("https://unowipes.com/api/v1/note/create",Object.assign(this.note)).then(response=>{
+                axios.post("https://unowipes.com/api/v1/notes",Object.assign(this.note)).then(response=>{
                     this.close()
                 }).catch(error => {
                     this.snackbar = {

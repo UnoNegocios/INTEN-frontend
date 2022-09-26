@@ -4,13 +4,13 @@
             <v-icon style="background: #e7e8e9; padding: 10px!important; border-radius: 50%;" class="mr-4">mdi-file-document-outline</v-icon>
             <span >Nueva {{quole}}</span>
             <v-spacer></v-spacer>
-            <!--v-col cols="12" sm="6" md="3">
+            <v-col cols="12" sm="6" md="3">
                 <v-autocomplete  :rules="[v => !!v || 'Campo requerido']" v-if="permissions('assignQuotations')" clearable v-model="quotation.user_id" :items="usersLists" label="Vendedor" item-text="name" item-value="id">
                     <template slot="no-data" class="pa-2">No existen usuarios relacionados.</template>                      
                 </v-autocomplete>
                 <v-autocomplete v-else-if="quotation.user_id=currentUser.id" disabled v-model="quotation.user_id" :items="usersLists" label="Vendedor" item-text="name" item-value="id">                
                 </v-autocomplete>
-            </v-col-->
+            </v-col>
             <v-col cols="12" sm="6" md="2" class="pb-0 mb-0">
                 <v-checkbox v-model="quotation.pos_sale" label="Mostrador"></v-checkbox>
             </v-col>
