@@ -321,6 +321,7 @@ import CreateCompany from "../clients/companies/create"
             })
         },
         save () {
+            this.calendar.last_updated_by_user_id = this.currentUser.id
             this.calendar.date = this.calendar.only_date + ' ' + this.calendar.only_time
             this.gris = true
             this.$nextTick(() => {

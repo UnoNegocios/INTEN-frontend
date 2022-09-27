@@ -352,7 +352,7 @@ export default {
             XLSX.writeFile(workbook, `${filename}.xlsx`)
         },
         deleteCalendar(){
-            axios.delete("https://unowipes.com/api/v1/calendars/"+this.deleteId).then(response => {
+            axios.delete("https://unowipes.com/api/v1/activities/"+this.deleteId).then(response => {
                 this.deleteId = ''
                 this.sheet = false
                 

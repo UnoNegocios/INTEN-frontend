@@ -155,7 +155,12 @@ export default {
                     name: id.name + ' ' + id.last
                 }
             })
-        }
+        },
+        currentUser:{
+            get(){
+                return this.$store.state.currentUser.user
+            }
+        } 
     },
     methods:{
         pendiente(date){
@@ -208,7 +213,7 @@ export default {
             this.getActivities()
         },
         completeActivity(id){
-            axios.patch("https://unowipes.com/api/v1/activities/" + id, {'completed':true}).then(response=>{
+            axios.patch("https://unowipes.com/api/v1/activities/" + id, {'completed':true, 'last_updated_by_user_id' : this.currentUser.id}).then(response=>{
                 this.getActivities()
             })
         }

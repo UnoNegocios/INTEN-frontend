@@ -44,20 +44,20 @@
                         </v-menu>
                     </v-col>
                     <v-col class="pt-0" cols="12" sm="6" md="4">
-                        <v-autocomplete clearable v-model="quotation.activation_time" prepend-icon="mdi-clock-outline" :items="hours" label="Hora de Activación">               
+                        <v-autocomplete clearable v-model="quotation.activation_hour" prepend-icon="mdi-clock-outline" :items="hours" label="Hora de Activación">               
                         </v-autocomplete>
                     </v-col> 
                 </v-row>
                 <!--ALAN-->
                 <v-row class="pb-6 mt-0 pt-0">
                      <v-col class="pt-0" cols="12" sm="6" md="4">
-                        <v-text-field :rules="[v => !!v || 'Campo requerido']" v-model="quotation.imei" label="IMEI"></v-text-field>
+                        <v-text-field v-model="quotation.imei" label="IMEI"></v-text-field>
                     </v-col>
                     <v-col class="pt-0" cols="12" sm="6" md="4">
-                        <v-text-field :rules="[v => !!v || 'Campo requerido']" v-model="quotation.nir" label="NIR"></v-text-field>
+                        <v-text-field v-model="quotation.nir" label="NIR"></v-text-field>
                     </v-col>
                      <v-col class="pt-0" cols="12" sm="6" md="4">
-                        <v-text-field :rules="[v => !!v || 'Campo requerido']" v-model="quotation.sim" label="SIM"></v-text-field>
+                        <v-text-field v-model="quotation.sim" label="SIM"></v-text-field>
                     </v-col>
                 </v-row>
                 <!--ALAN-->
@@ -106,7 +106,7 @@
                         </v-container>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                        <v-autocomplete clearable  v-model="quotation.payment_method" :items="paymentMethods" item-value="id" item-text="method" label="Metodo de Pago">
+                        <v-autocomplete clearable  v-model="quotation.payment_method_id" :items="paymentMethods" item-value="id" item-text="method" label="Metodo de Pago">
                         <template slot="no-data" class="pa-2">No existen Metodos de Pago relacionados.</template>
                         </v-autocomplete>
                         <v-text-field class="my-4" disabled v-if="quotation.subtotal=totalQuotation" v-model="quotation.subtotal" prefix="$" label="Monto en Pesos"></v-text-field>
@@ -133,7 +133,7 @@
                     <v-btn color="blue darken-1" text @click="close">
                         Cancelar
                     </v-btn>
-                    <v-btn color="blue darken-1" text @click="save"  :loading="gris" :disabled="gris">
+                    <v-btn color="blue darken-1" text @click="save"  :loading="gris" :disabled="gris || grey">
                         Guardar
                     </v-btn>
                 </v-card-actions>
@@ -205,9 +205,9 @@
                 imei:'',
                 nir:'',
                 sim:'',
-                payment_method:'',
+                payment_method_id:'',
                 activation_date:'',
-                activation_time:'',
+                activation_hour:'',
 
             },
             rules: {
@@ -235,6 +235,13 @@
             },
         },
         computed: {
+            grey(){
+                if(this.quotation.client_id==''||this.quotation.client_id==null||this.quotation.client_id==undefined){
+                    return true
+                }else{
+                    return false
+                }
+            },
             clientsList(){
                 return this.entries.clients.map(id => {
                     return{

@@ -426,6 +426,7 @@
         var editedItem={
           id:activity_id,
           status:'Completed',
+          last_updated_by_user_id:this.currentUser.id
         }
         this.$nextTick(() => {
           axios.patch("https://unowipes.com/api/v1/activities/" + activity_id,Object.assign(editedItem)).then(response=>{
@@ -454,7 +455,7 @@
         }
       },
       deleteCalendar(){
-        axios.delete("https://unowipes.com/api/v1/calendars/"+this.deleteId).then(response => {
+        axios.delete("https://unowipes.com/api/v1/activities/"+this.deleteId).then(response => {
             this.deleteId = ''
             this.sheet = false
             this.updateActivities()

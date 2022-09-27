@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title class="py-2">
             <v-icon style="background: #e7e8e9; padding: 10px!important; border-radius: 50%;" class="mr-4">mdi-file-document-outline</v-icon>
-            <span>Nuevo Lead</span>
+            <span>Nuevo Prospecto</span>
             <v-spacer></v-spacer>
             <v-autocomplete  :rules="[v => !!v || 'Campo requerido']" v-if="permissions('assignLeads')" clearable v-model="lead.user_id" :items="usersList" label="Vendedor" item-text="name" item-value="id">
                 <template slot="no-data" class="pa-2">No existen usuarios relacionados.</template>                      
