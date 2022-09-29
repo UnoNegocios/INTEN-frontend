@@ -81,7 +81,7 @@
                                 <v-col class="pt-0" cols="12" sm="6" md="4">
                                     <v-menu v-model="datePicker" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="290px" >
                                             <template v-slot:activator="{ on }">
-                                                <v-text-field :rules="[v => !!v || 'Campo requerido']" clearable required v-model="company.contract_date" label="Fecha de Contrato" prepend-icon="mdi-calendar" readonly v-on="on"></v-text-field>
+                                                <v-text-field  clearable required v-model="company.contract_date" label="Fecha de Contrato" prepend-icon="mdi-calendar" readonly v-on="on"></v-text-field>
                                             </template>
                                             <v-date-picker color="primary" v-model="company.contract_date" @input="datePicker = false"></v-date-picker>
                                         </v-menu>
