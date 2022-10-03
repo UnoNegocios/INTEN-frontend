@@ -371,7 +371,7 @@ export default {
             // Creamos el objeto fecha instanciándolo con la clase Date
             const fecha = new Date(date.slice(0,10));
             // Creamos array con los días de la semana
-            const dias_semana = ['Domingo', 'Lunes', 'martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            const dias_semana = ['Lunes', 'martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
             //Creamos constante para el dia de hoy
             const hoy = new Date(new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).slice(0,10))
             //sacamos diferencia
