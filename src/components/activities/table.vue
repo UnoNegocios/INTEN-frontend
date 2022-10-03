@@ -79,7 +79,7 @@
             </template>
         </v-data-table>
         <!-- Crear actividad -->
-        <v-dialog v-model="createDialog" max-width="700px">
+        <v-dialog v-model="createDialog" max-width="900px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn bottom color="#e25200" dark fab fixed right v-bind="attrs" v-on="on">
                 <v-icon color="white">  mdi-plus </v-icon>
@@ -88,7 +88,7 @@
           <create v-bind:company="company" @closeCreateDialogCalendar="closeCreateDialogCalendar"/>
         </v-dialog>
         <!-- Editar actividad -->
-        <v-dialog v-model="editDialog" max-width="700px">
+        <v-dialog v-model="editDialog" max-width="900px">
           <edit v-bind:calendar="calendar" @closeDialogEditCalendar="closeDialogEditCalendar"/>
         </v-dialog>
         <!-- Dialogo confirmación -->

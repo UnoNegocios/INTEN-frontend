@@ -187,7 +187,7 @@
                     Ventas
                   </v-tab>
                   <v-tab-item>
-                    <sales v-bind:company="company"/>
+                    <sales v-bind:company="companyDetail"/>
                   </v-tab-item>
                   <v-tab background-color="transparent" color="basil" grow>
                     Cancelaciones

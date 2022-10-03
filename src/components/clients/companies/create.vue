@@ -36,12 +36,12 @@
                             </v-row>
                             <v-row class="py-4">
                                 <v-col class="py-0" cols="12" sm="4" md="6">
-                                    <v-autocomplete outlined class="mt-3" dense rounded filled :rules="[v => !!v || 'Campo requerido']" clearable v-model="company.origin_id" :items="originLists" label="Procedencia*" item-text="name" item-value="id">
+                                    <v-autocomplete outlined class="mt-3" dense rounded filled clearable v-model="company.origin_id" :items="originLists" label="Procedencia*" item-text="name" item-value="id">
                                         <template slot="no-data" class="pa-2">No existen procedencias relacionadas.</template>                      
                                     </v-autocomplete>
                                 </v-col>
                                 <v-col class="py-0" cols="12" sm="4" md="6">
-                                    <v-autocomplete outlined class="mt-3" dense rounded filled :rules="[v => !!v || 'Campo requerido']" clearable v-model="company.status_id" :items="statusLists" label="Estatus*" item-text="name" item-value="id">
+                                    <v-autocomplete outlined class="mt-3" dense rounded filled clearable v-model="company.status_id" :items="statusLists" label="Estatus*" item-text="name" item-value="id">
                                         <template slot="no-data" class="pa-2">No existen estatus relacionados.</template>                      
                                     </v-autocomplete>
                                 </v-col>
@@ -85,7 +85,7 @@
                                             </template>
                                             <v-date-picker color="primary" v-model="company.contract_date" @input="datePicker = false"></v-date-picker>
                                         </v-menu>
-                                    <v-textarea filled class="mt-4" v-model="company.delivery_time" label="Horario de Entrega"></v-textarea>
+                                    <!--v-textarea filled class="mt-4" v-model="company.delivery_time" label="Horario de Entrega"></v-textarea-->
                                 </v-col>
                             </v-row>
                             </v-row>
@@ -212,8 +212,7 @@ import axios from "axios";
         }),
     computed: {
         grey(){
-            return false
-            if( this.company.origin_id==''||this.company.origin_id==null||this.company.origin_id==undefined||
+            if( //this.company.origin_id==''||this.company.origin_id==null||this.company.origin_id==undefined||
                 //this.company.status_id==''||this.company.status_id==null||this.company.status_id==undefined||
                 this.company.name==''||this.company.name==null||this.company.name==undefined){
                     return true

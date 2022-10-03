@@ -16,7 +16,7 @@
         <v-card-text class="pb-0">
             <v-container>
                 <v-row>
-                    <v-col class="py-0" cols="12" sm="6" md="6">
+                    <v-col class="py-0" cols="12" sm="6" md="7">
                         <v-autocomplete :rules="[v => !!v || 'Campo requerido']" clearable v-model="calendar.activity_type_id" :items="activityLists" label="Actividad" item-text="name" item-value="id">
                             <template slot="no-data" class="pa-2">No existen actividades relacionadas.</template>                      
                         </v-autocomplete>
@@ -86,7 +86,7 @@
                             </v-col>  
                         </v-row>  
                     </v-col>
-                    <v-col class="pb-0 pt-2" cols="12" sm="6" md="6">
+                    <v-col class="pb-0 pt-2" cols="12" sm="6" md="5">
                         <v-container fluid>
                             <v-textarea v-model="calendar.description" label="Descripcion"></v-textarea>
                         </v-container>

@@ -1,6 +1,6 @@
 {
   "name": "UNOCRM",
-  "version": "4.0.38",
+  "version": "4.0.39",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

@@ -230,7 +230,11 @@
                 this.isLoadingClients= true
                 axios.get(process.env.VUE_APP_BACKEND + 'api/v1/client/search?filter[name]='+val)
                 .then(res => {
-                    this.entries.clients = res.data.data
+                    if(this.entries.clients.length>0){
+                        this.entries.clients.concat(res.data.data)
+                    }else{
+                        this.entries.clients = res.data.data
+                    }
                 }).finally(() => (this.isLoadingClients = false))
             },
         },
@@ -294,10 +298,13 @@
             },
         },
         created(){
+            console.log(this.message[0])
             this.company=this.message[0]
             this.status=this.message[1]
+
             if(this.company!=undefined){
-                this.quotation.client_id=Number(this.company)
+                this.entries.clients = [this.company]
+                this.quotation.client_id=Number(this.company.id)
             }
             
         },

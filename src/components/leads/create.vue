@@ -18,27 +18,27 @@
                     <v-text-field :rules="[v => !!v || 'Campo requerido']" required v-model="lead.name" label="Nombre"></v-text-field>
                 </v-col>
                 <v-col class="pt-0" cols="12" sm="6" md="6">
-                    <v-text-field :rules="[v => !!v || 'Campo requerido']" required v-model="lead.last" label="Apellido"></v-text-field>
+                    <v-text-field required v-model="lead.last" label="Apellido"></v-text-field>
                 </v-col> 
             </v-row>
 
             <v-row class="ma-0">
                 <v-col class="pt-0" cols="12" sm="6" md="6">
-                    <v-text-field :rules="[v => !!v || 'Campo requerido']" required v-model="lead.phone" type="phone" label="Teléfono"></v-text-field>
+                    <v-text-field required v-model="lead.phone" type="phone" label="Teléfono"></v-text-field>
                 </v-col>
                 <v-col class="pt-0" cols="12" sm="6" md="6">
-                    <v-text-field :rules="[v => !!v || 'Campo requerido']" required v-model="lead.email" type="email" label="Correo Electrónico"></v-text-field>
+                    <v-text-field required v-model="lead.email" type="email" label="Correo Electrónico"></v-text-field>
                 </v-col> 
             </v-row>
 
             <v-row class="ma-0">
                 <v-col class="pt-0" cols="12" sm="6" md="4">
-                    <v-autocomplete clearable v-model="lead.funnel_id" :items="funnelsList" label="Funnel" item-text="name" item-value="id">
+                    <v-autocomplete :rules="[v => !!v || 'Campo requerido']" clearable v-model="lead.funnel_id" :items="funnelsList" label="Funnel" item-text="name" item-value="id">
                         <template slot="no-data" class="pa-2">No existen funnels relacionados.</template>
                     </v-autocomplete>
                 </v-col>
                 <v-col class="pt-0" cols="12" sm="6" md="4">
-                    <v-autocomplete clearable v-model="lead.funnel_phase_id" :items="funnelPhasesList" label="Fase" item-text="name" item-value="id">
+                    <v-autocomplete :rules="[v => !!v || 'Campo requerido']" clearable v-model="lead.funnel_phase_id" :items="funnelPhasesList" label="Fase" item-text="name" item-value="id">
                         <template slot="no-data" class="pa-2">No existen fases relacionadas.</template>                      
                     </v-autocomplete>
                 </v-col>
@@ -100,11 +100,11 @@ export default {
         },
     },
     beforeUpdate(){
-        if(this.lead.user_id!=''&&
+        if(//this.lead.user_id!=''&&
             this.lead.name!=''&&
-            this.lead.last!=''&&
-            this.lead.phone!=''&&
-            this.lead.email!=''&&
+            //this.lead.last!=''&&
+            //this.lead.phone!=''&&
+            //this.lead.email!=''&&
             this.lead.funnel_id!=''&&
             this.lead.funnel_phase_id!=''){
             this.diasbledSave = false
