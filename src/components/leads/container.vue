@@ -97,11 +97,11 @@
                                 
                                 
                                 
-                                <v-list-item @click="openConversation(element)" class="list-group-item item mt-2 pl-0 pr-4 elevation-0" v-for="element in leads[index].data" :key="element.id" style="background:white; min-height: 60px;">
-                                    <v-tooltip right>
+                                <v-list-item @click="openConversation(element)" class="list-group-item item mt-2 mb-7 pl-0 pr-4 elevation-0" v-for="element in leads[index].data" :key="element.id" style="background:white; min-height: 60px;">
+                                    <!--v-tooltip right>
                                         <template v-slot:activator="{ on, attrs }">
-                                            
-                                            <v-row class="ma-0" v-bind="attrs" v-on="on">
+                                            <v-bind="attrs" v-on="on">
+                                            <v-row class="ma-0"-->
 
                                                 <v-badge class="icon_style" avatar bordered overlap>
                                                     <template v-slot:badge>
@@ -143,11 +143,17 @@
 
                                                 <v-badge style="transform:scale(0.8); margin-top:-15px; margin-right:5px;" v-if="element.conversation.unread_messages>0" :content="element.conversation.unread_messages"></v-badge>
 
-                                            </v-row>
+                                            <!--/v-row>
                                         </template>
                                         <span v-if="currentUser.job_position == 'Administración' && element.user!=undefined">{{element.user.name}}</span>
-                                    </v-tooltip>
+                                    </v-tooltip-->
+                                    
 
+                                    <v-row v-if="element.user!=undefined" class="user-label ma-0 py-1 px-2">
+                                        <v-chip color="#ccd2d4" x-small style="font-weight:500; color:#001e60;">{{element.user.name}}</v-chip>
+                                        <v-spacer/>
+                                        <v-chip color="#001e60" style="font-weight:500;" dark x-small v-if="element.additional_data!=null">{{element.additional_data.interest}}</v-chip>
+                                    </v-row>
                                 </v-list-item>
 
                                     
@@ -476,7 +482,7 @@ export default {
             //this.pause = true
             let index_lead = this.leads.indexOf(this.leads.filter(element=>element.data.filter(dta=>dta.id == lead.id).length>0)[0])
             if(lead.conversation.channel == 'whatsapp'){
-                var server = process.env.VUE_APP_ZENVIA_WHATSAPP_SERVER
+                var server = lead.conversation.zenviaChannelId
             }else if(lead.conversation.channel == 'facebook'){
                 var server = process.env.VUE_APP_ZENVIA_FACEBOOK_SERVER
             }
@@ -635,5 +641,11 @@ export default {
     }
     .icon_style .v-badge__badge.primary{    
         inset: auto auto 0px 5px!important;
+    }
+    .user-label {
+        background: white;
+        width: 100%;
+        position: absolute;
+        bottom: -20px;
     }
 </style>

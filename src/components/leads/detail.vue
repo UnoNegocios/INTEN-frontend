@@ -24,15 +24,17 @@
                     <v-list-item style="border-bottom: solid 1px #ccd2d4" class="px-1">
                         <strong>Interes</strong>
                         <v-spacer></v-spacer>
-                        <span v-if="editInterest==false">{{lead.interest}}</span>
-                        <v-text-field style="width:100px;" dense v-else v-model="lead.interest"  @click:append="save" append-icon="mdi-content-save" label="Interes" placeholder="Interes" outlined></v-text-field>
+                        <span v-if="editInterest==false">{{lead_interest}}</span>
+
+                        <v-select style="width:100px;" dense v-else outlined v-model="lead_interest"  @click:append="save" append-icon="mdi-content-save"  :items="interests" label="Interes"></v-select>
+
                         <v-icon v-if="editInterest==false" @click="editInterest=true" small class="ml-2">mdi-pencil</v-icon>
                         <v-icon v-if="editInterest==true" @click="editInterest=false" small class="ml-2">mdi-close</v-icon>
                     </v-list-item>
                     <v-list-item style="border-bottom: solid 1px #ccd2d4" class="px-1">
                         <strong>Canal</strong>
                         <v-spacer></v-spacer>
-                        {{lead.channel}}
+                        {{lead.conversation.channel}}
                     </v-list-item>
                     <v-list-item style="border-bottom: solid 1px #ccd2d4" class="px-1">
                         <strong>Teléfono</strong>
@@ -132,6 +134,8 @@ export default {
     }, 
     data(){
         return{
+            interests:['plug', 'movil', 'mifi'],
+            lead_interest:'',
             playUser:true,
             user_id:'',
             createDialog:false,
@@ -162,6 +166,20 @@ export default {
             }
         } 
     },
+    created(){
+        if(this.lead.additional_data!=null){
+            this.lead_interest = this.lead.additional_data.interest
+        }
+    },
+    watch:{
+        lead:{
+            handler(){
+                if(this.lead.additional_data!=null){
+                    this.lead_interest = this.lead.additional_data.interest
+                }
+            },deep:true
+        }
+    },
     methods:{
         pendiente(date){
             console.log(date+' > '+this.today)
@@ -174,7 +192,7 @@ export default {
         save(){
             var editedItem = {
                 id: this.lead.id,
-                interest: this.lead.interest,
+                additional_data:{interest: this.lead_interest},
                 phone: this.lead.phone,
                 email: this.lead.email
             }

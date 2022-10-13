@@ -51,10 +51,14 @@
                                 <v-spacer></v-spacer>   
                             </v-row>
                             <p :class="message_item.direction === 'OUT' ? 'chat__sender chat__message': 'chat__reciever chat__message'" :style="'padding-right:'+ checkPadding(message_item.direction)"> 
+                                
                                 <span v-if="message_item.contents.type=='text' || message_item.contents.type=='template'">{{ message_item.contents.text }} </span>
-                                <v-dialog content-class="elevation-0" v-else-if="message_item.contents.type=='file' && message_item.contents.fileMimeType=='image/jpeg'" style="max-width:60px!important; max-width:600px!improtant; height:auto;">
+                                 
+                                <img v-else-if="message_item.contents.type=='file' && message_item.contents.fileMimeType=='image/png'" style="margin-right:-30px; margin-bottom:5px; width:60px; max-height:60px; object-fit:cover;" :src="message_item.contents.fileUrl"/>
+
+                                <v-dialog content-class="elevation-0" v-else-if="message_item.contents.type=='file' && (message_item.contents.fileMimeType=='image/jpeg' || message_item.contents.fileMimeType=='jpeg' || message_item.contents.fileMimeType=='png')" style="height:auto; max-width:60px!important; max-width:600px!improtant;">
                                     <template v-slot:activator="{ on, attrs }">
-                                        <img v-bind="attrs" v-on="on" style="margin-right:-30px; margin-bottom:5px; width:400px; max-height:400px; object-fit:cover;" :src="message_item.contents.fileUrl"/>
+                                        <img v-bind="attrs" v-on="on" :style="imageMargin(message_item.direction) + 'margin-bottom:5px; width:400px; max-height:400px; object-fit:cover;'" :src="message_item.contents.fileUrl"/>
                                     </template>
                                     <template v-slot:default="dialog">
                                         <div style="position: absolute; right: 0; top: 15px; width: 200px;">
@@ -172,6 +176,8 @@ import EmojiPicker from "vue-emoji-picker";
 export default {
     data() {
         return {
+            interests:['plug', 'movil', 'mifi'],
+            lead_interest:'',
             imageDilog:false,
             disableButtonFileSend: true,
             fileDialog:false,
@@ -234,7 +240,8 @@ export default {
                 dictMaxFilesExceeded: "No puedes subir más archivos.",
             },
             file:'',
-            fileLink:''
+            fileLink:'',
+            fileMimeType:''
         }
     },
     computed:{
@@ -267,6 +274,9 @@ export default {
         propData:Object
     }, 
     created(){
+        if(this.lead.additional_data!=null){
+            this.lead_interest = this.lead.additional_data.interest
+        }
         this.lead = this.propData.lead
         this.newPhase = this.lead.funnel_phase.id*1
         this.newFunnel = this.lead.funnel_phase.funnel.id*1
@@ -277,6 +287,7 @@ export default {
         this.scroll()
     },
     mounted() {
+        
         Echo.channel('new_message').listen('NewMessageEvent', (e) => {
             var new_message = {}
             new_message = e[0]
@@ -301,6 +312,13 @@ export default {
         })
     },
     methods:{
+        imageMargin(direction){
+            if(direction == 'OUT'){
+                return 'margin-right:-10px;'
+            }else if(direction == 'IN'){
+                return 'margin-right:-30px;'
+            }
+        },
         expiration(channel, date){
             if(channel == 'whatsapp'){
                 var fechaInicio = new Date(date).getTime();
@@ -405,12 +423,13 @@ export default {
         save(){
             var editedItem = {
                 id: this.lead.id,
-                interest: this.lead.interest,
+                additional_data:{interest: this.lead_interest},
                 phone: this.lead.phone,
                 email: this.lead.email
             }
             axios.patch("https://unowipes.com/api/v1/leads",Object.assign(editedItem)).then(response=>{
                 this.editInterest = false
+                this.lead_interest = ''
                 this.editPhone = false
                 this.editEmail = false
             })
@@ -421,7 +440,8 @@ export default {
                 user_id: this.currentUser.id,
                 contents:{
                     type: "file",
-                    fileUrl: this.fileLink
+                    fileUrl: this.fileLink,
+                    fileMimeType: this.fileMimeType
                 },
                 channel: this.propData.lead.conversation.channel,
                 uuid:'',
@@ -433,7 +453,7 @@ export default {
             }
             this.messages.push(messageInput)
             if(this.propData.lead.conversation.channel == 'whatsapp'){
-                var server = process.env.VUE_APP_ZENVIA_WHATSAPP_SERVER
+                var server = this.propData.lead.conversation.zenviaChannelId
             }else if(this.propData.lead.conversation.channel == 'facebook'){
                 var server = process.env.VUE_APP_ZENVIA_FACEBOOK_SERVER
             }
@@ -489,7 +509,7 @@ export default {
                 }
                 this.messages.push(messageInput)
                 if(this.propData.lead.conversation.channel == 'whatsapp'){
-                    var server = process.env.VUE_APP_ZENVIA_WHATSAPP_SERVER
+                    var server = this.propData.lead.conversation.zenviaChannelId
                 }else if(this.propData.lead.conversation.channel == 'facebook'){
                     var server = process.env.VUE_APP_ZENVIA_FACEBOOK_SERVER
                 }
@@ -548,7 +568,7 @@ export default {
             }
             this.messages.push(messageInput)
             if(this.propData.lead.conversation.channel == 'whatsapp'){
-                var server = process.env.VUE_APP_ZENVIA_WHATSAPP_SERVER
+                var server = this.propData.lead.conversation.zenviaChannelId
             }else if(this.propData.lead.conversation.channel == 'facebook'){
                 var server = process.env.VUE_APP_ZENVIA_FACEBOOK_SERVER
             }
@@ -623,6 +643,7 @@ export default {
             this.file = file
             console.log('File Successfully Uploaded with file name: ' + response.file);
             this.fileLink = 'https://unowipes.com/zenvia-files/' + response.file;
+            this.fileMimeType = response.extension
             this.disableButtonFileSend = false;
         },
         uploadError(file, message) {
@@ -632,6 +653,7 @@ export default {
             this.$refs.myVueDropzone.removeFile(file)
             this.file = ''
             this.fileLink = ''
+            this.fileMimeType = ''
         },
     },
 

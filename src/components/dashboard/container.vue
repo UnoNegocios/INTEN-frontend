@@ -363,7 +363,7 @@ export default {
             //this.pause = true
             let index_lead = this.leads.indexOf(this.leads.filter(element=>element.data.filter(dta=>dta.id == lead.id).length>0)[0])
             if(lead.conversation.channel == 'whatsapp'){
-                var server = process.env.VUE_APP_ZENVIA_WHATSAPP_SERVER
+                var server = this.propData.lead.conversation.zenviaChannelId
             }else if(lead.conversation.channel == 'facebook'){
                 var server = process.env.VUE_APP_ZENVIA_FACEBOOK_SERVER
             }
