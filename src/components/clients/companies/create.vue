@@ -171,7 +171,7 @@ import axios from "axios";
             gris:false,
             company:{
                 contract_date:'',
-                delivery_time:'',
+                //delivery_time:'',
                 user_id:'',
                 origin_id:'',
                 status_id:'',

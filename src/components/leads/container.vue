@@ -97,7 +97,7 @@
                                 
                                 
                                 
-                                <v-list-item @click="openConversation(element)" class="list-group-item item mt-2 mb-7 pl-0 pr-4 elevation-0" v-for="element in leads[index].data" :key="element.id" style="background:white; min-height: 60px;">
+                                <v-list-item @click="openConversation(element)" :class="'list-group-item item mt-2 pl-0 pr-4 elevation-0 ' + mbCondition(element.user)" v-for="element in leads[index].data" :key="element.id" style="background:white; min-height: 60px;">
                                     <!--v-tooltip right>
                                         <template v-slot:activator="{ on, attrs }">
                                             <v-bind="attrs" v-on="on">
@@ -150,9 +150,11 @@
                                     
 
                                     <v-row v-if="element.user!=undefined" class="user-label ma-0 py-1 px-2">
-                                        <v-chip color="#ccd2d4" x-small style="font-weight:500; color:#001e60;">{{element.user.name}}</v-chip>
+                                        <img v-if="element.additional_data!=null" style="height: 20px!important;" :src="'/logo_'+element.additional_data.interest+'.png'"/>
                                         <v-spacer/>
-                                        <v-chip color="#001e60" style="font-weight:500;" dark x-small v-if="element.additional_data!=null">{{element.additional_data.interest}}</v-chip>
+                                        <v-list-item-avatar size="20" class="ma-0" :color="element.user.color">
+                                            <span style="text-transform: uppercase; text-align: center; width: 20px; font-size:12px;" class="white--text"><strong>{{element.user.name.slice(0,1)}}{{element.user.last.slice(0,1)}}</strong></span>
+                                        </v-list-item-avatar>
                                     </v-row>
                                 </v-list-item>
 
@@ -358,7 +360,6 @@ export default {
         },
     },
     mounted() {
-
         Echo.channel('lead_change').listen('LeadChangeEvent', (e) => {
             if(!this.pause){
                 let lead_id = e[0].id//correcto
@@ -416,6 +417,11 @@ export default {
         },
     },
     methods: {
+        mbCondition(element){
+            if(element!=undefined){
+                return 'mb-7'
+            }
+        },
         removeFilter(){
             this.filters={
                 user_id:'',

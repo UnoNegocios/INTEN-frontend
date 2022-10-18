@@ -2,7 +2,7 @@
     <v-container style="max-width:100vw;">
         <!-- Filtros -->
         <v-navigation-drawer style="top: 0px; max-height:100vh!important;" right v-model="filters" :clipped="$vuetify.breakpoint.lgAndUp" app>
-            <filterCalendar v-bind:company="company" @filtersCalendar="filtersCalendar"/>
+            <filterCalendar v-bind:company="company" @filtersActivities="filtersActivities"/>
         </v-navigation-drawer>
         <!-- Contenedor -->
         <v-data-table :headers="headers" :items="calendars" class="elevation-0 px-6 py-4"
@@ -196,7 +196,7 @@ export default {
         },
         apiCall () {
             return new Promise((resolve, reject) => {
-                this.filterStorageLength = localStorage.getItem('filtersCalendarsLength')
+                this.filterStorageLength = localStorage.getItem('filtersActivitiesLength')
                 const { sortBy, sortDesc, page, itemsPerPage } = this.options
                 var items = []
                 var total = 0
@@ -204,8 +204,8 @@ export default {
                 if(this.company!=undefined){
                     link = link + 'filter[client_id]='+this.company.id+'&'
                 }
-                if(localStorage.getItem('filtersCalendars')!=null){
-                    link = link + JSON.parse(localStorage.getItem('filtersCalendars'))+'&'
+                if(localStorage.getItem('filtersActivities')!=null){
+                    link = link + JSON.parse(localStorage.getItem('filtersActivities'))+'&'
                 }/*else{
                     var startDate = []
                     var date = new Date()
@@ -331,17 +331,20 @@ export default {
             })
             })
         },
-        filtersCalendar: function(params) {
-            
+        filtersActivities: function(params) {
+            this.getDataFromApi()
         },
         closeDialogEditCalendar: function(params) {
+            this.getDataFromApi()
             this.editDialog = false;
-            this.$store.dispatch('calendar/getCalendars')
         },
         closeCreateDialogCalendar: function(params) {
+            /*
             if(params!=false){
             this.calendars.push(this.mapCalendars([params])[0])
             }
+            */
+           this.getDataFromApi()
             this.createDialog = false;
         },
         exportExcel: function () {
@@ -355,7 +358,7 @@ export default {
             axios.delete("https://unowipes.com/api/v1/activities/"+this.deleteId).then(response => {
                 this.deleteId = ''
                 this.sheet = false
-                
+                this.getDataFromApi()
             }).catch(error => {
                 this.snackbar = {
                     message: error.response.data.message,

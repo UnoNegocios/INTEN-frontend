@@ -56,7 +56,7 @@
                                  
                                 <img v-else-if="message_item.contents.type=='file' && message_item.contents.fileMimeType=='image/png'" style="margin-right:-30px; margin-bottom:5px; width:60px; max-height:60px; object-fit:cover;" :src="message_item.contents.fileUrl"/>
 
-                                <v-dialog content-class="elevation-0" v-else-if="message_item.contents.type=='file' && (message_item.contents.fileMimeType=='image/jpeg' || message_item.contents.fileMimeType=='jpeg' || message_item.contents.fileMimeType=='png')" style="height:auto; max-width:60px!important; max-width:600px!improtant;">
+                                <v-dialog content-class="elevation-0" v-else-if="message_item.contents.type=='file' && (message_item.contents.fileMimeType=='image/jpeg' || message_item.contents.fileMimeType=='jpeg' || message_item.contents.fileMimeType=='jpg' || message_item.contents.fileMimeType=='png')" style="height:auto; max-width:60px!important; max-width:600px!improtant;">
                                     <template v-slot:activator="{ on, attrs }">
                                         <img v-bind="attrs" v-on="on" :style="imageMargin(message_item.direction) + 'margin-bottom:5px; width:400px; max-height:400px; object-fit:cover;'" :src="message_item.contents.fileUrl"/>
                                     </template>
@@ -77,7 +77,7 @@
                                     </template>
                                 </v-dialog>
 
-                                <video style="margin-right:-30px; margin-bottom:5px; max-width:400px; max-height:400px; object-fit:cover;" controls v-if="message_item.contents.fileMimeType=='video/mp4'">
+                                <video style="margin-right:-30px; margin-bottom:5px; max-width:400px; max-height:400px; object-fit:cover;" controls v-if="message_item.contents.fileMimeType=='video/mp4'||message_item.contents.fileMimeType=='mp4'||message_item.contents.fileMimeType=='mov'">
                                     <source :src="message_item.contents.fileUrl" type="video/mp4"/>
                                 </video>
 

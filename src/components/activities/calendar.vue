@@ -413,12 +413,15 @@
       },
       closeDialogEditCalendar: function(params) {
         this.editDialog = false;
-        this.$store.dispatch('calendar/getCalendars')
+        location.reload()
       },
       closeCreateDialogCalendar: function(params) {
+        /*
         if(params!=false){
           this.events.push(this.mapCalendar([params])[0])
         }
+        */
+        this.updateActivities()
         this.createDialog = false;
       },
       status(activity_id, client){

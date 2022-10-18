@@ -11,7 +11,7 @@
                 Fecha de creación 
                 <v-menu offset-y :close-on-content-click="closeDatePicker(client.created_at)">
                     <template v-slot:activator="{ on, attrs }">
-                        <v-text-field :rules="[v => !!v || 'Campo requerido']" clearable required v-model="client.created_at" label="Fecha Creación" prepend-icon="mdi-calendar" v-bind="attrs" readonly v-on="on"></v-text-field>
+                        <v-text-field clearable v-model="client.created_at" label="Fecha Creación" prepend-icon="mdi-calendar" v-bind="attrs" readonly v-on="on"></v-text-field>
                     </template>
                     <v-date-picker v-model="client.created_at" range></v-date-picker>
                 </v-menu>
@@ -56,7 +56,7 @@
             email:'',
             rfc:'',
             razon_social:'',
-            created_at:''
+            created_at:[]
         },
     }),
     computed: {
@@ -71,7 +71,7 @@
         },
     },
     created () {
-        let params = JSON.parse(localStorage.getItem('filtersClients'))
+        let params = JSON.parse(localStorage.getItem('selectorFiltersClients'))
         if(params!=undefined){
             this.client = params
         }
@@ -140,7 +140,7 @@
             })
         },
         closeDatePicker(dates){
-            if(dates.length==2){
+            if(dates!=undefined && dates.length==2){
                 return true
             }else{
                 return false
@@ -157,8 +157,7 @@
                 email:'',
                 rfc:'',
                 razon_social:'',
-                dateCreateFrom:'',
-                dateCreateTo:'',
+                created_at:[]
             }
             localStorage.removeItem("selectorFiltersClients")
             localStorage.removeItem("entriesFiltersClients")
