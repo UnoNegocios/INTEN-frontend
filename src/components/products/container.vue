@@ -145,16 +145,17 @@ export default {
                 if(this.seach!=''){
                     link = 'filter[name]=' + this.search + '&'
                 }
-                axios.get("https://unowipes.com/api/v1/devices?" + link + "page=" + page + "&itemsPerPage=" + itemsPerPage).then(response => {
-                    items = this.mapItems(response.data.data)
-                    total = response.data.meta.total
+                axios.get("https://unowipes.com/api/v1/cellular_plans")//?" + link + "page=" + page + "&itemsPerPage=" + itemsPerPage)
+                .then(response => {
+                    items = this.mapItems(response.data)
+                    total = response.data.length
                     if (sortBy.length === 1 && sortDesc.length === 1) {
                         if(sortDesc[0]){
                             axios
-                            .get("https://unowipes.com/api/v1/devices?" + link + "page=" + page + "&sort=-" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
+                            .get("https://unowipes.com/api/v1/cellular_plans")//?" + link + "page=" + page + "&sort=-" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
                             .then(response=>{
-                                items = this.mapItems(response.data.data)
-                                total = response.data.meta.total
+                                items = this.mapItems(response.data)
+                                total = response.data.length
                                 resolve({
                                     items,
                                     total,
@@ -162,10 +163,10 @@ export default {
                             })
                         }else{
                             axios
-                            .get("https://unowipes.com/api/v1/devices?" + link + "page=" + page + "&sort=" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
+                            .get("https://unowipes.com/api/v1/cellular_plans")//?" + link + "page=" + page + "&sort=" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
                             .then(response=>{
-                                items = this.mapItems(response.data.data)
-                                total = response.data.meta.total
+                                items = this.mapItems(response.data)
+                                total = response.data.length
                                 resolve({
                                     items,
                                     total,

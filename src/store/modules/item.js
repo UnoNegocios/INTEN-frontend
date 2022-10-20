@@ -7,9 +7,9 @@ const getters = {};
 const actions = {
     getItems( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/devices")
+        .get("https://unowipes.com/api/v1/cellular_plans")
         .then(response => {
-            commit('setItems', response.data.data);
+            commit('setItems', response.data);
         });
     }
 };
