@@ -77,6 +77,10 @@
                                     </template>
                                 </v-dialog>
 
+                                <video style="height: 60px; width: 300px!important; transform: scale(.8); margin: -16px -39px; filter: brightness(1.1);" v-else-if="message_item.contents.type=='file' && message_item.contents.fileMimeType=='audio/ogg'" controls="" :autoplay="false" name="media">
+                                    <source src="https://chat.zenvia.com/storage/files/0a7e6096fb7a42c242b146f04498d59b6b437fafa613bc27b1f1d9bcfcf8bd05.bin" type="audio/ogg">
+                                </video>
+
                                 <video style="margin-right:-30px; margin-bottom:5px; max-width:400px; max-height:400px; object-fit:cover;" controls v-if="message_item.contents.fileMimeType=='video/mp4'||message_item.contents.fileMimeType=='mp4'||message_item.contents.fileMimeType=='mov'">
                                     <source :src="message_item.contents.fileUrl" type="video/mp4"/>
                                 </video>
@@ -320,6 +324,8 @@ export default {
             }
         },
         expiration(channel, date){
+            console.log(channel)
+            console.log(date)
             if(channel == 'whatsapp'){
                 var fechaInicio = new Date(date).getTime();
                 var fechaFin = new Date().getTime();

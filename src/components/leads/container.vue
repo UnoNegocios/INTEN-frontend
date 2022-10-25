@@ -42,7 +42,7 @@
             <v-row class="ma-0">
                 <v-menu offset-y>
                     <template v-slot:activator="{ on, attrs }">
-                        <v-row class="ma-0" >
+                        <v-row class="ma-0">
                             <span v-bind="attrs" v-on="on" style="font-size:21px;"> 
                                 🧠 {{funnel.name}}
                                 <v-tooltip right>
@@ -555,7 +555,7 @@ export default {
                 filter = filter + '&filter[created_between]=' + this.filters.created_at
             }
 
-            if(i==0 && this.funnel.id==1){
+            if(i==0){//&& this.funnel.id==1
                 if(filter!=''){
                     filter = filter.slice(1,filter.length)
                 }
