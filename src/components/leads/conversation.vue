@@ -45,8 +45,8 @@
                         <div v-for="(message_item, index) in messages" :key="index">
                             <v-row class="ma-0 mb-2">
                                 <v-spacer></v-spacer>
-                                <v-chip small style="font-weight:500;" color="#f0f0f0" class="elevation-1" light v-if="(index>=1 && message_item.zenvia_timestamp.slice(0,10)!=messages[index-1].zenvia_timestamp.slice(0,10)) || index==0">
-                                    {{dateFormat(message_item.zenvia_timestamp)}}
+                                <v-chip small style="font-weight:500;" color="#f0f0f0" class="elevation-1" light v-if="(index>=1 && message_item.created_at.slice(0,10)!=messages[index-1].created_at.slice(0,10)) || index==0">
+                                    {{dateFormat(message_item.created_at)}}
                                 </v-chip>
                                 <v-spacer></v-spacer>   
                             </v-row>
@@ -85,6 +85,10 @@
                                     <source :src="message_item.contents.fileUrl" type="video/mp4"/>
                                 </video>
 
+                                <v-btn style="letter-spacing: 0px;" color="primary" text class="py-6" v-if="message_item.contents.fileMimeType!=undefined && message_item.contents.fileMimeType.includes('application')" v-bind:href="message_item.contents.fileUrl" target="_blank">
+                                    <v-icon class="mr-2">mdi-file-document</v-icon><span>{{message_item.contents.fileName}}</span><v-icon class="ml-2">mdi-download-circle-outline</v-icon>
+                                </v-btn>
+
                                 <span v-if="message_item.contents.type=='card'">
                                     <span>{{ message_item.contents.text }} </span>
                                     <v-row class="ma-0 mt-1">
@@ -101,7 +105,7 @@
 
                                     <span :style="message_item.direction === 'OUT' ? 'position:absolute!important; right:50px!important;': ''">
                                         <!-- Hour -->
-                                        <span :style="message_item.direction === 'OUT' ? 'margin-left: 5px; bottom:-10px;': 'margin-left: 10px; bottom:2px;'" class="chat__timestamp">{{new Date(message_item.zenvia_timestamp).toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit',})}}</span>
+                                        <span :style="message_item.direction === 'OUT' ? 'margin-left: 5px; bottom:-10px;': 'margin-left: 10px; bottom:2px;'" class="chat__timestamp">{{new Date(message_item.created_at).toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit',})}}</span>
                                         <!-- Seen -->
                                         <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'CLOCK'" x-small color="grey" class="chat__checkmark">mdi-clock-outline</v-icon>
                                         <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'SENT'" x-small color="grey" class="chat__checkmark">mdi-check</v-icon>
@@ -110,6 +114,7 @@
                                         <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'REJECTED'" x-small color="red" class="chat__checkmark">mdi-alert-circle-outline</v-icon>
                                     </span>
                             </p>
+
                         </div>
                     </div>
                     <!-- Type Message-->
@@ -456,6 +461,7 @@ export default {
                 direction:'OUT',
                 statuses:[{code:'CLOCK'}],
                 zenvia_timestamp: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
+                created_at: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
             }
             this.messages.push(messageInput)
             if(this.propData.lead.conversation.channel == 'whatsapp'){
@@ -512,6 +518,7 @@ export default {
                     direction:'OUT',
                     statuses:[{code:'CLOCK'}],
                     zenvia_timestamp: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
+                    created_at: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
                 }
                 this.messages.push(messageInput)
                 if(this.propData.lead.conversation.channel == 'whatsapp'){
@@ -571,6 +578,7 @@ export default {
                 direction:'OUT',
                 statuses:[{code:'CLOCK'}],
                 zenvia_timestamp: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
+                created_at: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
             }
             this.messages.push(messageInput)
             if(this.propData.lead.conversation.channel == 'whatsapp'){

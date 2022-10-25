@@ -24,6 +24,8 @@
                         <v-date-picker v-model="filters.created_at" range></v-date-picker>
                     </v-menu>
 
+                    <v-text-field v-model="filters.phone" label="Teléfono"></v-text-field>
+
                 </div>
                 <v-card style="position:absolute; bottom:0; width:100%;" tile color="primary">
                     <v-list-item link @click="buscar=true, filter = false" dark>
@@ -297,7 +299,8 @@ export default {
             filters:{
                 user_id:'',
                 created_at:[],
-                id:''
+                id:'',
+                phone:''
             },
             buscar:false,
             search:'',
@@ -553,6 +556,9 @@ export default {
             }
             if(this.filters.created_at!=''&&this.filters.created_at!=null){
                 filter = filter + '&filter[created_between]=' + this.filters.created_at
+            }
+            if(this.filters.phone!=''&&this.filters.phone!=null){
+                filter = filter + '&filter[phone]=' + this.filters.phone
             }
 
             if(i==0){//&& this.funnel.id==1
