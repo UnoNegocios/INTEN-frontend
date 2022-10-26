@@ -575,7 +575,7 @@ export default {
             }
         },
         filtersSale: function(params) {
-            this.$store.dispatch('quotation/getSales', {'pageNumber':1, 'sort':'id'})
+            this.getDataFromApi()
             this.showTable = false
             this.filterMobile = false
             this.$nextTick(() => {

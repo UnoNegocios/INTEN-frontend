@@ -135,10 +135,14 @@ export default {
     },
     methods:{
         closeDatePicker(dates){
-            if(dates.length==2){
-                return true
+            if(dates!=null){
+                if(dates.length==2){
+                    return true
+                }else{
+                    return false
+                }
             }else{
-                return false
+                this.quotation.date = []
             }
         },
         filter(){
@@ -249,30 +253,22 @@ export default {
             this.quotation={
                 //multiples axios
                 client_id:'',
-                contact_id:'',
                 //multiples store
                 user_id:'',
                 created_by_user_id:'',
                 last_updated_by_user_id:'',
-                sales_man:'',
                 //abierto
                 id:'',
-                note:'',
-                invoice:'',
-                //select data
-                type:'',
-                status:'',
+                description:'',
+                imei:'',
+                nir:'',
+                sim:'',
                 //boolean
-                printed:'',
-                production_dispatched:'',
-                bar:'',
+                pos_sale:'',
                 //date
                 date:[],
                 created_at:[],
-                updated_at:[],
-                invoice_date:[],
-                shipping_date:[],
-                payment_status:''
+                updated_at:[]
             },
             this.entries={
                 companies: [],

@@ -185,13 +185,13 @@ export default {
                 }else{
                     var link = ''
                 }
-                axios.get("https://unowipes.com/api/v2/sale_utilities?itemsPerPage=" + itemsPerPage).then(response => {//" + link + "page=" + page + "
+                axios.get("https://unowipes.com/api/v1/sale_utilities?itemsPerPage=" + itemsPerPage).then(response => {//" + link + "page=" + page + "
                     items = this.mapSales(response.data.data)
                     total = response.data.meta.total
                     if (sortBy.length === 1 && sortDesc.length === 1) {
                         if(sortDesc[0]){
                             axios
-                            .get("https://unowipes.com/api/v2/sale_utilities?" + link + "page=" + page + "&sort=-" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
+                            .get("https://unowipes.com/api/v1/sale_utilities?" + link + "page=" + page + "&sort=-" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
                             .then(response=>{
                                 items = this.mapSales(response.data.data)
                                 total = response.data.meta.total
@@ -202,7 +202,7 @@ export default {
                             })
                         }else{
                             axios
-                            .get("https://unowipes.com/api/v2/sale_utilities?" + link + "page=" + page + "&sort=" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
+                            .get("https://unowipes.com/api/v1/sale_utilities?" + link + "page=" + page + "&sort=" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
                             .then(response=>{
                                 items = this.mapSales(response.data.data)
                                 total = response.data.meta.total

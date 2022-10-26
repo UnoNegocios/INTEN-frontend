@@ -122,7 +122,7 @@ export default {
             this.editedDetail.quantity = this.editedDetail.quantity*1
             this.gris = true
             this.$nextTick(() => {
-                axios.put("https://unowipes.com/api/v2/sale_items/" + this.editedDetail.id, this.editedDetail).then(response => {
+                axios.put("https://unowipes.com/api/v1/sale_items/" + this.editedDetail.id, this.editedDetail).then(response => {
                     this.close()
                 })
                 .catch(error => {

@@ -85,14 +85,14 @@ const actions = {
         //return new Promise((resolve, reject) => {
         if(localStorage.getItem('filtersSales')==undefined&&localStorage.getItem('filtersSales')==null){
             axios
-            .get("https://unowipes.com/api/v2/sale/totals"+'?filter[date_between]='+startDate)
+            .get("https://unowipes.com/api/v1/sale/totals"+'?filter[date_between]='+startDate)
             .then(response => {
                 state.total_loader = false
                 commit('setTotals', response.data);
             });
         }else{
             axios
-            .get("https://unowipes.com/api/v2/sale/totals?"+ JSON.parse(localStorage.getItem('filtersSales')))
+            .get("https://unowipes.com/api/v1/sale/totals?"+ JSON.parse(localStorage.getItem('filtersSales')))
             .then(response=>{
                 state.total_loader = false
                 commit('setTotals', response.data);
