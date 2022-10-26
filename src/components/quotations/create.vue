@@ -382,13 +382,15 @@
             },
             save(){
                 for(var i=0; i<this.quotation.items.length; i++){
-                    this.quotation.items[i].value = this.devicesList.filter(item=>item.id == this.quotation.items[i].item).map(item=>item.price)[0]
-                    this.quotation.items[i].cost = this.devicesList.filter(item=>item.id == this.quotation.items[i].item).map(item=>item.cost)[0]
+                    this.quotation.items[i].value = this.devicesList.filter(item=>item.id == this.quotation.items[i].cellular_plan_id).map(item=>item.price)[0]
+                    //this.quotation.items[i].cost = this.devicesList.filter(item=>item.id == this.quotation.items[i].item).map(item=>item.cost)[0]
                 }
                 this.quotation.created_by_user_id = this.currentUser.id
                 this.quotation.last_updated_by_user_id = this.currentUser.id
                 this.quotation.status = this.status
                 this.$nextTick(() => {
+                    console.log(this.quotation)
+                    
                     axios.post("https://unowipes.com/api/v1/sales",Object.assign(this.quotation)).then(response=>{
                         this.close()
                     }).catch(error => {
@@ -399,6 +401,7 @@
                         }
                         this.gris = false
                     })
+                    
                 })
             },
             closeCreateDialogCompany: function(params) {

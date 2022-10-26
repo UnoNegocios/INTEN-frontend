@@ -89,6 +89,19 @@
                                     <v-icon class="mr-2">mdi-file-document</v-icon><span>{{message_item.contents.fileName}}</span><v-icon class="ml-2">mdi-download-circle-outline</v-icon>
                                 </v-btn>
 
+                                <!--img v-if="message_item.contents.type=='location'" src="/maps.webp" style="margin-right:-30px; margin-bottom:5px; width:200px; max-height:100px; object-fit:cover;" :href="'https://maps.google.com/?q=' + message_item.contents.latitude + ',' + message_item.contents.longitude"/-->
+
+                                <!--span v-if="message_item.contents.type=='location'">
+                                    <iframe :src="'https://maps.google.com/maps?q=' + message_item.contents.latitude + ',' + message_item.contents.longitude + '&hl=es;z=14&amp;output=embed'" 
+                                        width="535" 
+                                        height="300" 
+                                        style="border:0;" 
+                                        allowfullscreen="" 
+                                        loading="lazy" 
+                                        referrerpolicy="no-referrer-when-downgrade"
+                                    ></iframe>
+                                </span-->
+
                                 <span v-if="message_item.contents.type=='card'">
                                     <span>{{ message_item.contents.text }} </span>
                                     <v-row class="ma-0 mt-1">

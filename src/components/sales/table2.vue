@@ -509,7 +509,7 @@ export default {
         items(items){
             var respuesta=''
             for(var i=0; i<items.length; i++){
-                respuesta = respuesta + items[i].device.name
+                respuesta = respuesta + items[i].cellular_plan.name
                 if(i<(items.length-1)){
                     respuesta = respuesta + ', '
                 }
