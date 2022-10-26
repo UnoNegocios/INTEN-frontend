@@ -66,7 +66,7 @@
                         <v-text-field type=number v-model="item.quantity" label="Cantidad"></v-text-field><!--:disabled="yanohay(item.quantity, item.item, k)" -->
                     </v-col>
                     <v-col ols="12" sm ="8" md="6" class="py-0 my-0">
-                         <v-autocomplete v-model="item.item" :items="devicesList" item-value="id" item-text="name" label="Producto"> 
+                         <v-autocomplete v-model="item.cellular_plan_id" :items="devicesList" item-value="id" item-text="name" label="Producto"> 
                             <template v-slot:item="{item, attrs, on}">
                                 <v-list-item v-on="on" v-bind="attrs">
                                     <v-list-item-content>
@@ -90,7 +90,7 @@
                             </template> 
                         </v-autocomplete>
                     </v-col>
-                    <v-col cols="12" sm ="8" md="4" class="py-0 my-0" v-if="item.item!=''">
+                    <v-col cols="12" sm ="8" md="4" class="py-0 my-0" v-if="item.cellular_plan_id!=''">
                         <v-text-field v-model="item.price" prefix="$" suffix="c/u" label="Precio Ajustado"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm ="4" md="1">
@@ -193,10 +193,9 @@
                 description:'',
                 items:[{
                     quantity:1,
-                    device_id:'',
+                    cellular_plan_id:'',
                     value:'',
                     price:'',
-                    weight:'',
                 }],
                 status:'quotation',
                 pos_sale:false,
@@ -208,7 +207,8 @@
                 payment_method_id:'',
                 activation_date:'',
                 activation_hour:'',
-
+                subtotal: '',
+                user_id: ''
             },
             rules: {
                 required: value => !!value || 'Campo requerido',
@@ -348,17 +348,29 @@
             },
             close () {
                 this.gris = false
-                this.quotation = Object.assign({}, this.defaultItem)
-
-                this.quotation.client_id=null
-                this.quotation.status='quotation'
-                this.quotation.items=[{
-                    quantity:1,
-                    item:'',
-                    value:'',
-                    price:'',
-                    weight:''
-                }]
+                this.quotation = {
+                    client_id:'',
+                    pdf:'',
+                    description:'',
+                    items:[{
+                        quantity:1,
+                        cellular_plan_id:'',
+                        value:'',
+                        price:'',
+                    }],
+                    status:'vendido',
+                    pos_sale:false,
+                    created_by_user_id:'',
+                    last_updated_by_user_id:'',
+                    imei:'',
+                    nir:'',
+                    sim:'',
+                    payment_method_id:'',
+                    activation_date:'',
+                    activation_hour:'',
+                    subtotal: '',
+                    user_id: ''
+                }
                 this.quotation.pos_sale=false
 
                 if(this.company!=undefined){
@@ -370,7 +382,6 @@
             },
             save(){
                 for(var i=0; i<this.quotation.items.length; i++){
-                    this.quotation.items[i].weight = this.devicesList.filter(item=>item.id == this.quotation.items[i].item).map(item=>item.weight)[0]*this.quotation.items[i].quantity
                     this.quotation.items[i].value = this.devicesList.filter(item=>item.id == this.quotation.items[i].item).map(item=>item.price)[0]
                     this.quotation.items[i].cost = this.devicesList.filter(item=>item.id == this.quotation.items[i].item).map(item=>item.cost)[0]
                 }
