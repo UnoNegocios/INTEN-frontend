@@ -91,7 +91,7 @@
 
                                 <!--img v-if="message_item.contents.type=='location'" src="/maps.webp" style="margin-right:-30px; margin-bottom:5px; width:200px; max-height:100px; object-fit:cover;" :href="'https://maps.google.com/?q=' + message_item.contents.latitude + ',' + message_item.contents.longitude"/-->
 
-                                <!--span v-if="message_item.contents.type=='location'">
+                                <span v-if="message_item.contents.type=='location'">
                                     <iframe :src="'https://maps.google.com/maps?q=' + message_item.contents.latitude + ',' + message_item.contents.longitude + '&hl=es;z=14&amp;output=embed'" 
                                         width="535" 
                                         height="300" 
@@ -100,7 +100,7 @@
                                         loading="lazy" 
                                         referrerpolicy="no-referrer-when-downgrade"
                                     ></iframe>
-                                </span-->
+                                </span>
 
                                 <span v-if="message_item.contents.type=='card'">
                                     <span>{{ message_item.contents.text }} </span>
