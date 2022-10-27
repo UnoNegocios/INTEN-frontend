@@ -129,11 +129,11 @@
                                                         <div v-else>{{element.name}} <span v-if="element.last!=null">{{element.last}}</span></div>
                                                     </v-list-item-title>
                                                     <div style="font-size:12px;" v-if="element.conversation!=undefined && element.conversation.latest_message!=null && element.conversation.latest_message.contents.text!=undefined">
-                                                        <div style="font-weight:600;" v-if="element.conversation.unread_messages>0">{{element.conversation.latest_message.contents.text.slice(0,45)}}<span v-if="element.conversation.latest_message.contents.text.length>45">...</span></div>
-                                                        <div v-else>{{element.conversation.latest_message.contents.text.slice(0,45)}}<span v-if="element.conversation.latest_message.contents.text.length>45">...</span></div>
+                                                        <div style="font-weight:600;" v-if="element.conversation.unread_messages>0">{{element.conversation.latest_message.contents.text.slice(0,45)}}<span v-if="element.conversation.latest_message.contents.text!=undefined && element.conversation.latest_message.contents.text.length>45">...</span></div>
+                                                        <div v-else>{{element.conversation.latest_message.contents.text.slice(0,45)}}<span v-if="element.conversation.latest_message.contents.text!=undefined && element.conversation.latest_message.contents.text.length>45">...</span></div>
                                                     </div>
                                                     <div style="font-size:12px;" v-else-if="element.conversation!=undefined && element.conversation.latest_message!=null && element.conversation.latest_message.contents.body!=undefined">
-                                                        <div style="font-weight:600;" v-if="element.conversation.unread_messages>0">{{element.conversation.latest_message.contents.body.slice(0,45)}}<span v-if="element.conversation.latest_message.contents.text.length>45">...</span></div>
+                                                        <div style="font-weight:600;" v-if="element.conversation.unread_messages>0">{{element.conversation.latest_message.contents.body.slice(0,45)}}<span v-if="element.conversation.latest_message.contents.text!=undefined && element.conversation.latest_message.contents.text.length>45">...</span></div>
                                                         <div v-else>{{element.conversation.latest_message.contents.body.slice(0,45)}}<span v-if="element.conversation.latest_message.contents.body.length>45">...</span></div>
                                                     </div>
                                                     <div v-else-if="element.conversation.latest_message.contents.type=='file'" style="font-size:12px;">
