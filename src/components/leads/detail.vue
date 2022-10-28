@@ -17,9 +17,24 @@
             <v-tab-item :value="'tab-1'">
                 <v-list>
                     <v-list-item style="border-bottom: solid 1px #ccd2d4" class="px-1">
-                        <strong>Nombre</strong>
-                        <v-spacer></v-spacer>
-                        {{lead.name}} {{lead.last}}
+                        <v-row class="ma-0" >
+                            <strong>Nombre</strong>
+                            <v-spacer></v-spacer>
+                            
+                            <span v-if="editName==false">{{lead.name}} {{lead.last}}</span>
+                            <v-icon v-if="editName==false" @click="editName=true" small class="ml-2">mdi-pencil</v-icon>
+
+                            <v-icon v-if="editName" @click="save" small class="ml-2">mdi-content-save</v-icon>
+                            <v-icon v-if="editName" @click="editName=false" small class="ml-2">mdi-close</v-icon>
+                        </v-row>
+                        <v-row  v-if="editName" class="ma-0">
+                            <v-col cols="6" class="pr-0">
+                                <v-text-field dense v-model="lead.name" label="Nombre" placeholder="Nombre" outlined></v-text-field>
+                            </v-col>
+                            <v-col cols="6" class="pr-0">
+                                <v-text-field dense v-model="lead.last" label="Apellido" placeholder="Apellido" outlined></v-text-field>
+                            </v-col>
+                        </v-row>
                     </v-list-item>
                     <v-list-item style="border-bottom: solid 1px #ccd2d4" class="px-1">
                         <strong>Interes</strong>
@@ -139,6 +154,7 @@ export default {
             playUser:true,
             user_id:'',
             createDialog:false,
+            editName:false,
             editInterest:false,
             editPhone:false,
             editEmail:false,
@@ -194,12 +210,15 @@ export default {
                 id: this.lead.id,
                 additional_data:{interest: this.lead_interest},
                 phone: this.lead.phone,
-                email: this.lead.email
+                email: this.lead.email,
+                name: this.lead.name,
+                last: this.lead.last
             }
             axios.patch("https://unowipes.com/api/v1/leads/" + editedItem.id,Object.assign(editedItem)).then(response=>{
                 this.editInterest = false
                 this.editPhone = false
                 this.editEmail = false
+                this.editName = false
             })
         },
         saveUser(){
