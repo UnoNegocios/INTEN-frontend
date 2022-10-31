@@ -206,7 +206,7 @@ import EditDetail from "../sales/detail/edit"
 import AddDetail  from "../sales/detail/create"
 export default {
     props:{
-        company:String
+        company:Object
     },
     components: {
         'filterSales':Filter,
@@ -303,6 +303,7 @@ export default {
             }
         },
         showCompany(){
+            console.log(this.company)
             if(this.company == null){
                 return { text: 'Empresa o Cliente', value: 'company_id',}
             }else{
@@ -397,7 +398,7 @@ export default {
                 var total = 0
                 var link = ''
                 if(this.company!=undefined){
-                    link = link + 'filter[company_id]='+this.company+'&'
+                    link = link + 'filter[client_id]='+this.company.id+'&'
                 }
 
                 if(localStorage.getItem('filtersSales')!=null){
@@ -461,10 +462,10 @@ export default {
                     id:id.id,
                     company_id: this.nombre(id.client),
                     companyID: id.client.id,
-                    created_at:id.created_at.slice(0, 18),
+                    created_at:new Date(id.created_at).toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 18),
                     
                     pos_sale:id.pos_sale,
-                    updated_at:id.updated_at.slice(0, 18),
+                    updated_at:new Date(id.updated_at).toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 18),
                     user:id.user,
                     created_by_user_id:this.salesman(id.created_by_user_id),
                     last_updated_by_user_id:this.salesman(id.last_updated_by_user_id),

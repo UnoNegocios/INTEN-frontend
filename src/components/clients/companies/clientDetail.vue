@@ -256,7 +256,7 @@ import axios from "axios";
 import Contacts from "../contacts/container"
 import Activities from "../../activities/table"
 import Quotations from "../../quotations/table"
-import Sales from "../../sales/table"
+import Sales from "../../sales/table2"
 import Canceled from "../../canceled/table"
 import Notes from "../../notes/container"
 import ActivityLog from "../../activitylog/container"

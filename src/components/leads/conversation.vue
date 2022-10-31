@@ -52,6 +52,8 @@
                             </v-row>
                             <p :class="message_item.direction === 'OUT' ? 'chat__sender chat__message': 'chat__reciever chat__message'" :style="'padding-right:'+ checkPadding(message_item.direction)"> 
                                 
+                                
+
                                 <span v-if="message_item.contents.type=='text' || message_item.contents.type=='template'">{{ message_item.contents.text }} </span>
                                  
                                 <img v-else-if="message_item.contents.type=='file' && message_item.contents.fileMimeType=='image/png'" style="margin-right:-30px; margin-bottom:5px; width:60px; max-height:60px; object-fit:cover;" :src="message_item.contents.fileUrl"/>
@@ -77,21 +79,19 @@
                                     </template>
                                 </v-dialog>
 
-                                <video style="height: 60px; width: 300px!important; transform: scale(.8); margin: -16px -39px; filter: brightness(1.1);" v-else-if="message_item.contents.type=='file' && message_item.contents.fileMimeType.includes('ogg')" controls="" :autoplay="false" name="media">
+                                <video style="height: 60px; width: 300px!important; transform: scale(.8); margin: -16px -39px; filter: brightness(1.1);" v-else-if="message_item.contents.type=='file' && message_item.contents.fileMimeType!=undefined && message_item.contents.fileMimeType.includes('ogg')" controls="" :autoplay="false" name="media">
                                     <source :src="message_item.contents.fileUrl" type="audio/ogg">
                                 </video>
 
-                                <video style="margin-right:-30px; margin-bottom:5px; max-width:400px; max-height:400px; object-fit:cover;" controls v-if="message_item.contents.fileMimeType=='video/mp4'||message_item.contents.fileMimeType=='mp4'||message_item.contents.fileMimeType=='mov'">
+                                <video style="margin-right:-30px; margin-bottom:5px; max-width:400px; max-height:400px; object-fit:cover;" controls v-else-if="message_item.contents.fileMimeType=='video/mp4'||message_item.contents.fileMimeType=='mp4'||message_item.contents.fileMimeType=='mov'">
                                     <source :src="message_item.contents.fileUrl" type="video/mp4"/>
                                 </video>
 
-                                <v-btn style="letter-spacing: 0px;" color="primary" text class="py-6" v-if="message_item.contents.fileMimeType!=undefined && message_item.contents.fileMimeType.includes('application')" v-bind:href="message_item.contents.fileUrl" target="_blank">
+                                <v-btn style="letter-spacing: 0px;" color="primary" text class="py-6" v-else-if="message_item.contents.fileMimeType!=undefined && message_item.contents.fileMimeType.includes('application')" v-bind:href="message_item.contents.fileUrl" target="_blank">
                                     <v-icon class="mr-2">mdi-file-document</v-icon><span>{{message_item.contents.fileName}}</span><v-icon class="ml-2">mdi-download-circle-outline</v-icon>
                                 </v-btn>
 
-                                <!--img v-if="message_item.contents.type=='location'" src="/maps.webp" style="margin-right:-30px; margin-bottom:5px; width:200px; max-height:100px; object-fit:cover;" :href="'https://maps.google.com/?q=' + message_item.contents.latitude + ',' + message_item.contents.longitude"/-->
-
-                                <span v-if="message_item.contents.type=='location'">
+                                <span v-else-if="message_item.contents.type=='location'">
                                     <iframe :src="'https://maps.google.com/maps?q=' + message_item.contents.latitude + ',' + message_item.contents.longitude + '&hl=es;z=14&amp;output=embed'" 
                                         width="535" 
                                         height="300" 
@@ -102,30 +102,31 @@
                                     ></iframe>
                                 </span>
 
-                                <span v-if="message_item.contents.type=='card'">
+                                <span v-else-if="message_item.contents.type=='card'">
                                     <span>{{ message_item.contents.text }} </span>
                                     <v-row class="ma-0 mt-1">
                                         <v-btn disabled v-for="(button, index) in message_item.contents.buttons" v-bind:key="index" class="elevation-0 mt-1" style="min-width: 100%;" small>{{ button.text }}</v-btn>
                                     </v-row>
                                 </span>
 
-                                <span v-if="message_item.contents.type=='button'">
+                                <span v-else-if="message_item.contents.type=='button'">
                                     <span>{{ message_item.contents.body }} </span>
                                     <v-row class="ma-0 mt-1">
                                         <v-btn disabled v-for="(button, index) in message_item.contents.buttons" v-bind:key="index" class="elevation-0 mt-1" style="min-width: 100%;" small>{{ button.title }}</v-btn>
                                     </v-row>
                                 </span>
 
-                                    <span :style="message_item.direction === 'OUT' ? 'position:absolute!important; right:50px!important;': ''">
-                                        <!-- Hour -->
-                                        <span :style="message_item.direction === 'OUT' ? 'margin-left: 5px; bottom:-10px;': 'margin-left: 10px; bottom:2px;'" class="chat__timestamp">{{new Date(message_item.created_at).toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit',})}}</span>
-                                        <!-- Seen -->
-                                        <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'CLOCK'" x-small color="grey" class="chat__checkmark">mdi-clock-outline</v-icon>
-                                        <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'SENT'" x-small color="grey" class="chat__checkmark">mdi-check</v-icon>
-                                        <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'DELIVERED'" x-small color="grey" class="chat__checkmark">mdi-check-all</v-icon>
-                                        <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'READ'" x-small color="primary" class="chat__checkmark">mdi-check-all</v-icon>
-                                        <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'REJECTED'" x-small color="red" class="chat__checkmark">mdi-alert-circle-outline</v-icon>
-                                    </span>
+                                <!-- Fecha y Hora -->
+                                <span :style="message_item.direction === 'OUT' ? 'position:absolute!important; right:50px!important;': ''">
+                                    <!-- Hour -->
+                                    <span :style="message_item.direction === 'OUT' ? 'margin-left: 5px; bottom:-10px;': 'margin-left: 10px; bottom:2px;'" class="chat__timestamp">{{new Date(message_item.created_at).toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit',})}}</span>
+                                    <!-- Seen -->
+                                    <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'CLOCK'" x-small color="grey" class="chat__checkmark">mdi-clock-outline</v-icon>
+                                    <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'SENT'" x-small color="grey" class="chat__checkmark">mdi-check</v-icon>
+                                    <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'DELIVERED'" x-small color="grey" class="chat__checkmark">mdi-check-all</v-icon>
+                                    <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'READ'" x-small color="primary" class="chat__checkmark">mdi-check-all</v-icon>
+                                    <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'REJECTED'" x-small color="red" class="chat__checkmark">mdi-alert-circle-outline</v-icon>
+                                </span>
                             </p>
 
                         </div>
