@@ -329,7 +329,7 @@ import axios from "axios";
                 this.quotation.total = this.quotation.subtotal*1.08
             }
             this.$nextTick(() => {
-                axios.put("https://unowipes.com/api/v1/sale",Object.assign(this.quotation)).then(response=>{
+                axios.put("https://unowipes.com/api/v1/sale/" + this.quotation.id,Object.assign(this.quotation)).then(response=>{
                     this.close()
                 }).catch(error => {
                     this.snackbar = {

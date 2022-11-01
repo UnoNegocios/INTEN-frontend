@@ -629,7 +629,7 @@ export default {
             XLSX.writeFile(workbook, `${filename}.xlsx`)
         },
         deleteSale(){
-            axios.delete("https://wowipes.com/api/v1/quotation/delete/"+this.deleteId).then(response => {
+            axios.delete("https://wowipes.com/api/v1/sales/"+this.deleteId).then(response => {
                 this.deleteId = ''
                 this.sheet = false
                 this.getDataFromApi()
