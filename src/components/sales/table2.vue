@@ -121,7 +121,7 @@
             <v-bottom-sheet  v-model="sheet" inset>
                 <v-sheet class="text-center" height="150px">
                     <div class="pt-6">
-                    ¿Seguro que deseas borrar esta cotizaión?
+                    ¿Seguro que deseas borrar esta venta?
                     </div>
                     <v-btn class="mt-4" text color="error" @click="deleteSale()">
                     Eliminar
@@ -527,7 +527,7 @@ export default {
             }
         },
         printTicket(item){
-            axios.put("https://wowipes.com/api/v1/quotation/print-sale",Object.assign(item)).then(response=>{
+            axios.put("https://unowipes.com/api/v1/quotation/print-sale",Object.assign(item)).then(response=>{
                 localStorage.setItem('printTicket', item.id);
                 window.open("/");
                 this.$nextTick(() => {
@@ -611,7 +611,7 @@ export default {
                     empresa: id.company_id,
                     mostrador: id.bar,
                     fecha_programada: id.date,
-                    serie: id.type,
+                    serie: id.type
                     subtotal: id.subtotal,
                     iva: id.iva,
                     total: id.total,
@@ -629,7 +629,7 @@ export default {
             XLSX.writeFile(workbook, `${filename}.xlsx`)
         },
         deleteSale(){
-            axios.delete("https://wowipes.com/api/v1/sales/"+this.deleteId).then(response => {
+            axios.delete("https://unowipes.com/api/v1/sales/"+this.deleteId).then(response => {
                 this.deleteId = ''
                 this.sheet = false
                 this.getDataFromApi()
@@ -700,7 +700,7 @@ export default {
                 }
             }
             this.$nextTick(() => {
-                axios.put("https://wowipes.com/api/v1/quotation/bar-bulk-update",Object.assign(edited)).then(response=>{
+                axios.put("https://unowipes.com/api/v1/quotation/bar-bulk-update",Object.assign(edited)).then(response=>{
                     this.$store.dispatch('quotation/getSales')
                     this.gris = false
                     this.searchInput = ''
