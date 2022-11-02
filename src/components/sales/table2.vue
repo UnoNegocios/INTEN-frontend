@@ -611,7 +611,7 @@ export default {
                     empresa: id.company_id,
                     mostrador: id.bar,
                     fecha_programada: id.date,
-                    serie: id.type
+                    serie: id.type,
                     subtotal: id.subtotal,
                     iva: id.iva,
                     total: id.total,

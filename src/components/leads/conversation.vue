@@ -301,6 +301,7 @@ export default {
             this.lead_interest = this.lead.additional_data.interest
         }
         this.lead = this.propData.lead
+
         this.newPhase = this.lead.funnel_phase.id*1
         this.newFunnel = this.lead.funnel_phase.funnel.id*1
         this.funnel_phases = this.propData.funnel_phases
@@ -314,7 +315,9 @@ export default {
         Echo.channel('new_message').listen('NewMessageEvent', (e) => {
             var new_message = {}
             new_message = e[0]
+
             this.lead.conversation.latest_session_message_time = new_message.created_at
+
 
             if(new_message.direction=='OUT'){
                 var channelId = new_message.to
@@ -330,8 +333,7 @@ export default {
             }
         })
         Echo.channel('new_message_status_event').listen('NewMessageStatusEvent', (e) => {
-            console.log(e)
-            console.log('perro')
+            
         })
     },
     methods:{
@@ -343,8 +345,6 @@ export default {
             }
         },
         expiration(channel, date){
-            console.log(channel)
-            console.log(date)
             if(channel == 'whatsapp'){
                 var fechaInicio = new Date(date).getTime();
                 var fechaFin = new Date().getTime();

@@ -401,6 +401,9 @@ export default {
             [0].conversation.latest_message = new_message
 
             this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
+            [0].conversation.latest_session_message_time = new_message.created_at
+
+            this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
             [0].conversation.unread_messages = this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
             [0].conversation.unread_messages + 1
 
