@@ -109,7 +109,7 @@
           <create v-bind:message="[company, statusss]" @closeCreateDialogQuotation="closeCreateDialogQuotation"/>
         </v-dialog>
         <!-- Editar venta -->
-        <v-dialog v-model="editDialog" max-width="650px">
+        <v-dialog v-model="editDialog" max-width="900px">
           <edit v-bind:quotation="sale" @closeDialogEditQuotation="closeDialogEditQuotation"/>
         </v-dialog>
         <!-- Enviar email -->
@@ -303,7 +303,6 @@ export default {
             }
         },
         showCompany(){
-            console.log(this.company)
             if(this.company == null){
                 return { text: 'Empresa o Cliente', value: 'company_id',}
             }else{
@@ -667,18 +666,27 @@ export default {
                 this.sale = response.data.data.map(id=>{
                     return{
                         id:id.id,
-                        company_id:this.existe(id.company),
-                        contact_id:this.existe(id.contact),
-                        user_id:this.existe(id.user),
+                        client_id:this.existe(id.client),
                         pdf:id.pdf,
-                        note:id.note,
-                        bar:id.bar,
-                        date:id.date,
-                        type:id.type,
-                        invoice:id.invoice,
+                        description:id.description,
+                        items:id.items.map(item=>{return{
+                            quantity:item.quantity,
+                            cellular_plan_id:this.existe(item.cellular_plan),
+                            value:item.value,
+                            price:item.price,
+                        }}),
+                        pos_sale:id.pos_sale,
                         last_updated_by_user_id:this.existe(id.last_updated_by_user_id),
-                        invoice_date:id.invoice_date,
-                        status:'vendido'
+                        imei:id.imei,
+                        nir:id.nir,
+                        sim:id.sim,
+                        payment_method_id:this.existe(id.payment_method),
+                        activation_date:id.activation_date,
+                        activation_hour:id.activation_hour,
+                        subtotal: '',
+                        user_id:this.existe(id.user),
+                        client:id.client,
+                        
                     }
                 })[0]
                 this.editDialog = true
