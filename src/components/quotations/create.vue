@@ -72,18 +72,6 @@
                                     <v-list-item-content>
                                         <v-list-item-title>
                                             {{item.name}} | {{(item.price*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}
-                                            <!--div>
-                                                <span style="font-size:12px;">Categoría:</span>
-                                                <template v-for="(category, index) in item.categories">
-                                                    <v-chip  v-bind:key="index" small class="ml-2"  style="font-size:8px;">{{categoryName(category)}}</v-chip>
-                                                </template>
-                                            </div>
-                                            <div>
-                                                <span style="font-size:14px;">Inventario:
-                                                    <strong v-if="item.inventory[0]<1" style="color:red!important;">{{item.inventory[0]}}</strong>
-                                                    <strong v-else style="color:green!important;">{{item.inventory[0]}}</strong>
-                                                </span>
-                                            </div-->
                                         </v-list-item-title>
                                     </v-list-item-content>
                                 </v-list-item>
@@ -91,7 +79,7 @@
                         </v-autocomplete>
                     </v-col>
                     <v-col cols="12" sm ="8" md="4" class="py-0 my-0" v-if="item.cellular_plan_id!=''">
-                        <v-text-field v-model="item.price" prefix="$" suffix="c/u" label="Precio Ajustado"></v-text-field>
+                        <v-text-field disabled v-model="item.price" prefix="$" suffix="c/u" label="Precio"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm ="4" md="1">
                         <v-icon @click="remove(k)" v-show="k || ( !k && quotation.items.length > 1)" color="red">mdi-close</v-icon>
@@ -139,7 +127,6 @@
                 </v-card-actions>
             </v-col>
         </v-row>
-
         <!-- Crear empresa -->
         <v-dialog v-model="createCompanyDialog" max-width="700px">
           <template v-slot:activator="{ on, attrs }">
@@ -224,6 +211,13 @@
             },
         }),
         watch: {
+            items:{
+                handler(){
+                    for(var i=0; i<this.quotation.items.length; i++){
+                        this.quotation.items[i].price = this.devicesList.filter(item=>item.id == this.quotation.items[i].cellular_plan_id).map(item=>item.price)[0]
+                    }
+                },deep:true
+            },
             searchClients(val){
                 //if (this.clientsList.length > 0) return
                 if (this.isLoadingClients) return
@@ -239,8 +233,18 @@
             },
         },
         computed: {
+            items(){
+                return this.quotation.items
+            },
             grey(){
-                if(this.quotation.client_id==''||this.quotation.client_id==null||this.quotation.client_id==undefined){
+                var items = 0
+                console.log(this.quotation.items.length)
+                for(var i=0; i<this.quotation.items.length; i++){
+                    if(this.quotation.items[i].cellular_plan_id!=''&&this.quotation.items[i].cellular_plan_id!=null&&this.quotation.items[i].cellular_plan_id!=undefined){
+                        items = items+1
+                    }
+                }
+                if((this.quotation.client_id==''||this.quotation.client_id==null||this.quotation.client_id==undefined)||items!=this.quotation.items.length){
                     return true
                 }else{
                     return false
@@ -298,7 +302,6 @@
             },
         },
         created(){
-            console.log(this.message[0])
             this.company=this.message[0]
             this.status=this.message[1]
 
@@ -389,7 +392,6 @@
                 this.quotation.last_updated_by_user_id = this.currentUser.id
                 this.quotation.status = this.status
                 this.$nextTick(() => {
-                    console.log(this.quotation)
                     
                     axios.post("https://unowipes.com/api/v1/sales",Object.assign(this.quotation)).then(response=>{
                         this.close()
