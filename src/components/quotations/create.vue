@@ -12,7 +12,7 @@
                 </v-autocomplete>
             </v-col>
             <v-col cols="12" sm="6" md="2" class="pb-0 mb-0">
-                <v-checkbox v-model="quotation.pos_sale" label="Mostrador"></v-checkbox>
+                <v-checkbox v-model="quotation.pos_sale" label="Recarga"></v-checkbox>
             </v-col>
         </v-card-title>
         <v-divider></v-divider>
@@ -49,7 +49,7 @@
                     </v-col> 
                 </v-row>
                 <!--ALAN-->
-                <v-row class="pb-6 mt-0 pt-0">
+                <!--v-row class="pb-6 mt-0 pt-0">
                      <v-col class="pt-0" cols="12" sm="6" md="4">
                         <v-text-field v-model="quotation.imei" label="IMEI"></v-text-field>
                     </v-col>
@@ -59,7 +59,7 @@
                      <v-col class="pt-0" cols="12" sm="6" md="4">
                         <v-text-field v-model="quotation.sim" label="SIM"></v-text-field>
                     </v-col>
-                </v-row>
+                </v-row-->
                 <!--ALAN-->
                 <v-row style="background-color: #94949417;" class="px-2 ma-0 py-2 " v-for="(item,k) in quotation.items" :key="k">
                     <v-col ols="12" sm ="4" md="1" class="py-0 my-0">

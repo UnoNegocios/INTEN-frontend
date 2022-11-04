@@ -107,7 +107,7 @@
 
                                                 <v-badge class="icon_style" avatar bordered overlap>
                                                     <template v-slot:badge>
-                                                        <v-avatar>
+                                                        <v-avatar v-if="element.conversation!=undefined">
                                                             <v-img v-if="element.conversation.channel == 'whatsapp' " src="https://unocrm.mx/wp-content/uploads/2021/08/whatsapp-icon-seeklogo.com_.svg"></v-img>
                                                             <v-img v-else-if="element.conversation.channel == 'facebook' " src="https://upload.wikimedia.org/wikipedia/commons/b/be/Facebook_Messenger_logo_2020.svg"></v-img>
                                                             <v-img v-else-if="element.conversation.channel == 'instagram' " src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"></v-img>
@@ -123,27 +123,27 @@
                                                 
                                                 <v-list-item-content  style="display: block;">
                                                     <v-list-item-title style="font-size:15px;">
-                                                        <div style="font-weight:500;" v-if="element.conversation.unread_messages>0">
+                                                        <div style="font-weight:500;" v-if="element.conversation!=undefined && element.conversation.unread_messages>0">
                                                             {{element.name}} <span v-if="element.last!=null">{{element.last}}</span>
                                                         </div>
                                                         <div v-else>{{element.name}} <span v-if="element.last!=null">{{element.last}}</span></div>
                                                     </v-list-item-title>
-                                                    <div style="font-size:12px;" v-if="element.conversation!=undefined && element.conversation.latest_message!=null && element.conversation.latest_message.contents.text!=undefined">
+                                                    <div style="font-size:12px;" v-if="element.conversation!=undefined && element.conversation!=undefined && element.conversation.latest_message!=null && element.conversation.latest_message.contents.text!=undefined">
                                                         <div style="font-weight:600;" v-if="element.conversation.unread_messages>0">{{element.conversation.latest_message.contents.text.slice(0,45)}}<span v-if="element.conversation.latest_message.contents.text!=undefined && element.conversation.latest_message.contents.text.length>45">...</span></div>
                                                         <div v-else>{{element.conversation.latest_message.contents.text.slice(0,45)}}<span v-if="element.conversation.latest_message.contents.text!=undefined && element.conversation.latest_message.contents.text.length>45">...</span></div>
                                                     </div>
-                                                    <div style="font-size:12px;" v-else-if="element.conversation!=undefined && element.conversation.latest_message!=null && element.conversation.latest_message.contents.body!=undefined">
+                                                    <div style="font-size:12px;" v-else-if="element.conversation!=undefined && element.conversation!=undefined && element.conversation.latest_message!=null && element.conversation.latest_message.contents.body!=undefined">
                                                         <div style="font-weight:600;" v-if="element.conversation.unread_messages>0">{{element.conversation.latest_message.contents.body.slice(0,45)}}<span v-if="element.conversation.latest_message.contents.text!=undefined && element.conversation.latest_message.contents.text.length>45">...</span></div>
                                                         <div v-else>{{element.conversation.latest_message.contents.body.slice(0,45)}}<span v-if="element.conversation.latest_message.contents.body.length>45">...</span></div>
                                                     </div>
-                                                    <div v-else-if="element.conversation.latest_message.contents.type=='file'" style="font-size:12px;">
+                                                    <div v-else-if="element.conversation!=undefined && element.conversation.latest_message.contents.type=='file'" style="font-size:12px;">
                                                         <div style="font-weight:600;" v-if="element.conversation.unread_messages>0"><v-icon small>mdi-attachment</v-icon><span class="ml-1" style="line-height:19px;">Archivo Adjunto</span></div>
                                                         <div v-else><v-icon small>mdi-attachment</v-icon><span class="ml-1" style="line-height:19px;">Archivo Adjunto</span></div>
                                                     </div>
-                                                    <v-list-item-subtitle v-else-if="element.conversation.channel == 'cliengo'" style="font-size:12px;">{{element.additional_data.final_question}} </v-list-item-subtitle>
+                                                    <v-list-item-subtitle v-else-if="element.conversation!=undefined && element.conversation.channel == 'cliengo'" style="font-size:12px;">{{element.additional_data.final_question}} </v-list-item-subtitle>
                                                 </v-list-item-content>
 
-                                                <v-badge style="transform:scale(0.8); margin-top:-15px; margin-right:5px;" v-if="element.conversation.unread_messages>0" :content="element.conversation.unread_messages"></v-badge>
+                                                <v-badge style="transform:scale(0.8); margin-top:-15px; margin-right:5px;" v-if="element.conversation!=undefined && element.conversation.unread_messages>0" :content="element.conversation.unread_messages"></v-badge>
 
                                             <!--/v-row>
                                         </template>

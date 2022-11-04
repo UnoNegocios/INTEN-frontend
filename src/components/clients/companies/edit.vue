@@ -47,6 +47,18 @@
                                 </v-col>
 
                             </v-row>
+
+                            <v-row class="pb-6 mt-0 pt-0">
+                                <v-col class="pt-0" cols="12" sm="6" md="4">
+                                    <v-text-field v-model="company.imei" label="IMEI"></v-text-field>
+                                </v-col>
+                                <v-col class="pt-0" cols="12" sm="6" md="4">
+                                    <v-text-field v-model="company.nir" label="NIR"></v-text-field>
+                                </v-col>
+                                <v-col class="pt-0" cols="12" sm="6" md="4">
+                                    <v-text-field v-model="company.sim" label="SIM"></v-text-field>
+                                </v-col>
+                            </v-row>
                         </v-container>
                     </v-card-text>
                 </v-stepper-content>

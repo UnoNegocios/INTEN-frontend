@@ -49,7 +49,8 @@
                     <v-list-item style="border-bottom: solid 1px #ccd2d4" class="px-1">
                         <strong>Canal</strong>
                         <v-spacer></v-spacer>
-                        {{lead.conversation.channel}}
+                        <span v-if="lead.conversation!=undefined">{{lead.conversation.channel}}</span>
+                        <span v-else>Carga manual</span>
                     </v-list-item>
                     <v-list-item style="border-bottom: solid 1px #ccd2d4" class="px-1">
                         <strong>Teléfono</strong>
