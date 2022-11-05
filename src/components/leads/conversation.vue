@@ -46,7 +46,7 @@
                             <v-row class="ma-0 mb-2">
                                 <v-spacer></v-spacer>
                                 <v-chip small style="font-weight:500;" color="#f0f0f0" class="elevation-1" light v-if="(index>=1 && message_item.created_at.slice(0,10)!=messages[index-1].created_at.slice(0,10)) || index==0">
-                                    {{dateFormat(message_item.created_at)}}
+                                    {{dateFormat(message_item.meessage_datetime)}}
                                 </v-chip>
                                 <v-spacer></v-spacer>   
                             </v-row>
@@ -119,7 +119,7 @@
                                 <!-- Fecha y Hora -->
                                 <span :style="message_item.direction === 'OUT' ? 'position:absolute!important; right:50px!important;': ''">
                                     <!-- Hour -->
-                                    <span :style="message_item.direction === 'OUT' ? 'margin-left: 5px; bottom:-10px;': 'margin-left: 10px; bottom:2px;'" class="chat__timestamp">{{new Date(message_item.created_at).toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit',})}}</span>
+                                    <span :style="message_item.direction === 'OUT' ? 'margin-left: 5px; bottom:-10px;': 'margin-left: 10px; bottom:2px;'" class="chat__timestamp">{{message_item.meessage_datetime.slice(11,16)}}</span>
                                     <!-- Seen -->
                                     <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'CLOCK'" x-small color="grey" class="chat__checkmark">mdi-clock-outline</v-icon>
                                     <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'SENT'" x-small color="grey" class="chat__checkmark">mdi-check</v-icon>
@@ -411,15 +411,19 @@ export default {
             console.debug(data)
         },
         dateFormat(date){
+            console.log(date.slice(0,10))
+            console.log(new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).slice(0,10))
             // Creamos el objeto fecha instanciándolo con la clase Date
             const fecha = new Date(date.slice(0,10));
+            
             // Creamos array con los días de la semana
             const dias_semana = ['Lunes', 'martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
             //Creamos constante para el dia de hoy
             const hoy = new Date(new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).slice(0,10))
+            console.log(hoy)
             //sacamos diferencia
             const difference = (Date.UTC(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()) - Date.UTC(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()))/(1000*60*60*24)
-
+            console.log('---')
             if((difference)<7){
                 if(difference==0){
                     return 'Hoy'
@@ -515,6 +519,7 @@ export default {
             })
         },
         sendMessage(){
+            
             if(this.message!=''){
                 var message = this.message
                 this.message = ''
@@ -533,6 +538,7 @@ export default {
                     statuses:[{code:'CLOCK'}],
                     zenvia_timestamp: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
                     created_at: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
+                    meessage_datetime: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
                 }
                 this.messages.push(messageInput)
                 if(this.propData.lead.conversation.channel == 'whatsapp'){
@@ -569,7 +575,7 @@ export default {
                     })
                 })
             }else{
-                
+                console.log(new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),)
             }
         },
         sendTemplateMessage(){

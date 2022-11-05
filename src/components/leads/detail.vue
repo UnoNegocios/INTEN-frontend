@@ -199,7 +199,6 @@ export default {
     },
     methods:{
         pendiente(date){
-            console.log(date+' > '+this.today)
             if(date>this.today){
                 return true
             }else{

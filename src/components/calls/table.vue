@@ -198,7 +198,7 @@ export default {
             //websockets
             Echo.channel('test').listen('Test', (e) => {
                 this.$store.dispatch('call/getCalls')
-                //console.log(e)
+
             })
     },
     methods: {

@@ -238,7 +238,6 @@
             },
             grey(){
                 var items = 0
-                console.log(this.quotation.items.length)
                 for(var i=0; i<this.quotation.items.length; i++){
                     if(this.quotation.items[i].cellular_plan_id!=''&&this.quotation.items[i].cellular_plan_id!=null&&this.quotation.items[i].cellular_plan_id!=undefined){
                         items = items+1

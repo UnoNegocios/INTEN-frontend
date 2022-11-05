@@ -393,7 +393,6 @@ export default {
                     //this.pause = false
                 })
             }else{
-                console.log('else')
                 this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}
                 this.conversation_dialog = true
                 //this.pause = false

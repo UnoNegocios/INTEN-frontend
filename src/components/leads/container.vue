@@ -378,11 +378,15 @@ export default {
             }
         })
         Echo.channel('new_lead').listen('BroadcastNewLead', (e) => {
+            console.log('new_lead')
+            console.log(e)
             this.leads[0].data.unshift(e[0])
             new Audio('/mixkit-sci-fi-reject-notification-896.wav').play()
         })
         
         Echo.channel('new_message').listen('NewMessageEvent', (e) => {
+            console.log('new_message')
+            console.log(e)
             let new_message = e[0]
 
             if(new_message.direction=='OUT'){
@@ -391,21 +395,37 @@ export default {
                 var channelId = new_message.from
             }
 
-            let index_lead = this.leads.indexOf(this.leads.filter(lead=>lead.data.filter(dta=>dta.conversation.channelId == channelId).length>0)[0])
+            console.log(channelId)
+
+            console.log('1')
+
+            let index_lead = this.leads.indexOf(this.leads.filter(lead=>lead.data.filter(dta=>this.checkmamadas(dta.conversation) == channelId).length>0)[0])
+
+            console.log('2')
 
             let conversation = this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)[0]
 
+            console.log('3')
+
             let index_conversation = this.leads[index_lead].data.indexOf(conversation)
+
+            console.log('4')
             
             this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
             [0].conversation.latest_message = new_message
 
+            console.log('5')
+
             this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
             [0].conversation.latest_session_message_time = new_message.created_at
+
+            console.log('6')
 
             this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
             [0].conversation.unread_messages = this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
             [0].conversation.unread_messages + 1
+
+            console.log('7')
 
             this.leads[index_lead].data.splice(index_conversation, 1)
             this.leads[index_lead].data.unshift(conversation)
@@ -423,6 +443,11 @@ export default {
         },
     },
     methods: {
+        checkmamadas(conversation){
+            if(conversation!=null){
+            return conversation.channelId
+            }
+        },
         mbCondition(element){
             if(element!=undefined){
                 return 'mb-7'
@@ -506,7 +531,7 @@ export default {
             && this.leads[index_lead].data.filter(dta=>dta.conversation.id == lead.conversation.id).filter(dta=>dta.user == undefined).length>0){
 
                 this.leads[index_lead].data.filter(dta=>dta.conversation.id == lead.conversation.id)[0].user = this.currentUser
-                axios.post("https://unowipes.com/api/v1/conversation/agent-first-interaction", {conversation_id:lead.conversation.id, user_id:this.currentUser.id, channel:lead.conversation.channel, sending_server:server, from:lead.conversation.latest_message.from}).then(resp=>{
+                axios.post("https://unowipes.com/api/v1/conversation/agent-first-interaction", {conversation_id:lead.conversation.id, user_id:this.currentUser.id, channel:lead.conversation.channel, sending_server:server, from:lead.conversation.channelId}).then(resp=>{
                     this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}
                     this.conversation_dialog = true
                     this.leads[index_lead].data.filter(
@@ -524,7 +549,6 @@ export default {
                     //this.pause = false
                 })
             }else{
-                console.log('else')
                 this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}
                 this.conversation_dialog = true
                 //this.pause = false

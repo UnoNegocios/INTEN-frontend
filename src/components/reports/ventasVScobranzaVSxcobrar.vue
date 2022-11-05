@@ -102,7 +102,6 @@ export default {
                 type: 'area',
                 data: this.$store.state.reports.saleman_report.collection_pending_accounts_total,
             }]
-            console.log(perro)
             return perro
         },
         closeDatePicker(){
