@@ -42,7 +42,7 @@ export default {
     },
     methods:{
         save(){
-            axios.post("https://unowipes.com/api/v1/collection/bulk-collection-detail",Object.assign(this.collectionsDetails))
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/collection/bulk-collection-detail",Object.assign(this.collectionsDetails))
         }
     }
 }

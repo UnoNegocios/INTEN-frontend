@@ -10,7 +10,7 @@ const getters = {};
 const actions = {
     getResults( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/result/all")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/result/all")
         .then(response => {
             commit('setResults', response.data);
         });

@@ -248,7 +248,7 @@ export default {
             recording:false,
             pauseChange:true,
             dropzoneOptions: {
-                url: "https://unowipes.com/api/v1/message/upload-file",
+                url: process.env.VUE_APP_BACKEND + "api/v1/message/upload-file",
                 addRemoveLinks: true,
                 maxFiles: 1,
                 thumbnailWidth: 400,
@@ -376,7 +376,7 @@ export default {
             link.click()
         },
         saveFunelAndFace(){
-            axios.patch("https://unowipes.com/api/v1/leads/"+this.lead.id, {funnel_phase_id:this.newPhase.toString()})
+            axios.patch(process.env.VUE_APP_BACKEND + "api/v1/leads/"+this.lead.id, {funnel_phase_id:this.newPhase.toString()})
         },
         convertToClient(){
 
@@ -411,35 +411,35 @@ export default {
             console.debug(data)
         },
         dateFormat(date){
-            console.log(date.slice(0,10))
-            console.log(new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).slice(0,10))
-            // Creamos el objeto fecha instanciándolo con la clase Date
-            const fecha = new Date(date.slice(0,10));
-            
-            // Creamos array con los días de la semana
-            const dias_semana = ['Lunes', 'martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-            //Creamos constante para el dia de hoy
-            const hoy = new Date(new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).slice(0,10))
-            console.log(hoy)
-            //sacamos diferencia
-            const difference = (Date.UTC(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()) - Date.UTC(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()))/(1000*60*60*24)
-            console.log('---')
-            if((difference)<7){
-                if(difference==0){
-                    return 'Hoy'
-                }else if(difference==1){
-                    return 'Ayer'
+
+            console.log(date)
+            if(date!=undefined){
+                // Creamos el objeto fecha instanciándolo con la clase Date
+                const fecha = new Date(date.slice(0,10));
+                
+                // Creamos array con los días de la semana
+                const dias_semana = ['Lunes', 'martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+                //Creamos constante para el dia de hoy
+                const hoy = new Date(new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).slice(0,10))
+                //sacamos diferencia
+                const difference = (Date.UTC(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()) - Date.UTC(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()))/(1000*60*60*24)
+                if((difference)<7){
+                    if(difference==0){
+                        return 'Hoy'
+                    }else if(difference==1){
+                        return 'Ayer'
+                    }else{
+                        return dias_semana[fecha.getDay()]
+                    }
                 }else{
-                    return dias_semana[fecha.getDay()]
-                }
-            }else{
-                // Creamos array con los meses del año
-                const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-                // Construimos el formato de salida
-                if(fecha.getUTCFullYear()!=new Date().getUTCFullYear()){
-                    return dias_semana[fecha.getDay()] + ', ' + fecha.getDate() + ' de ' + meses[fecha.getMonth()];
-                }else{
-                    return dias_semana[fecha.getDay()] + ', ' + fecha.getDate() + ' de ' + meses[fecha.getMonth()] + ' de ' + fecha.getUTCFullYear();
+                    // Creamos array con los meses del año
+                    const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+                    // Construimos el formato de salida
+                    if(fecha.getUTCFullYear()!=new Date().getUTCFullYear()){
+                        return dias_semana[fecha.getDay()] + ', ' + fecha.getDate() + ' de ' + meses[fecha.getMonth()];
+                    }else{
+                        return dias_semana[fecha.getDay()] + ', ' + fecha.getDate() + ' de ' + meses[fecha.getMonth()] + ' de ' + fecha.getUTCFullYear();
+                    }
                 }
             }
         },
@@ -456,7 +456,7 @@ export default {
                 phone: this.lead.phone,
                 email: this.lead.email
             }
-            axios.patch("https://unowipes.com/api/v1/leads",Object.assign(editedItem)).then(response=>{
+            axios.patch(process.env.VUE_APP_BACKEND + "api/v1/leads",Object.assign(editedItem)).then(response=>{
                 this.editInterest = false
                 this.lead_interest = ''
                 this.editPhone = false
@@ -480,6 +480,7 @@ export default {
                 statuses:[{code:'CLOCK'}],
                 zenvia_timestamp: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
                 created_at: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
+                meessage_datetime: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
             }
             this.messages.push(messageInput)
             if(this.propData.lead.conversation.channel == 'whatsapp'){
@@ -510,7 +511,7 @@ export default {
                 messageInput.uuid = response.data.id,
                 messageInput.from = response.data.from,
                 messageInput.to = response.data.to,
-                axios.post("https://unowipes.com/api/v1/messages",Object.assign(messageInput)).then(response=>{
+                axios.post(process.env.VUE_APP_BACKEND + "api/v1/messages",Object.assign(messageInput)).then(response=>{
                     this.messages[this.messages.length-1] = messageInput
                     this.scroll()
                     this.$refs.myVueDropzone.removeFile(this.file)
@@ -569,7 +570,7 @@ export default {
                     messageInput.uuid = response.data.id,
                     messageInput.from = response.data.from,
                     messageInput.to = response.data.to,
-                    axios.post("https://unowipes.com/api/v1/messages",Object.assign(messageInput)).then(response=>{
+                    axios.post(process.env.VUE_APP_BACKEND + "api/v1/messages",Object.assign(messageInput)).then(response=>{
                         this.messages[this.messages.length-1] = messageInput
                         this.scroll()
                     })
@@ -599,6 +600,7 @@ export default {
                 statuses:[{code:'CLOCK'}],
                 zenvia_timestamp: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
                 created_at: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
+                meessage_datetime: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
             }
             this.messages.push(messageInput)
             if(this.propData.lead.conversation.channel == 'whatsapp'){
@@ -633,14 +635,14 @@ export default {
                 messageInput.uuid = response.data.id,
                 messageInput.from = response.data.from,
                 messageInput.to = response.data.to,
-                axios.post("https://unowipes.com/api/v1/messages",Object.assign(messageInput)).then(response=>{
+                axios.post(process.env.VUE_APP_BACKEND + "api/v1/messages",Object.assign(messageInput)).then(response=>{
                     this.messages[this.messages.length-1] = messageInput
                     this.scroll()
                 })
             })
         },
         getMessages($state) {
-            axios.get("https://unowipes.com/api/v1/messages?filter[conversation_id]=" + this.propData.lead.conversation.id + "&page=" + this.page)
+            axios.get(process.env.VUE_APP_BACKEND + "api/v1/messages?filter[conversation_id]=" + this.propData.lead.conversation.id + "&page=" + this.page)
             .then(response=>{
                 if (response.data.data.length) {
                     var messages = response.data.data.sort(function(a,b){
@@ -676,7 +678,7 @@ export default {
         uploadSuccess(file, response) {
             this.file = file
             console.log('File Successfully Uploaded with file name: ' + response.file);
-            this.fileLink = 'https://unowipes.com/zenvia-files/' + response.file;
+            this.fileLink = process.env.VUE_APP_BACKEND + 'zenvia-files/' + response.file;
             this.fileMimeType = response.extension
             this.disableButtonFileSend = false;
         },

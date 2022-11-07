@@ -48,7 +48,7 @@ export default {
         deleteItem (item) {
             let id = item.id
             if (confirm('¿Seguro que deseas borrar este proveedor?')) {
-                axios.delete("https://unowipes.com/api/v1/providers/"+id).then(response => {
+                axios.delete(process.env.VUE_APP_BACKEND + "api/v1/providers/"+id).then(response => {
                     this.$store.dispatch('provider/getProviders')
                 }).catch(error => {
                     this.snackbar = {

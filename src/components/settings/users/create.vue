@@ -340,7 +340,7 @@ export default {
             this.editedItem.permissions = this.rol(this.editedItem.rol)
             this.editedItem.avatar='default.jpg'
             this.editedItem.status=1
-            axios.post("https://unowipes.com/api/v1/users",Object.assign(this.editedItem)).then(response=>{
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/users",Object.assign(this.editedItem)).then(response=>{
                 this.close()
             }).catch(error => {
                 this.snackbar = {

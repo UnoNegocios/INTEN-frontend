@@ -65,7 +65,7 @@ export default {
     },
     data:()=>({ 
         /*dropzoneOptions: {
-            url: "https://unowipes.com/api/v1/item/files",
+            url: process.env.VUE_APP_BACKEND + "api/v1/item/files",
             addRemoveLinks: true,
             thumbnailWidth: 150,
             dictDefaultMessage: 'Haz clic aquí o arrastra la(s) imagen(es) a subir.',
@@ -129,7 +129,7 @@ export default {
         },
         save () {
             this.$nextTick(() => {
-                axios.patch("https://unowipes.com/api/v1/devices/" + this.editedItem.id,Object.assign(this.editedItem)).then(response=>{
+                axios.patch(process.env.VUE_APP_BACKEND + "api/v1/devices/" + this.editedItem.id,Object.assign(this.editedItem)).then(response=>{
                     this.close()
                 }).catch(error => {
                     this.snackbar = {
@@ -142,14 +142,14 @@ export default {
             })
         },
         saveCategory(){
-            axios.post("https://unowipes.com/api/v1/consumption_categories",Object.assign(this.createCategory)).then(response=>{
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/consumption_categories",Object.assign(this.createCategory)).then(response=>{
                 this.$store.dispatch('category/getCategories')
                 //this.disable = true
                 this.createCategory.name=''
             }) 
         },
         saveProvider(){
-            axios.post("https://unowipes.com/api/v1/providers",Object.assign(this.createProvider)).then(response=>{
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/providers",Object.assign(this.createProvider)).then(response=>{
                 this.$store.dispatch('provider/getProviders')
                 //this.disable = true
                 this.createProvider.name=''

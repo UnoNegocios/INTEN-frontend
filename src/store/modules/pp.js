@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getPps( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/quotation/all")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/quotation/all")
         .then(response => {
             commit('setPps', response.data);
         });

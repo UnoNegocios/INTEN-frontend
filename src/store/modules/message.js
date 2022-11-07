@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getMessages( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/message/all/" + localStorage.getItem("conversacionId"))
+        .get(process.env.VUE_APP_BACKEND + "api/v1/message/all/" + localStorage.getItem("conversacionId"))
         .then(response => {
             commit('setMessages', response.data);
         });

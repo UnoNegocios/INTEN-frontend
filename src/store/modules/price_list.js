@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getPriceLists( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/price_list/all")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/price_list/all")
         .then(response => {
             commit('setPriceLists', response.data);
         });

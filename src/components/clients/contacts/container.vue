@@ -23,7 +23,7 @@
                         <v-list>
                             <v-list-item>
                                 <v-list-item-avatar>
-                                    <img src="https://unowipes.com/files/default.jpg">
+                                    <img src=process.env.VUE_APP_BACKEND + "files/default.jpg">
                                 </v-list-item-avatar>
                                 <v-list-item-content>
                                     <v-list-item-title>{{contact.name}} {{contact.last}}</v-list-item-title>
@@ -116,7 +116,7 @@ export default {
     methods:{
         apiCall () {
             return new Promise((resolve, reject) => {
-                axios.get("https://unowipes.com/api/v1/contacts?filter[client_id]=" + this.client.id).then(response => {
+                axios.get(process.env.VUE_APP_BACKEND + "api/v1/contacts?filter[client_id]=" + this.client.id).then(response => {
                     resolve(response.data.data.map(id=>{
                         return{
                             id:id.id,
@@ -147,7 +147,7 @@ export default {
             this.sheet = true
         },
         deleteContact(){
-            axios.delete("https://unowipes.com/api/v1/contact/delete/"+this.deleteId).then(response => {
+            axios.delete(process.env.VUE_APP_BACKEND + "api/v1/contact/delete/"+this.deleteId).then(response => {
                 this.deleteId = ''
                 this.sheet = false
                 this.$store.dispatch('contact/getContacts')

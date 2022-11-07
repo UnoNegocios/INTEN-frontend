@@ -88,7 +88,7 @@
                         <v-card-title class="py-1 px-3" :style="'border-bottom: 2px ' + funnel.color + ' solid; font-size:15px;' + 'background:white;'">
                             {{funnel_phase.name}}
                             <v-spacer/>
-                            <v-icon small>mdi-message-processing</v-icon> <span class="ml-2">{{leads[index].data.length}}</span>
+                            <v-icon small>mdi-message-processing</v-icon> <span class="ml-2">{{leads[index].data.length}}</span><span v-if="leads[index].data.length>0&&((leads[index].data.length%50)==0)">+</span>
                         </v-card-title>
                         <div>
                             <div class="text-center py-6" v-if="leads[index].load_leads">
@@ -160,7 +160,13 @@
                                     </v-row>
                                 </v-list-item>
 
-                                    
+                                
+                                <infinite-loading direction="bottom" :ref="'phase' + funnel_phase.id" @infinite="getMoreLeads(funnel_phase.id)">
+                                    <span slot="no-results">
+                                        <span class="your-customize-class"></span>
+                                    </span>
+                                </infinite-loading>
+                                                        
 
 
                             </draggable>
@@ -294,6 +300,7 @@ export default {
     },
     data() {
         return {
+            leads_links:[{link:'', phase_id:''}],
             filter:false,
             filterMobile:false,
             filters:{
@@ -362,7 +369,7 @@ export default {
             })
         },
     },
-    mounted() {
+    mounted() {      
         Echo.channel('lead_change').listen('LeadChangeEvent', (e) => {
             if(!this.pause){
                 let lead_id = e[0].id//correcto
@@ -378,15 +385,13 @@ export default {
             }
         })
         Echo.channel('new_lead').listen('BroadcastNewLead', (e) => {
-            console.log('new_lead')
-            console.log(e)
+            
             this.leads[0].data.unshift(e[0])
             new Audio('/mixkit-sci-fi-reject-notification-896.wav').play()
         })
         
         Echo.channel('new_message').listen('NewMessageEvent', (e) => {
-            console.log('new_message')
-            console.log(e)
+            
             let new_message = e[0]
 
             if(new_message.direction=='OUT'){
@@ -395,37 +400,21 @@ export default {
                 var channelId = new_message.from
             }
 
-            console.log(channelId)
-
-            console.log('1')
-
             let index_lead = this.leads.indexOf(this.leads.filter(lead=>lead.data.filter(dta=>this.checkmamadas(dta.conversation) == channelId).length>0)[0])
-
-            console.log('2')
 
             let conversation = this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)[0]
 
-            console.log('3')
-
             let index_conversation = this.leads[index_lead].data.indexOf(conversation)
-
-            console.log('4')
             
             this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
             [0].conversation.latest_message = new_message
 
-            console.log('5')
-
             this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
             [0].conversation.latest_session_message_time = new_message.created_at
-
-            console.log('6')
 
             this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
             [0].conversation.unread_messages = this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
             [0].conversation.unread_messages + 1
-
-            console.log('7')
 
             this.leads[index_lead].data.splice(index_conversation, 1)
             this.leads[index_lead].data.unshift(conversation)
@@ -443,6 +432,21 @@ export default {
         },
     },
     methods: {
+        getMoreLeads(phase) {
+            var getLink = this.leads_links.filter(lead_link=>lead_link.phase_id == phase).map(lead_link=>lead_link.link)[0]
+            var index_lead = this.leads.indexOf(this.leads.filter(lead=>lead.funnel_phase_id == phase)[0])
+            var index_leads_links = this.leads_links.indexOf(this.leads_links.filter(lead_link=>lead_link.phase_id == phase)[0])
+            if(getLink!=undefined){
+                axios.get(getLink.replace('http://', 'https://')).then(response=>{
+                    this.leads[index_lead].data = (JSON.parse(JSON.stringify(this.leads[index_lead].data))).concat(response.data.data)
+                    this.leads_links[index_leads_links].link = response.data.links.next
+                    this.$refs['phase' + phase][0].stateChanger.loaded();
+                })
+            }
+            else{
+                this.$refs['phase' + phase][0].stateChanger.complete();
+            }
+        },  
         checkmamadas(conversation){
             if(conversation!=null){
             return conversation.channelId
@@ -498,7 +502,7 @@ export default {
         },
         getFunnelPhases() {
             return new Promise((resolve, reject) => {
-                axios.get("https://unowipes.com/api/v1/funnel_phases?filter[funnel_id]=" + this.funnel.id)
+                axios.get(process.env.VUE_APP_BACKEND + "api/v1/funnel_phases?filter[funnel_id]=" + this.funnel.id)
                 .then(response=>{
                     var items = response.data
                     resolve({
@@ -531,7 +535,7 @@ export default {
             && this.leads[index_lead].data.filter(dta=>dta.conversation.id == lead.conversation.id).filter(dta=>dta.user == undefined).length>0){
 
                 this.leads[index_lead].data.filter(dta=>dta.conversation.id == lead.conversation.id)[0].user = this.currentUser
-                axios.post("https://unowipes.com/api/v1/conversation/agent-first-interaction", {conversation_id:lead.conversation.id, user_id:this.currentUser.id, channel:lead.conversation.channel, sending_server:server, from:lead.conversation.channelId}).then(resp=>{
+                axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversation/agent-first-interaction", {conversation_id:lead.conversation.id, user_id:this.currentUser.id, channel:lead.conversation.channel, sending_server:server, from:lead.conversation.channelId}).then(resp=>{
                     this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}
                     this.conversation_dialog = true
                     this.leads[index_lead].data.filter(
@@ -540,7 +544,7 @@ export default {
                     //this.pause = false
                 })
             }else if(this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0){
-                axios.post("https://unowipes.com/api/v1/conversation/mark_messages_as_read", {conversation_id:lead.conversation.id, user_id:this.currentUser.id}).then(resp=>{
+                axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversation/mark_messages_as_read", {conversation_id:lead.conversation.id, user_id:this.currentUser.id}).then(resp=>{
                     this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}
                     this.conversation_dialog = true
                     this.leads[index_lead].data.filter(
@@ -567,7 +571,7 @@ export default {
             let new_funnel_phase_id = evt.to._prevClass
             let element_id = evt.item._underlying_vm_.id
             if(funnel_phase_id!=new_funnel_phase_id){
-                axios.patch("https://unowipes.com/api/v1/leads/" + element_id, {funnel_phase_id: new_funnel_phase_id.slice(17,new_funnel_phase_id.length)}).then(response=>{})
+                axios.patch(process.env.VUE_APP_BACKEND + "api/v1/leads/" + element_id, {funnel_phase_id: new_funnel_phase_id.slice(17,new_funnel_phase_id.length)}).then(response=>{})
             }
         },
         getLeads(i) {
@@ -587,21 +591,28 @@ export default {
             if(this.filters.phone!=''&&this.filters.phone!=null){
                 filter = filter + '&filter[phone]=' + this.filters.phone
             }
-
             if(i==0){//&& this.funnel.id==1
                 if(filter!=''){
                     filter = filter.slice(1,filter.length)
                 }
-                axios.get("https://unowipes.com/api/v1/unassigned_leads?" + filter)
-                .then(response=>{
-                    this.leads[i].data = response.data.data
+                axios.get(process.env.VUE_APP_BACKEND + "api/v1/unassigned_leads?" + filter)
+                .then(resp=>{
+                    
+                    this.leads[i].data = resp.data.data
                     this.leads[i].load_leads = false
+                    
+                    //this.leads_links.push({link: resp.data.links.next, phase_id: this.leads[i].funnel_phase_id})
+                
                 })
             }else{
-                axios.get("https://unowipes.com/api/v1/leads?filter[funnel_phase_id]=" + this.leads[i].funnel_phase_id + filter)
-                .then(response=>{
-                    this.leads[i].data = response.data.data
+                axios.get(process.env.VUE_APP_BACKEND + "api/v1/leads?filter[funnel_phase_id]=" + this.leads[i].funnel_phase_id + filter + '&sort=latest')
+                .then(resp=>{
+                    
+                    this.leads[i].data = resp.data.data
                     this.leads[i].load_leads = false
+                    
+                    this.leads_links.push({link: resp.data.links.next, phase_id: this.leads[i].funnel_phase_id})
+                
                 })
             }
         },
@@ -610,14 +621,14 @@ export default {
             this.getFunnelPhasesFromApi()
         },
         saveFunnel(){
-            axios.post("https://unowipes.com/api/v1/funnels", this.created_funnel)
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/funnels", this.created_funnel)
             .then(response=>{
                 this.closeFunnelDialog()
                 this.$store.dispatch('funnel/getFunnels')
             })
         },
         saveEditedFunnel(){
-            axios.put("https://unowipes.com/api/v1/funnels", this.funnel)
+            axios.put(process.env.VUE_APP_BACKEND + "api/v1/funnels", this.funnel)
             .then(response=>{
                 this.closeFunnelDialog()
                 this.$store.dispatch('funnel/getFunnels')
@@ -626,7 +637,7 @@ export default {
         saveFunnelPhase(){
             this.created_funnel_phase.funnel_id = this.funnel.id
             
-            axios.post("https://unowipes.com/api/v1/funnel_phases", this.created_funnel_phase)
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/funnel_phases", this.created_funnel_phase)
             .then(response=>{
                 this.closeFunnelPhaseDialog()
                 this.getFunnelPhasesFromApi()

@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getFrequencies( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/frequency/all")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/frequency/all")
         .then(response => {
             commit('setFrequencies', response.data);
         });

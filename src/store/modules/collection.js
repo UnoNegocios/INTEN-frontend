@@ -11,14 +11,14 @@ const getters = {};
 const actions = {
     getCollections( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/collection/all")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/collection/all")
         .then(response => {
             commit('setCollections', response.data);
         });
     },
     getCollectionDetails( {commit} ){
         axios
-        .get("https://unowipes.com/api/v2/collection_details")
+        .get(process.env.VUE_APP_BACKEND + "api/v2/collection_details")
         .then(response => {
             commit('setCollectionDetails', response.data.data);
         });
@@ -26,13 +26,13 @@ const actions = {
     getNewCollections( {commit}, request){
         if(localStorage.getItem('filtersCollections')==undefined&&localStorage.getItem('filtersCollections')==null){
             axios
-            .get("https://unowipes.com/api/v2/collections?page=" + request.pageNumber + "&sort=" + request.sort)
+            .get(process.env.VUE_APP_BACKEND + "api/v2/collections?page=" + request.pageNumber + "&sort=" + request.sort)
             .then(response => {
                 commit('setNewCollections', response.data);
             });
         }else{
             axios
-            .get("https://unowipes.com/api/v2/collections?"+ JSON.parse(localStorage.getItem('filtersCollections')) + "&page=" + request.pageNumber + "&sort=" + request.sort)
+            .get(process.env.VUE_APP_BACKEND + "api/v2/collections?"+ JSON.parse(localStorage.getItem('filtersCollections')) + "&page=" + request.pageNumber + "&sort=" + request.sort)
             .then(response=>{
                 commit('setNewCollections', response.data );
             })
@@ -47,14 +47,14 @@ const actions = {
         //return new Promise((resolve, reject) => {
         if(localStorage.getItem('filtersCollections')==undefined&&localStorage.getItem('filtersCollections')==null){
             axios
-            .get("https://unowipes.com/api/v2/collection/totals"+'?filter[date_between]='+startDate)
+            .get(process.env.VUE_APP_BACKEND + "api/v2/collection/totals"+'?filter[date_between]='+startDate)
             .then(response => {
                 commit('setTotals', response.data.values);
                 state.total_loader = false
             });
         }else{
             axios
-            .get("https://unowipes.com/api/v2/collection/totals?"+ JSON.parse(localStorage.getItem('filtersCollections')))
+            .get(process.env.VUE_APP_BACKEND + "api/v2/collection/totals?"+ JSON.parse(localStorage.getItem('filtersCollections')))
             .then(response=>{
                 commit('setTotals', response.data.values);
                 state.total_loader = false

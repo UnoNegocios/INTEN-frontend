@@ -56,7 +56,7 @@ export default {
                 var quotations_details = []
                 var quotations = []
                 var total = 0
-                axios.get("https://unowipes.com/api/v1/sales?page=" + page + "&itemsPerPage=" + 99999999).then(response => {
+                axios.get(process.env.VUE_APP_BACKEND + "api/v1/sales?page=" + page + "&itemsPerPage=" + 99999999).then(response => {
                     quotations = response.data.data//.map(quotation=>quotation.items)
                     quotations_details = []
                     for(var i=0; i<quotations.length; i++){
@@ -83,7 +83,7 @@ export default {
             })
         },
         save(){
-            axios.post("https://unowipes.com/api/v1/sale_details/bulk-create", this.records)
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/sale_details/bulk-create", this.records)
         },
         tieneValue(item){
             if(item!=undefined){

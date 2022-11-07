@@ -234,7 +234,7 @@ export default {
             this.gris = true
             this.$nextTick(() => {
                 if(this.editedItem.length>0){
-                    axios.post("https://unowipes.com/api/v1/inventory/bulkstore",Object.assign(this.editedItem)).then(response => {
+                    axios.post(process.env.VUE_APP_BACKEND + "api/v1/inventory/bulkstore",Object.assign(this.editedItem)).then(response => {
                         this.gris = false
                         this.dialog = false
                         this.searchInput = ''

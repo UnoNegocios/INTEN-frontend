@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getPhases( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/client_phases")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/client_phases")
         .then(response => {
             commit('setPhases', response.data);
         });

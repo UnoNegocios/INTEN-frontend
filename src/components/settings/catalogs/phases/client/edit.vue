@@ -71,7 +71,7 @@ export default {
             this.$emit("closeDialogPhase", false);
         },
         save () {
-            axios.put("https://unowipes.com/api/v1/client_phases",Object.assign(this.editedPhase)).then(response=>{
+            axios.put(process.env.VUE_APP_BACKEND + "api/v1/client_phases",Object.assign(this.editedPhase)).then(response=>{
                 this.close()
             }).catch(error => {
                 this.snackbar = {

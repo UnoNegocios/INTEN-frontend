@@ -127,7 +127,7 @@
                     color: null
                 },
                 dropzoneOptions: {
-                    url: "https://unowipes.com/api/v1/user/photo",
+                    url: process.env.VUE_APP_BACKEND + "api/v1/user/photo",
                     addRemoveLinks: true,
                     maxFiles: 1,
                     thumbnailWidth: 250,
@@ -158,7 +158,7 @@
         },
         methods:{
             save(){
-                axios.put("https://unowipes.com/api/v1/user/update",Object.assign(this.currentUser)).then(response=>{
+                axios.put(process.env.VUE_APP_BACKEND + "api/v1/user/update",Object.assign(this.currentUser)).then(response=>{
                     this.$store.dispatch('currentUser/getUser')
                     this.editName=false
                     this.editPhoto=false
@@ -174,7 +174,7 @@
                 })
             },
             savePassword(){
-                axios.put("https://unowipes.com/api/v1/user/password",Object.assign(this.currentUser, this.editedPassword)).then(response=>{
+                axios.put(process.env.VUE_APP_BACKEND + "api/v1/user/password",Object.assign(this.currentUser, this.editedPassword)).then(response=>{
                     this.editedPassword=''
                     this.editPassword=false
                 }).catch(error => {

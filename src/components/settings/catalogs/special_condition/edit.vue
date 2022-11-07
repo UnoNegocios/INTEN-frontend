@@ -51,7 +51,7 @@ export default {
             })
         },
         save () {
-            axios.put("https://unowipes.com/api/v1/special_conditions/"+this.editedSpecialCondition.id,Object.assign(this.editedSpecialCondition)).then(response=>{
+            axios.put(process.env.VUE_APP_BACKEND + "api/v1/special_conditions/"+this.editedSpecialCondition.id,Object.assign(this.editedSpecialCondition)).then(response=>{
                 this.close()
             }).catch(error => {
                 this.snackbar = {

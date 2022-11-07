@@ -50,7 +50,7 @@ export default {
         deleteItem (item) {
             let id = item.id
             if (confirm('¿Seguro que deseas borrar esta frecuencia de consumo?')) {
-                axios.delete("https://unowipes.com/api/v1/frequency/delete/"+id).then(response => {
+                axios.delete(process.env.VUE_APP_BACKEND + "api/v1/frequency/delete/"+id).then(response => {
                     this.$store.dispatch('frequency/getFrequencies')
                 }).catch(error => {
                     this.snackbar = {

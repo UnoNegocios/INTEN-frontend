@@ -214,7 +214,7 @@ export default {
                 name: this.lead.name,
                 last: this.lead.last
             }
-            axios.patch("https://unowipes.com/api/v1/leads/" + editedItem.id,Object.assign(editedItem)).then(response=>{
+            axios.patch(process.env.VUE_APP_BACKEND + "api/v1/leads/" + editedItem.id,Object.assign(editedItem)).then(response=>{
                 this.editInterest = false
                 this.editPhone = false
                 this.editEmail = false
@@ -233,14 +233,14 @@ export default {
                 id: this.lead.id,
                 user_id: this.lead.user.id
             }
-            axios.patch("https://unowipes.com/api/v1/leads/" + editedItem.id,{'id':editedItem.id, 'user_id':editedItem.user_id}).then(response=>{
+            axios.patch(process.env.VUE_APP_BACKEND + "api/v1/leads/" + editedItem.id,{'id':editedItem.id, 'user_id':editedItem.user_id}).then(response=>{
                 this.editUser = false
                 this.user_id = ''
                 this.playUser = false
             })
         },
         getActivities(){
-            axios.get("https://unowipes.com/api/v1/activities?filter[lead_id]=" + this.lead.id).then(response => {
+            axios.get(process.env.VUE_APP_BACKEND + "api/v1/activities?filter[lead_id]=" + this.lead.id).then(response => {
                 this.renderActivities = true
                 this.activities = response.data.data
             })
@@ -250,7 +250,7 @@ export default {
             this.getActivities()
         },
         completeActivity(id){
-            axios.patch("https://unowipes.com/api/v1/activities/" + id, {'completed':true, 'last_updated_by_user_id' : this.currentUser.id}).then(response=>{
+            axios.patch(process.env.VUE_APP_BACKEND + "api/v1/activities/" + id, {'completed':true, 'last_updated_by_user_id' : this.currentUser.id}).then(response=>{
                 this.getActivities()
             })
         }

@@ -9,7 +9,7 @@
                 <v-row>
                     <v-col class="py-1" cols="12" sm="6" md="2">
                         <v-list-item-avatar>
-                            <img src="https://unowipes.com/files/default.jpg">
+                            <img src=process.env.VUE_APP_BACKEND + "files/default.jpg">
                         </v-list-item-avatar>
                     </v-col>
                     <v-col class="py-0" cols="12" sm="6" md="5">
@@ -95,7 +95,7 @@ import axios from "axios";
             this.contact.phone = Number(this.contact.phone.replace(/\s/g, ''))
             this.gris = true
             this.$nextTick(() => {
-                axios.patch("https://unowipes.com/api/v1/contacts/" + this.contact.id,Object.assign(this.contact)).then(response=>{
+                axios.patch(process.env.VUE_APP_BACKEND + "api/v1/contacts/" + this.contact.id,Object.assign(this.contact)).then(response=>{
                     this.close()
                 }).catch(error => {
                     this.snackbar = {

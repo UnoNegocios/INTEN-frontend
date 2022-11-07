@@ -265,7 +265,7 @@
       updateRange ({ start, end }) {
         this.start = start.date
         this.end = end.date
-        var link = "https://unowipes.com/api/v1/calendar_activities?filter[date_between]=" + this.start + ',' + this.end
+        var link = process.env.VUE_APP_BACKEND + "api/v1/calendar_activities?filter[date_between]=" + this.start + ',' + this.end
         if(localStorage.getItem('filtersActivities')!=null){
           axios.get(link + JSON.parse(localStorage.getItem('filtersActivities'))).then(response => {
             this.events = this.mapCalendar(response.data.data)
@@ -356,7 +356,7 @@
         }
       },
       filtersActivities: function(params) {
-        var link = "https://unowipes.com/api/v1/calendar_activities?filter[date_between]=" + this.start + ',' + this.end
+        var link = process.env.VUE_APP_BACKEND + "api/v1/calendar_activities?filter[date_between]=" + this.start + ',' + this.end
         axios.get(link + JSON.parse(localStorage.getItem('filtersActivities'))).then(response => {
           this.events = this.mapCalendar(response.data.data)
         }).catch(error => {
@@ -364,7 +364,7 @@
         })
       },
       updateActivities(){
-        var link = "https://unowipes.com/api/v1/calendar_activities?filter[date_between]=" + this.start + ',' + this.end
+        var link = process.env.VUE_APP_BACKEND + "api/v1/calendar_activities?filter[date_between]=" + this.start + ',' + this.end
         if(localStorage.getItem('filtersActivities')!=null){
           axios.get(link + JSON.parse(localStorage.getItem('filtersActivities'))).then(response => {
             this.events = this.mapCalendar(response.data.data)
@@ -432,7 +432,7 @@
           last_updated_by_user_id:this.currentUser.id
         }
         this.$nextTick(() => {
-          axios.patch("https://unowipes.com/api/v1/activities/" + activity_id,Object.assign(editedItem)).then(response=>{
+          axios.patch(process.env.VUE_APP_BACKEND + "api/v1/activities/" + activity_id,Object.assign(editedItem)).then(response=>{
             this.sheet2 = true
             this.updateActivities()
           }).catch(error => {
@@ -458,7 +458,7 @@
         }
       },
       deleteCalendar(){
-        axios.delete("https://unowipes.com/api/v1/activities/"+this.deleteId).then(response => {
+        axios.delete(process.env.VUE_APP_BACKEND + "api/v1/activities/"+this.deleteId).then(response => {
             this.deleteId = ''
             this.sheet = false
             this.updateActivities()

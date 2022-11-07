@@ -51,7 +51,7 @@ export default {
             })
         },
         save () {
-            axios.put("https://unowipes.com/api/v1/origins/" + this.editedOrigin.id,Object.assign(this.editedOrigin)).then(response=>{
+            axios.put(process.env.VUE_APP_BACKEND + "api/v1/origins/" + this.editedOrigin.id,Object.assign(this.editedOrigin)).then(response=>{
                 this.close()
             }).catch(error => {
                 this.snackbar = {

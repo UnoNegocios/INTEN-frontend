@@ -161,7 +161,7 @@ export default {
             })
         },
         save () {
-            axios.put("https://unowipes.com/api/v1/item/update",Object.assign(this.editedItem)).then(response=>{
+            axios.put(process.env.VUE_APP_BACKEND + "api/v1/item/update",Object.assign(this.editedItem)).then(response=>{
                 if(this.inventario != this.editedItem.inventory[0]){
                     var inventario = {
                         created_by_user_id: this.currentUser.id,
@@ -170,7 +170,7 @@ export default {
                         quantity: this.editedItem.inventory[0] - this.inventario
                     }
                     this.$nextTick(() => {
-                        axios.post("https://unowipes.com/api/v1/inventory/create",Object.assign(inventario)).then(response=>{
+                        axios.post(process.env.VUE_APP_BACKEND + "api/v1/inventory/create",Object.assign(inventario)).then(response=>{
                             this.close()
                         }).catch(error => {
                             this.snackbar = {
@@ -194,21 +194,21 @@ export default {
             })
         },
         saveCategory(){
-            axios.post("https://unowipes.com/api/v1/category/create",Object.assign(this.createCategory)).then(response=>{
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/category/create",Object.assign(this.createCategory)).then(response=>{
                 this.$store.dispatch('category/getCategories')
                 this.disable = true
                 this.createCategory.name=''
             }) 
         },
         saveProvider(){
-            axios.post("https://unowipes.com/api/v1/provider/create",Object.assign(this.createProvider)).then(response=>{
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/provider/create",Object.assign(this.createProvider)).then(response=>{
                 this.$store.dispatch('provider/getProviders')
                 this.disable = true
                 this.createProvider.name=''
             }) 
         },
         saveUnit(){
-            axios.post("https://unowipes.com/api/v1/unit/create",Object.assign(this.createUnit)).then(response=>{
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/unit/create",Object.assign(this.createUnit)).then(response=>{
                 this.$store.dispatch('unit/getUnits')
                 this.disable = true
                 this.createUnit.name=''

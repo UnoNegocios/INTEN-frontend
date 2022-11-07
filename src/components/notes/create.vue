@@ -203,7 +203,7 @@ import CreateCompany from "../clients/companies/create"
             this.note.seen = false
             this.gris = true
             this.$nextTick(() => {
-                axios.post("https://unowipes.com/api/v1/notes",Object.assign(this.note)).then(response=>{
+                axios.post(process.env.VUE_APP_BACKEND + "api/v1/notes",Object.assign(this.note)).then(response=>{
                     this.close()
                 }).catch(error => {
                     this.snackbar = {

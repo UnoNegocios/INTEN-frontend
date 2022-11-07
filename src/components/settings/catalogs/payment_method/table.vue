@@ -50,7 +50,7 @@ export default {
         deleteItem (item) {
             let id = item.id
             if (confirm('¿Seguro que deseas borrar este metodo de pago?')) {
-                axios.delete("https://unowipes.com/api/v1/payment_methods/"+id).then(response => {
+                axios.delete(process.env.VUE_APP_BACKEND + "api/v1/payment_methods/"+id).then(response => {
                     this.$store.dispatch('payment_method/getPaymentMethods')
                 }).catch(error => {
                     this.snackbar = {

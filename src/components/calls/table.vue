@@ -224,7 +224,7 @@ export default {
             this.editedItem.note = this.note
             this.gris = true
             this.$nextTick(() => {
-                axios.put("https://unowipes.com/api/v1/call/update",Object.assign(this.editedItem)).then(response=>{
+                axios.put(process.env.VUE_APP_BACKEND + "api/v1/call/update",Object.assign(this.editedItem)).then(response=>{
                     this.note=''
                     this.dialogNote = false
                 }).catch(error => {

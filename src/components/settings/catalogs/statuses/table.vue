@@ -54,7 +54,7 @@ export default {
         deleteItem (item) {
             let id = item.id
             if (confirm('¿Seguro que deseas borrar este estatus?')) {
-                axios.delete("https://unowipes.com/api/v1/statuses/"+id).then(response => {
+                axios.delete(process.env.VUE_APP_BACKEND + "api/v1/statuses/"+id).then(response => {
                     this.$store.dispatch('status/getStatuses')
                 }).catch(error => {
                     this.snackbar = {

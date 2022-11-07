@@ -51,7 +51,7 @@ export default {
             })
         },
         save () {
-            axios.put("https://unowipes.com/api/v1/contact_modes/"+this.editedMode.id,Object.assign(this.editedMode)).then(response=>{
+            axios.put(process.env.VUE_APP_BACKEND + "api/v1/contact_modes/"+this.editedMode.id,Object.assign(this.editedMode)).then(response=>{
                 this.close()
             }).catch(error => {
                 this.snackbar = {

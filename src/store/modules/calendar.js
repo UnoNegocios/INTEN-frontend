@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getCalendars( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/calendar")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/calendar")
         .then(response => {
             commit('setCalendars', response.data);
         });

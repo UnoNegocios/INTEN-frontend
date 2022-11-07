@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getVehicles( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/vehicle/all")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/vehicle/all")
         .then(response => {
             commit('setVehicles', response.data);
         });

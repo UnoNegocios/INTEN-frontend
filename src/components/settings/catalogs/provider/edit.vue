@@ -51,7 +51,7 @@ export default {
             })
         },
         save () {
-            axios.put("https://unowipes.com/api/v1/providers/"+this.editedProvider.id,Object.assign(this.editedProvider)).then(response=>{
+            axios.put(process.env.VUE_APP_BACKEND + "api/v1/providers/"+this.editedProvider.id,Object.assign(this.editedProvider)).then(response=>{
                 this.close()
             }).catch(error => {
                 this.snackbar = {

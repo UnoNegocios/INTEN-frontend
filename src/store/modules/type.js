@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getTypes( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/type/all")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/type/all")
         .then(response => {
             commit('setTypes', response.data);
         });

@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getInventories( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/inventory/all")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/inventory/all")
         .then(response => {
             commit('setInventories', response.data);
         });

@@ -145,14 +145,14 @@ export default {
                 if(this.seach!=''){
                     link = 'filter[name]=' + this.search + '&'
                 }
-                axios.get("https://unowipes.com/api/v1/cellular_plans")//?" + link + "page=" + page + "&itemsPerPage=" + itemsPerPage)
+                axios.get(process.env.VUE_APP_BACKEND + "api/v1/cellular_plans")//?" + link + "page=" + page + "&itemsPerPage=" + itemsPerPage)
                 .then(response => {
                     items = this.mapItems(response.data)
                     total = response.data.length
                     if (sortBy.length === 1 && sortDesc.length === 1) {
                         if(sortDesc[0]){
                             axios
-                            .get("https://unowipes.com/api/v1/cellular_plans")//?" + link + "page=" + page + "&sort=-" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
+                            .get(process.env.VUE_APP_BACKEND + "api/v1/cellular_plans")//?" + link + "page=" + page + "&sort=-" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
                             .then(response=>{
                                 items = this.mapItems(response.data)
                                 total = response.data.length
@@ -163,7 +163,7 @@ export default {
                             })
                         }else{
                             axios
-                            .get("https://unowipes.com/api/v1/cellular_plans")//?" + link + "page=" + page + "&sort=" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
+                            .get(process.env.VUE_APP_BACKEND + "api/v1/cellular_plans")//?" + link + "page=" + page + "&sort=" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
                             .then(response=>{
                                 items = this.mapItems(response.data)
                                 total = response.data.length
@@ -219,7 +219,7 @@ export default {
         deleteItem (item) {
             let id = item.id
             if (confirm('¿Seguro que deseas borrar este producto/servicio?')) {
-                axios.delete("https://unowipes.com/api/v1/item/delete/"+id).then(response => {
+                axios.delete(process.env.VUE_APP_BACKEND + "api/v1/item/delete/"+id).then(response => {
                     this.$store.dispatch('item/getItems')
                 }).catch(error => {
                     this.snackbar = {

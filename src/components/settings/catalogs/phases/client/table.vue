@@ -56,7 +56,7 @@ export default {
         deleteItem (item) {
             let id = item.id
             if (confirm('¿Seguro que deseas borrar este rango?')) {
-                axios.delete("https://unowipes.com/api/v1/client_phases/"+id).then(response => {
+                axios.delete(process.env.VUE_APP_BACKEND + "api/v1/client_phases/"+id).then(response => {
                     this.$store.dispatch('phase/getPhases')
                 }).catch(error => {
                     this.snackbar = {

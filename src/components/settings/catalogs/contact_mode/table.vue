@@ -50,7 +50,7 @@ export default {
         deleteItem (item) {
             let id = item.id
             if (confirm('¿Seguro que deseas borrar este medio de cobntacto?')) {
-                axios.delete("https://unowipes.com/api/v1/contact_modes/"+id).then(response => {
+                axios.delete(process.env.VUE_APP_BACKEND + "api/v1/contact_modes/"+id).then(response => {
                     this.$store.dispatch('contact_mode/getContactModes')
                 }).catch(error => {
                     this.snackbar = {

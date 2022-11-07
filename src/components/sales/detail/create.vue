@@ -125,7 +125,7 @@ export default {
             this.sale_item.quotation_id = this.addDetail
             this.gris = true
             this.$nextTick(() => {
-                axios.post("https://unowipes.com/api/v1/sale_items", this.sale_item).then(response => {
+                axios.post(process.env.VUE_APP_BACKEND + "api/v1/sale_items", this.sale_item).then(response => {
                     this.close()
                 }).catch(error => {
                     this.snackbar = {

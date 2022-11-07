@@ -301,7 +301,7 @@ import axios from "axios";
             this.company.phone = Number(this.company.phone.replace(/\s/g, ''))
             this.gris = true
             this.$nextTick(() => {
-                axios.patch("https://unowipes.com/api/v1/clients/"+this.company.id,Object.assign(this.company)).then(response=>{
+                axios.patch(process.env.VUE_APP_BACKEND + "api/v1/clients/"+this.company.id,Object.assign(this.company)).then(response=>{
                     this.close()
                 }).catch(error => {
                     this.snackbar = {

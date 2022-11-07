@@ -325,7 +325,7 @@ import CreateCompany from "../clients/companies/create"
             this.calendar.date = this.calendar.only_date + ' ' + this.calendar.only_time
             this.gris = true
             this.$nextTick(() => {
-                axios.patch("https://unowipes.com/api/v1/activities/" + this.calendar.id,Object.assign(this.calendar)).then(response=>{
+                axios.patch(process.env.VUE_APP_BACKEND + "api/v1/activities/" + this.calendar.id,Object.assign(this.calendar)).then(response=>{
                     this.close()
                 }).catch(error => {
                     this.snackbar = {

@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getStatuses( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/statuses")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/statuses")
         .then(response => {
             commit('setStatuses', response.data);
         });

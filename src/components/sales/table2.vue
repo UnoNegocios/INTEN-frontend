@@ -362,7 +362,7 @@ export default {
         },
         confirmRejection(){
             this.editedItem.last_updated_by_user_id = this.currentUser.id
-            axios.post("https://unowipes.com/api/v1/sale/cancel",Object.assign(this.editedItem)).then(response=>{
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/sale/cancel",Object.assign(this.editedItem)).then(response=>{
                 this.getDataFromApi()
                 this.cancel()
             }).catch(error => {
@@ -409,14 +409,14 @@ export default {
                     startDate[1] = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10)
                     link = link + 'filter[date_between]='+startDate+'&'
                 }
-                axios.get("https://unowipes.com/api/v1/sales?" + link + "page=" + page + "&itemsPerPage=" + itemsPerPage).then(response => {
+                axios.get(process.env.VUE_APP_BACKEND + "api/v1/sales?" + link + "page=" + page + "&itemsPerPage=" + itemsPerPage).then(response => {
                     this.salesLength = response.data.meta.total
                     items = this.mapSales(response.data.data)
                     total = response.data.meta.total
                     if (sortBy.length === 1 && sortDesc.length === 1) {
                         if(sortDesc[0]){
                             axios
-                            .get("https://unowipes.com/api/v1/sales?" + link + "page=" + page + "&sort=-" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
+                            .get(process.env.VUE_APP_BACKEND + "api/v1/sales?" + link + "page=" + page + "&sort=-" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
                             .then(response=>{
                                 items = this.mapSales(response.data.data)
                                 total = response.data.meta.total
@@ -427,7 +427,7 @@ export default {
                             })
                         }else{
                             axios
-                            .get("https://unowipes.com/api/v1/sales?" + link + "page=" + page + "&sort=" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
+                            .get(process.env.VUE_APP_BACKEND + "api/v1/sales?" + link + "page=" + page + "&sort=" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
                             .then(response=>{
                                 items = this.mapSales(response.data.data)
                                 total = response.data.meta.total
@@ -526,7 +526,7 @@ export default {
             }
         },
         printTicket(item){
-            axios.put("https://unowipes.com/api/v1/quotation/print-sale",Object.assign(item)).then(response=>{
+            axios.put(process.env.VUE_APP_BACKEND + "api/v1/quotation/print-sale",Object.assign(item)).then(response=>{
                 localStorage.setItem('printTicket', item.id);
                 window.open("/");
                 this.$nextTick(() => {
@@ -628,7 +628,7 @@ export default {
             XLSX.writeFile(workbook, `${filename}.xlsx`)
         },
         deleteSale(){
-            axios.delete("https://unowipes.com/api/v1/sales/"+this.deleteId).then(response => {
+            axios.delete(process.env.VUE_APP_BACKEND + "api/v1/sales/"+this.deleteId).then(response => {
                 this.deleteId = ''
                 this.sheet = false
                 this.getDataFromApi()
@@ -662,7 +662,7 @@ export default {
             this.sheet = true
         },
         editItem(id){
-            axios.get("https://unowipes.com/api/v1/sales?filter[id]=" + id).then(response => {
+            axios.get(process.env.VUE_APP_BACKEND + "api/v1/sales?filter[id]=" + id).then(response => {
                 this.sale = response.data.data.map(id=>{
                     return{
                         id:id.id,
@@ -708,7 +708,7 @@ export default {
                 }
             }
             this.$nextTick(() => {
-                axios.put("https://unowipes.com/api/v1/quotation/bar-bulk-update",Object.assign(edited)).then(response=>{
+                axios.put(process.env.VUE_APP_BACKEND + "api/v1/quotation/bar-bulk-update",Object.assign(edited)).then(response=>{
                     this.$store.dispatch('quotation/getSales')
                     this.gris = false
                     this.searchInput = ''
@@ -730,7 +730,7 @@ export default {
             })
         },
         deleteDetail(id){
-            axios.delete("https://unowipes.com/api/v1/sale_items/" + id).then(response => {
+            axios.delete(process.env.VUE_APP_BACKEND + "api/v1/sale_items/" + id).then(response => {
                 this.getDataFromApi()
             }).catch(error => {
                 this.snackbar = {

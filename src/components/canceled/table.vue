@@ -268,7 +268,7 @@ export default {
             var editedItem = this.$store.state.quotation.cancellations.filter(quotation=>quotation.id == this.statusId)[0]
             editedItem.status = this.statusData
             this.$nextTick(() => {
-                axios.put("https://unowipes.com/api/v1/quotation/update",Object.assign(editedItem)).then(response=>{
+                axios.put(process.env.VUE_APP_BACKEND + "api/v1/quotation/update",Object.assign(editedItem)).then(response=>{
                     this.statusId = ''
                     this.statusData = ''
                     this.sheet2 = false

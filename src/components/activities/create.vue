@@ -324,7 +324,7 @@ export default {
             this.calendar.last_updated_by_user_id = this.currentUser.id
             this.calendar.date = this.calendar.only_date + ' ' + this.calendar.only_time
             this.$nextTick(() => {
-                axios.post("https://unowipes.com/api/v1/activities",Object.assign(this.calendar)).then(response=>{
+                axios.post(process.env.VUE_APP_BACKEND + "api/v1/activities",Object.assign(this.calendar)).then(response=>{
                     this.close()
                 }).catch(error => {
                     this.snackbar = {

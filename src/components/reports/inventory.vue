@@ -311,7 +311,7 @@ export default {
         },
         deleteItem (id) {
             if (confirm('¿Seguro que deseas borrar este movimiento de inventario?')) {
-                axios.delete("https://unowipes.com/api/v1/inventory/delete/"+id).then(response => {
+                axios.delete(process.env.VUE_APP_BACKEND + "api/v1/inventory/delete/"+id).then(response => {
                     this.$store.dispatch('inventory/getInventories')
                 }).catch(error => {
                     this.snackbar = {

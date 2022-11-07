@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getUsers( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/users")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/users")
         .then(response => {
             commit('setUsers', response.data.data);
         });

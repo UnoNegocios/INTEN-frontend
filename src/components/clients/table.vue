@@ -206,14 +206,14 @@ export default {
                     startDate[1] = new Date(date.getFullYear(), date.getMonth() + 1, 0).toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).toString().slice(0, 10)
                     link = link + 'filter[date_between]='+startDate+'&'
                 }*/
-                axios.get("https://unowipes.com/api/v1/clients?" + link + "page=" + page + "&itemsPerPage=" + itemsPerPage).then(response => {
+                axios.get(process.env.VUE_APP_BACKEND + "api/v1/clients?" + link + "page=" + page + "&itemsPerPage=" + itemsPerPage).then(response => {
                     this.clientsLength = response.data.meta.total
                     items = this.mapClients(response.data.data)
                     total = response.data.meta.total
                     if (sortBy.length === 1 && sortDesc.length === 1) {
                         if(sortDesc[0]){
                             axios
-                            .get("https://unowipes.com/api/v1/clients?" + link + "page=" + page + "&sort=-" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
+                            .get(process.env.VUE_APP_BACKEND + "api/v1/clients?" + link + "page=" + page + "&sort=-" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
                             .then(response=>{
                                 items = this.mapClients(response.data.data)
                                 total = response.data.meta.total
@@ -224,7 +224,7 @@ export default {
                             })
                         }else{
                             axios
-                            .get("https://unowipes.com/api/v1/clients?" + link + "page=" + page + "&sort=" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
+                            .get(process.env.VUE_APP_BACKEND + "api/v1/clients?" + link + "page=" + page + "&sort=" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
                             .then(response=>{
                                 items = this.mapClients(response.data.data)
                                 total = response.data.meta.total
@@ -272,7 +272,7 @@ export default {
             }
         },
         changeStatus(id, status){
-            axios.patch("https://unowipes.com/api/v1/clients/" + id, {'status_id':status}).then(response=>{
+            axios.patch(process.env.VUE_APP_BACKEND + "api/v1/clients/" + id, {'status_id':status}).then(response=>{
                 this.getDataFromApi()
             }).catch(error => {
                 this.snackbar = {
@@ -336,7 +336,7 @@ export default {
             }
         },*/
         deleteCompany(){
-            axios.delete("https://unowipes.com/api/v1/company/"+this.deleteId).then(response => {
+            axios.delete(process.env.VUE_APP_BACKEND + "api/v1/company/"+this.deleteId).then(response => {
                 this.deleteId = ''
                 this.sheet = false
                 this.getDataFromApi()
@@ -357,7 +357,7 @@ export default {
             this.sheet = true
         },
         editItem(id){
-            axios.get("https://unowipes.com/api/v1/clients?filter[id]=" + id).then(response => {
+            axios.get(process.env.VUE_APP_BACKEND + "api/v1/clients?filter[id]=" + id).then(response => {
                 this.company = response.data.data.map(id=>{
                     return{
                         id:id.id,

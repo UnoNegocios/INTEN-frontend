@@ -50,7 +50,7 @@ export default {
         deleteItem (item) {
             let id = item.id
             if (confirm('¿Seguro que deseas borrar esta lista de precios?')) {
-                axios.delete("https://unowipes.com/api/v1/price_list/delete/"+id).then(response => {
+                axios.delete(process.env.VUE_APP_BACKEND + "api/v1/price_list/delete/"+id).then(response => {
                     this.$store.dispatch('price_list/getPriceLists')
                 }).catch(error => {
                     this.snackbar = {

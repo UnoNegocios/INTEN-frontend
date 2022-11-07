@@ -337,14 +337,14 @@ export default {
             })
         },
         save () {
-            axios.put("https://unowipes.com/api/v1/user/update",Object.assign(this.editedItem)).then(response=>{
+            axios.put(process.env.VUE_APP_BACKEND + "api/v1/user/update",Object.assign(this.editedItem)).then(response=>{
                 if(this.editedPassword!=''&&this.editedPassword!=undefined&&this.editedPassword!=null){
                     var newPass = this.editedItem
                     newPass.password = this.editedPassword
-                    axios.put("https://unowipes.com/api/v1/user/password",Object.assign(newPass)).then(response=>{
+                    axios.put(process.env.VUE_APP_BACKEND + "api/v1/user/password",Object.assign(newPass)).then(response=>{
                         if(this.editedRol!=''&&this.editedRol!=undefined&&this.editedRol!=null){
                             this.editedItem.permissions = this.rol(this.editedRol)
-                            axios.put("https://unowipes.com/api/v1/user/update",Object.assign(this.editedItem)).then(response=>{
+                            axios.put(process.env.VUE_APP_BACKEND + "api/v1/user/update",Object.assign(this.editedItem)).then(response=>{
                                 this.editedRol=''
                                 this.close()
                             }).catch(error => {
@@ -362,7 +362,7 @@ export default {
                 }else{
                     if(this.editedRol!=''&&this.editedRol!=undefined&&this.editedRol!=null){
                         this.editedItem.permissions = this.rol(this.editedRol)
-                        axios.put("https://unowipes.com/api/v1/user/update",Object.assign(this.editedItem)).then(response=>{
+                        axios.put(process.env.VUE_APP_BACKEND + "api/v1/user/update",Object.assign(this.editedItem)).then(response=>{
                             this.editedRol=''
                             this.close()
                         }).catch(error => {

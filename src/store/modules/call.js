@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getCalls( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/call/all")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/call/all")
         .then(response => {
             commit('setCalls', response.data);
         });

@@ -14,7 +14,7 @@ const getters = {
 const actions = {
     getServicios( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/item/all")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/item/all")
         .then(response => {
             commit('setServicios', response.data);
         });

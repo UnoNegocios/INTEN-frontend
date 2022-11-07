@@ -50,7 +50,7 @@ export default {
         deleteItem (item) {
             let id = item.id
             if (confirm('¿Seguro que deseas borrar esta zona?')) {
-                axios.delete("https://unowipes.com/api/v1/special_conditions/"+id).then(response => {
+                axios.delete(process.env.VUE_APP_BACKEND + "api/v1/special_conditions/"+id).then(response => {
                     this.$store.dispatch('special_condition/getSpecialConditions')
                 }).catch(error => {
                     this.snackbar = {

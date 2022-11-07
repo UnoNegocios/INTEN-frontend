@@ -50,7 +50,7 @@ export default {
         deleteItem (item) {
             let id = item.id
             if (confirm('¿Seguro que deseas borrar este uso de CFDI?')) {
-                axios.delete("https://unowipes.com/api/v1/cfdi/delete/"+id).then(response => {
+                axios.delete(process.env.VUE_APP_BACKEND + "api/v1/cfdi/delete/"+id).then(response => {
                     this.$store.dispatch('cfdi/getCfdi')
                 }).catch(error => {
                     this.snackbar = {

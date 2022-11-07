@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getPaymentMethods( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/payment_methods")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/payment_methods")
         .then(response => {
             commit('setPaymentMethods', response.data);
         });

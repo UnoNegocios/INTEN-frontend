@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getExpenses( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/expense/all")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/expense/all")
         .then(response => {
             commit('setExpenses', response.data);
         });

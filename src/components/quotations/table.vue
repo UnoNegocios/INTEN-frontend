@@ -536,7 +536,7 @@ export default {
             editedItem.last_updated_by_user_id = this.currentUser.id
             var joel = editedItem.items
             this.$nextTick(() => {
-                axios.put("https://unowipes.com/api/v1/quotation/update",Object.assign(editedItem)).then(response=>{
+                axios.put(process.env.VUE_APP_BACKEND + "api/v1/quotation/update",Object.assign(editedItem)).then(response=>{
                     if(this.statusData == 'vendido'){
                         for(var i=0; i<joel.length; i++){
                             var inventario = {
@@ -546,7 +546,7 @@ export default {
                                 quantity: joel[i].quantity,
                             }
                             this.$nextTick(() => {
-                                axios.post("https://unowipes.com/api/v1/inventory/create",Object.assign(inventario)).catch(error => {
+                                axios.post(process.env.VUE_APP_BACKEND + "api/v1/inventory/create",Object.assign(inventario)).catch(error => {
                                     this.snackbar = {
                                         message: error.response.data.message,
                                         color: 'error',
@@ -1392,7 +1392,7 @@ export default {
             XLSX.writeFile(workbook, `${filename}.xlsx`)
         },
         deleteQuotation(){
-            axios.delete("https://unowipes.com/api/v1/quotation/delete/"+this.deleteId).then(response => {
+            axios.delete(process.env.VUE_APP_BACKEND + "api/v1/quotation/delete/"+this.deleteId).then(response => {
                 this.deleteId = ''
                 this.sheet = false
                 this.$store.dispatch('quotation/getQuotations')

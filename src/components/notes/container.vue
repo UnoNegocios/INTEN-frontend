@@ -153,7 +153,7 @@
       },
       editItem(item){
         item.seen = true
-        axios.put("https://unowipes.com/api/v1/notes/" + item.id,Object.assign(item)).then(response=>{
+        axios.put(process.env.VUE_APP_BACKEND + "api/v1/notes/" + item.id,Object.assign(item)).then(response=>{
             this.$store.dispatch('note/getNotes')
         }).catch(error => {
             this.snackbar = {
@@ -164,7 +164,7 @@
         })
       },
       deleteNote(){
-        axios.delete("https://unowipes.com/api/v1/notes/"+this.deleteId).then(response => {
+        axios.delete(process.env.VUE_APP_BACKEND + "api/v1/notes/"+this.deleteId).then(response => {
           this.deleteId = ''
           this.sheet = false
           this.$store.dispatch('note/getNotes')

@@ -9,7 +9,7 @@
                 <v-row>
                     <v-col class="pt-2 pb-0" cols="12" sm="6" md="2">
                         <v-list-item-avatar class="ml-2">
-                            <img src="https://unowipes.com/files/default.jpg">
+                            <img src=process.env.VUE_APP_BACKEND + "files/default.jpg">
                         </v-list-item-avatar>
                     </v-col>
                     <v-col class="py-0" cols="12" sm="6" md="5">
@@ -105,7 +105,7 @@ import axios from "axios";
             this.contact.phone = (Number(this.contact.phone.replace(/\s/g, ''))).toString()
             this.gris = true
             this.$nextTick(() => {
-                axios.post("https://unowipes.com/api/v1/contacts",Object.assign(this.contact))
+                axios.post(process.env.VUE_APP_BACKEND + "api/v1/contacts",Object.assign(this.contact))
                 .then(response => {
                     this.close()
                 })

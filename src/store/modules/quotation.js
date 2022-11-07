@@ -21,13 +21,13 @@ const actions = {
     getNewQuotations( {commit}, request){
         if(localStorage.getItem('filtersSales')==undefined&&localStorage.getItem('filtersSales')==null){
             axios
-            .get("https://unowipes.com/api/v2/q?page=" + request.pageNumber + "&sort=" + request.sort)
+            .get(process.env.VUE_APP_BACKEND + "api/v2/q?page=" + request.pageNumber + "&sort=" + request.sort)
             .then(response => {
                 commit('setNewQuotations', response.data);
             });
         }else{
             axios
-            .get("https://unowipes.com/api/v2/q?"+ JSON.parse(localStorage.getItem('filtersSales')) + "&page=" + request.pageNumber + "&sort=" + request.sort)
+            .get(process.env.VUE_APP_BACKEND + "api/v2/q?"+ JSON.parse(localStorage.getItem('filtersSales')) + "&page=" + request.pageNumber + "&sort=" + request.sort)
             .then(response=>{
                 commit('setNewQuotations', response.data );
             })
@@ -36,13 +36,13 @@ const actions = {
     getSales( {commit}, request){
         if(localStorage.getItem('filtersSales')==undefined&&localStorage.getItem('filtersSales')==null){
             axios
-            .get("https://unowipes.com/api/v1/sales?page=" + request.pageNumber + "&sort=" + request.sort)
+            .get(process.env.VUE_APP_BACKEND + "api/v1/sales?page=" + request.pageNumber + "&sort=" + request.sort)
             .then(response => {
                 commit('setSales', response.data);
             });
         }else{
             axios
-            .get("https://unowipes.com/api/v1/sales?"+ JSON.parse(localStorage.getItem('filtersSales')) + "&page=" + request.pageNumber + "&sort=" + request.sort)
+            .get(process.env.VUE_APP_BACKEND + "api/v1/sales?"+ JSON.parse(localStorage.getItem('filtersSales')) + "&page=" + request.pageNumber + "&sort=" + request.sort)
             .then(response=>{
                 commit('setSales', response.data );
             })
@@ -50,28 +50,28 @@ const actions = {
     },
     getCancellations( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/quotation/cancellations")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/quotation/cancellations")
         .then(response => {
             commit('setCancellations', response.data);
         });
     },
     async getCompanyQuotations( {commit}, company_id ){
         await axios
-        .get("https://unowipes.com/api/v2/company/sales", {params:{id:company_id}})
+        .get(process.env.VUE_APP_BACKEND + "api/v2/company/sales", {params:{id:company_id}})
         .then(response => {
             commit('setCompanyQuotations', response.data);
         });
     },
     getQuotations( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/quotation/all")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/quotation/all")
         .then(response => {
             commit('setQuotations', response.data);
         });
     },
     getOnlyQuotations( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/quotation/quotations")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/quotation/quotations")
         .then(response => {
             commit('setOnlyQuotations', response.data);
         });
@@ -85,14 +85,14 @@ const actions = {
         //return new Promise((resolve, reject) => {
         if(localStorage.getItem('filtersSales')==undefined&&localStorage.getItem('filtersSales')==null){
             axios
-            .get("https://unowipes.com/api/v1/sale/totals"+'?filter[date_between]='+startDate)
+            .get(process.env.VUE_APP_BACKEND + "api/v1/sale/totals"+'?filter[date_between]='+startDate)
             .then(response => {
                 state.total_loader = false
                 commit('setTotals', response.data);
             });
         }else{
             axios
-            .get("https://unowipes.com/api/v1/sale/totals?"+ JSON.parse(localStorage.getItem('filtersSales')))
+            .get(process.env.VUE_APP_BACKEND + "api/v1/sale/totals?"+ JSON.parse(localStorage.getItem('filtersSales')))
             .then(response=>{
                 state.total_loader = false
                 commit('setTotals', response.data);
@@ -102,7 +102,7 @@ const actions = {
     },
     getQuotationItems( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/qi")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/qi")
         .then(response => {
             commit('setQuoationItems', response.data);
         });
@@ -110,13 +110,13 @@ const actions = {
     getOrders( {commit}, request){
         if(localStorage.getItem('filtersOrders')==undefined&&localStorage.getItem('filtersOrders')==null){
             axios
-            .get("https://unowipes.com/api/v2/orders/dispatched_orders?page=" + request.pageNumber + "&sort=" + request.sort)
+            .get(process.env.VUE_APP_BACKEND + "api/v2/orders/dispatched_orders?page=" + request.pageNumber + "&sort=" + request.sort)
             .then(response => {
                 commit('setOrders', response.data);
             });
         }else{
             axios
-            .get("https://unowipes.com/api/v2/orders/dispatched_orders?"+ JSON.parse(localStorage.getItem('filtersOrders')) + "&page=" + request.pageNumber + "&sort=" + request.sort)
+            .get(process.env.VUE_APP_BACKEND + "api/v2/orders/dispatched_orders?"+ JSON.parse(localStorage.getItem('filtersOrders')) + "&page=" + request.pageNumber + "&sort=" + request.sort)
             .then(response=>{
                 commit('setOrders', response.data );
             })

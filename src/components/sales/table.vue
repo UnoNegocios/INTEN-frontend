@@ -617,7 +617,7 @@ export default {
             }
         },
         printTicket(item){
-                axios.put("https://unowipes.com/api/v1/quotation/print-sale",Object.assign(item)).then(response=>{
+                axios.put(process.env.VUE_APP_BACKEND + "api/v1/quotation/print-sale",Object.assign(item)).then(response=>{
                     localStorage.setItem('printTicket', item.id);
                     window.open("/");
                     this.$nextTick(() => {
@@ -778,7 +778,7 @@ export default {
             editedItem.rejection_comment = this.rejectionData
             editedItem.last_updated_by_user_id = this.currentUser.id
             this.$nextTick(() => {
-                axios.put("https://unowipes.com/api/v1/quotation/update",Object.assign(editedItem)).then(response=>{
+                axios.put(process.env.VUE_APP_BACKEND + "api/v1/quotation/update",Object.assign(editedItem)).then(response=>{
                     this.statusId = ''
                     this.statusData = ''
                     this.sheet2 = false
@@ -1602,7 +1602,7 @@ export default {
             XLSX.writeFile(workbook, `${filename}.xlsx`)
         },
         deleteQuotation(){
-            axios.delete("https://unowipes.com/api/v1/quotation/delete/"+this.deleteId).then(response => {
+            axios.delete(process.env.VUE_APP_BACKEND + "api/v1/quotation/delete/"+this.deleteId).then(response => {
                 this.deleteId = ''
                 this.sheet = false
                 this.$store.dispatch('quotation/getQuotations')
@@ -1685,7 +1685,7 @@ export default {
             }
             this.$nextTick(() => {
                 
-                axios.put("https://unowipes.com/api/v1/quotation/bar-bulk-update",Object.assign(edited)).then(response=>{
+                axios.put(process.env.VUE_APP_BACKEND + "api/v1/quotation/bar-bulk-update",Object.assign(edited)).then(response=>{
                     this.$store.dispatch('quotation/getQuotations')
                     this.gris = false
                     this.searchInput = ''

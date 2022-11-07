@@ -78,7 +78,7 @@ export default {
             })
         },
         save () {
-            axios.post("https://unowipes.com/api/v1/client_phases",Object.assign(this.editedItem)).then(response=>{
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/client_phases",Object.assign(this.editedItem)).then(response=>{
                 this.close()
             }).catch(error => {
                 this.snackbar = {

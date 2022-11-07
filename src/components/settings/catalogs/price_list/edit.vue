@@ -51,7 +51,7 @@ export default {
             })
         },
         save () {
-            axios.put("https://unowipes.com/api/v1/price_list/update",Object.assign(this.editedPriceList)).then(response=>{
+            axios.put(process.env.VUE_APP_BACKEND + "api/v1/price_list/update",Object.assign(this.editedPriceList)).then(response=>{
                 this.close()
             }).catch(error => {
                 this.snackbar = {

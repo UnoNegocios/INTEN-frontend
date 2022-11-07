@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getContactModes( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/contact_modes")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/contact_modes")
         .then(response => {
             commit('setContactModes', response.data);
         });

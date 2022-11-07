@@ -298,7 +298,7 @@ import ActivityLog from "../../activitylog/container"
     methods: {
       apiCall () {
         return new Promise((resolve, reject) => {
-            axios.get("https://unowipes.com/api/v1/clients?filter[id]=" + this.company).then(response => {
+            axios.get(process.env.VUE_APP_BACKEND + "api/v1/clients?filter[id]=" + this.company).then(response => {
               resolve(response.data.data[0])
             })
         })
@@ -318,7 +318,7 @@ import ActivityLog from "../../activitylog/container"
       saveNote(){
         this.gris = true
         this.$nextTick(() => {
-          axios.put("https://unowipes.com/api/v1/company/update",Object.assign(this.companyDetail)).then(response=>{
+          axios.put(process.env.VUE_APP_BACKEND + "api/v1/company/update",Object.assign(this.companyDetail)).then(response=>{
             this.$store.dispatch('company/getCompanies')
           }).catch(error => {
             this.snackbar = {

@@ -172,7 +172,7 @@
             createCompanyDialog: false,
             datePicker:'',
             dropzoneOptions: {
-                url: "https://unowipes.com/api/v1/quotation/files",
+                url: process.env.VUE_APP_BACKEND + "api/v1/quotation/files",
                 addRemoveLinks: true,
                 maxFiles: 1
             },
@@ -341,7 +341,7 @@
                 this.quotation.status = this.status
                 this.$nextTick(() => {
                     
-                    axios.put("https://unowipes.com/api/v1/sales/"+this.quotation.id,Object.assign(this.quotation)).then(response=>{
+                    axios.put(process.env.VUE_APP_BACKEND + "api/v1/sales/"+this.quotation.id,Object.assign(this.quotation)).then(response=>{
                         this.close()
                     }).catch(error => {
                         this.snackbar = {

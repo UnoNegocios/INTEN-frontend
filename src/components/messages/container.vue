@@ -290,7 +290,7 @@ import CreateCompany from "../clients/companies/create"
                 var editedItem = this.conversations.filter(conversation=>conversation.id == this.conversationId)[0]
                 editedItem.company_id = this.company_id
                 this.$nextTick(() => {
-                    axios.put("https://unowipes.com/api/v1/conversation/update",Object.assign(editedItem)).then(response=>{
+                    axios.put(process.env.VUE_APP_BACKEND + "api/v1/conversation/update",Object.assign(editedItem)).then(response=>{
                         this.company_id = null
                         this.asociarDialog = false
                         this.$nextTick(() => {
@@ -309,7 +309,7 @@ import CreateCompany from "../clients/companies/create"
                 var editedItem = this.conversations.filter(conversation=>conversation.id == this.conversationId)[0]
                 editedItem.contact_id = this.contact_id
                 this.$nextTick(() => {
-                    axios.put("https://unowipes.com/api/v1/conversation/update",Object.assign(editedItem)).then(response=>{
+                    axios.put(process.env.VUE_APP_BACKEND + "api/v1/conversation/update",Object.assign(editedItem)).then(response=>{
                         this.contact_id = null
                         this.company_id = null
                         this.asociarDialog = false
@@ -410,7 +410,7 @@ import CreateCompany from "../clients/companies/create"
                     this.messageInput.to = response.data.to
                     this.messageInput.direction = response.data.direction
                     this.messageInput.channel = this.channel
-                    axios.post("https://unowipes.com/api/v1/message/create",Object.assign(this.messageInput)).then(response=>{
+                    axios.post(process.env.VUE_APP_BACKEND + "api/v1/message/create",Object.assign(this.messageInput)).then(response=>{
                         this.$store.dispatch('message/getMessages')
                     })
                 })  

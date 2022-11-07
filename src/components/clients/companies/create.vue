@@ -348,7 +348,7 @@ import axios from "axios";
                 this.company.phone = (Number(this.company.phone.replace(/\s/g, ''))).toString()
                 this.gris = true
                 this.$nextTick(() => {
-                    axios.post("https://unowipes.com/api/v1/clients",Object.assign(this.company)).then(response=>{
+                    axios.post(process.env.VUE_APP_BACKEND + "api/v1/clients",Object.assign(this.company)).then(response=>{
                         this.close()
                     }).catch(error => {
                         this.snackbar = {

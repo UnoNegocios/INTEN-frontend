@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getZones( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/zone/all")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/zone/all")
         .then(response => {
             commit('setZones', response.data);
         });

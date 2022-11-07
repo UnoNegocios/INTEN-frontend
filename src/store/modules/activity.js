@@ -10,7 +10,7 @@ const getters = {};
 const actions = {
     getActivities( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/activity_types")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/activity_types")
         .then(response => {
             commit('setActivities', response.data.data);
         });

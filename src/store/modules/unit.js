@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getUnits( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/unit/all")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/unit/all")
         .then(response => {
             commit('setUnits', response.data);
         });

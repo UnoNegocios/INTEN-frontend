@@ -5,14 +5,14 @@ const state = {
 const getters = {};
 const actions = {
   getUser({ commit }) {
-    axios.get("https://unowipes.com/api/v1/user/current", 
+    axios.get(process.env.VUE_APP_BACKEND + "api/v1/user/current", 
     
     ).then(response => {
       commit("setUser", response.data.data);
     });
   },
   loginUser({}, user) {
-    axios.post("https://unowipes.com/api/v1/user/login", {
+    axios.post(process.env.VUE_APP_BACKEND + "api/v1/user/login", {
         email: user.email,
         password: user.password
       })

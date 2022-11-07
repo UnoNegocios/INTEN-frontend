@@ -53,7 +53,7 @@ export default {
             }
         },
         save(){
-            axios.post("https://unowipes.com/api/v1/bulk-collection-detail",Object.assign(this.sales))
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/bulk-collection-detail",Object.assign(this.sales))
         }
     }
 }

@@ -117,7 +117,7 @@ export default {
                 if(this.lead.user_id==''&& this.lead.user_id==null){
                     this.lead.user_id = this.currentUser.id
                 }
-                axios.post("https://unowipes.com/api/v1/leads",Object.assign(this.lead)).then(response=>{
+                axios.post(process.env.VUE_APP_BACKEND + "api/v1/leads",Object.assign(this.lead)).then(response=>{
                     console.log('1')
                     this.close()
                 })

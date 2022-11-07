@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getOrigins( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/origins")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/origins")
         .then(response => {
             commit('setOrigins', response.data);
         });

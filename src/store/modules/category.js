@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
   getCategories( {commit} ){
     axios
-    .get("https://unowipes.com/api/v1/consumption_categories")
+    .get(process.env.VUE_APP_BACKEND + "api/v1/consumption_categories")
     .then(response => {
         commit('setCategories', response.data);
     });

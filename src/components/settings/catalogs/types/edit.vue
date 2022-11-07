@@ -57,7 +57,7 @@ export default {
             })
         },
         save () {
-            axios.put("https://unowipes.com/api/v1/activity_types",Object.assign(this.editedType)).then(response=>{
+            axios.put(process.env.VUE_APP_BACKEND + "api/v1/activity_types",Object.assign(this.editedType)).then(response=>{
                 this.close()
             }).catch(error => {
                 this.snackbar = {

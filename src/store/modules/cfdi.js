@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getCfdi( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/cfdi")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/cfdi")
         .then(response => {
             commit('setCfdi', response.data);
         });

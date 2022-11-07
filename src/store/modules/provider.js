@@ -10,7 +10,7 @@ const getters = {};
 const actions = {
     getProviders( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/providers")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/providers")
         .then(response => {
             commit('setProviders', response.data);
         });

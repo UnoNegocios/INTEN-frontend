@@ -354,7 +354,7 @@ export default {
                 this.ticket.estatus = 'cerrado'
                 //actualiza el inventario
                 axios
-                .get("https://unowipes.com/api/v1/servicio/all")
+                .get(process.env.VUE_APP_BACKEND + "api/v1/servicio/all")
                 .then(response => {
                     var gato = response.data
                     for(var i=0; i<this.ticket.inputs.length; i++){

@@ -342,7 +342,7 @@ export default {
         },
         getFunnelPhases() {
             return new Promise((resolve, reject) => {
-                axios.get("https://unowipes.com/api/v1/funnel_phases?filter[funnel_id]=" + this.funnel.id)
+                axios.get(process.env.VUE_APP_BACKEND + "api/v1/funnel_phases?filter[funnel_id]=" + this.funnel.id)
                 .then(response=>{
                     var items = response.data
                     resolve({
@@ -375,7 +375,7 @@ export default {
             && this.leads[index_lead].data.filter(dta=>dta.conversation.id == lead.conversation.id).filter(dta=>dta.user == undefined).length>0){
 
                 this.leads[index_lead].data.filter(dta=>dta.conversation.id == lead.conversation.id)[0].user = this.currentUser
-                axios.post("https://unowipes.com/api/v1/conversation/agent-first-interaction", {conversation_id:lead.conversation.id, user_id:this.currentUser.id, channel:lead.conversation.channel, sending_server:server, from:lead.conversation.latest_message.from}).then(resp=>{
+                axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversation/agent-first-interaction", {conversation_id:lead.conversation.id, user_id:this.currentUser.id, channel:lead.conversation.channel, sending_server:server, from:lead.conversation.latest_message.from}).then(resp=>{
                     this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}
                     this.conversation_dialog = true
                     this.leads[index_lead].data.filter(
@@ -384,7 +384,7 @@ export default {
                     //this.pause = false
                 })
             }else if(this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0){
-                axios.post("https://unowipes.com/api/v1/conversation/mark_messages_as_read", {conversation_id:lead.conversation.id, user_id:this.currentUser.id}).then(resp=>{
+                axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversation/mark_messages_as_read", {conversation_id:lead.conversation.id, user_id:this.currentUser.id}).then(resp=>{
                     this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}
                     this.conversation_dialog = true
                     this.leads[index_lead].data.filter(
@@ -411,18 +411,18 @@ export default {
             let new_funnel_phase_id = evt.to._prevClass
             let element_id = evt.item._underlying_vm_.id
             if(funnel_phase_id!=new_funnel_phase_id){
-                axios.patch("https://unowipes.com/api/v1/leads/" + element_id, {funnel_phase_id: new_funnel_phase_id.slice(17,new_funnel_phase_id.length)}).then(response=>{})
+                axios.patch(process.env.VUE_APP_BACKEND + "api/v1/leads/" + element_id, {funnel_phase_id: new_funnel_phase_id.slice(17,new_funnel_phase_id.length)}).then(response=>{})
             }
         },
         getLeads(i) {
             if(i==0 && this.funnel.id==1){
-                axios.get("https://unowipes.com/api/v1/unassigned_leads")
+                axios.get(process.env.VUE_APP_BACKEND + "api/v1/unassigned_leads")
                 .then(response=>{
                     this.leads[i].data = response.data.data
                     this.leads[i].load_leads = false
                 })
             }else{
-                axios.get("https://unowipes.com/api/v1/leads?filter[funnel_phase_id]=" + this.leads[i].funnel_phase_id)
+                axios.get(process.env.VUE_APP_BACKEND + "api/v1/leads?filter[funnel_phase_id]=" + this.leads[i].funnel_phase_id)
                 .then(response=>{
                     this.leads[i].data = response.data.data
                     this.leads[i].load_leads = false
@@ -434,14 +434,14 @@ export default {
             this.getFunnelPhasesFromApi()
         },
         saveFunnel(){
-            axios.post("https://unowipes.com/api/v1/funnels", this.created_funnel)
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/funnels", this.created_funnel)
             .then(response=>{
                 this.closeFunnelDialog()
                 this.$store.dispatch('funnel/getFunnels')
             })
         },
         saveEditedFunnel(){
-            axios.put("https://unowipes.com/api/v1/funnels", this.funnel)
+            axios.put(process.env.VUE_APP_BACKEND + "api/v1/funnels", this.funnel)
             .then(response=>{
                 this.closeFunnelDialog()
                 this.$store.dispatch('funnel/getFunnels')
@@ -450,7 +450,7 @@ export default {
         saveFunnelPhase(){
             this.created_funnel_phase.funnel_id = this.funnel.id
             
-            axios.post("https://unowipes.com/api/v1/funnel_phases", this.created_funnel_phase)
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/funnel_phases", this.created_funnel_phase)
             .then(response=>{
                 this.closeFunnelPhaseDialog()
                 this.getFunnelPhasesFromApi()

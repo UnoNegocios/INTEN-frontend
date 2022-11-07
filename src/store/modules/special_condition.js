@@ -7,7 +7,7 @@ const getters = {};
 const actions = {
     getSpecialConditions( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/special_conditions")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/special_conditions")
         .then(response => {
             commit('setSpecialConditions', response.data);
         });

@@ -145,7 +145,7 @@ export default {
     methods:{
         changePhase(){
             if(!this.pauseChange){
-                axios.patch("https://unowipes.com/api/v1/leads/"+this.lead.id, {funnel_phase_id:this.lead.funnel_phase.id}).then(response=>{
+                axios.patch(process.env.VUE_APP_BACKEND + "api/v1/leads/"+this.lead.id, {funnel_phase_id:this.lead.funnel_phase.id}).then(response=>{
                     this.$emit("refresh", true);
                 })
             }
@@ -196,7 +196,7 @@ export default {
                 phone: this.lead.phone,
                 email: this.lead.email
             }
-            axios.patch("https://unowipes.com/api/v1/leads",Object.assign(editedItem)).then(response=>{
+            axios.patch(process.env.VUE_APP_BACKEND + "api/v1/leads",Object.assign(editedItem)).then(response=>{
                 this.editInterest = false
                 this.editPhone = false
                 this.editEmail = false

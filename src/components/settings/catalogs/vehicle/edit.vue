@@ -51,7 +51,7 @@ export default {
             })
         },
         save () {
-            axios.put("https://unowipes.com/api/v1/vehicle/update",Object.assign(this.editedVehicle)).then(response=>{
+            axios.put(process.env.VUE_APP_BACKEND + "api/v1/vehicle/update",Object.assign(this.editedVehicle)).then(response=>{
                 this.close()
             }).catch(error => {
                 this.snackbar = {

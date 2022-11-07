@@ -8,14 +8,14 @@ const getters = {};
 const actions = {
     getFunnels( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/funnels")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/funnels")
         .then(response => {
             commit('setFunnels', response.data.data);
         });
     },
     getPhases( {commit} ){
         axios
-        .get("https://unowipes.com/api/v1/funnel_phases")
+        .get(process.env.VUE_APP_BACKEND + "api/v1/funnel_phases")
         .then(response => {
             commit('setPhases', response.data);
         });

@@ -175,7 +175,7 @@ export default {
         changeStatus(id, status){
             var editedItem = this.$store.state.company.companies.filter(company=>company.id == id)[0]
             editedItem.status_id = status
-            axios.put("https://unowipes.com/api/v1/company/update",Object.assign(editedItem)).then(response=>{
+            axios.put(process.env.VUE_APP_BACKEND + "api/v1/company/update",Object.assign(editedItem)).then(response=>{
                 this.$store.dispatch('company/getCompanies')
             }).catch(error => {
                 this.snackbar = {
@@ -242,7 +242,7 @@ export default {
             }
         },
         deleteCompany(){
-            axios.delete("https://unowipes.com/api/v1/company/delete/"+this.deleteId).then(response => {
+            axios.delete(process.env.VUE_APP_BACKEND + "api/v1/company/delete/"+this.deleteId).then(response => {
                 this.deleteId = ''
                 this.sheet = false
                 this.$store.dispatch('company/getCompanies')

@@ -156,7 +156,7 @@ export default {
     }),
     created(){
         var id = localStorage.getItem('printTicket')
-        axios.get("https://unowipes.com/api/v1/sales/"+id).then(response => {
+        axios.get(process.env.VUE_APP_BACKEND + "api/v1/sales/"+id).then(response => {
             this.sale = response.data.data
             this.perro = true
             localStorage.removeItem("printTicket")
