@@ -80,7 +80,7 @@
                         <v-icon v-if="editUser==true" @click="saveUser()" small class="ml-2">mdi-content-save</v-icon>
                     </v-list-item>
                     <v-list-item class="px-1">
-                            <v-textarea label="Nota" background-color="amber lighten-4" v-model="lead.note"></v-textarea>
+                            <v-textarea label="Nota" background-color="amber lighten-4" v-model="lead.note" @click:append="save" append-icon="mdi-content-save"></v-textarea>
                     </v-list-item>
                 </v-list>
 
@@ -212,7 +212,8 @@ export default {
                 phone: this.lead.phone,
                 email: this.lead.email,
                 name: this.lead.name,
-                last: this.lead.last
+                last: this.lead.last,
+                note: this.lead.note
             }
             axios.patch(process.env.VUE_APP_BACKEND + "api/v1/leads/" + editedItem.id,Object.assign(editedItem)).then(response=>{
                 this.editInterest = false
