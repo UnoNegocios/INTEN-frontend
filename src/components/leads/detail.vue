@@ -68,7 +68,7 @@
                         <v-icon v-if="editEmail==false" @click="editEmail=true" small class="ml-2">mdi-pencil</v-icon>
                         <v-icon v-if="editEmail==true" @click="editEmail=false" small class="ml-2">mdi-close</v-icon>
                     </v-list-item>
-                    <v-list-item style="border-bottom: solid 1px #ccd2d4" class="px-1">
+                    <v-list-item :disabled="!permissions('assignCompanies')" style="border-bottom: solid 1px #ccd2d4" class="px-1">
                         <strong>Responsable</strong>
                         <v-spacer></v-spacer>
                         <span v-if="editUser==false&&lead.user!=null">{{lead.user.name}} {{lead.user.last}}</span>
@@ -198,6 +198,19 @@ export default {
         }
     },
     methods:{
+        permissions(permission){
+            if(this.currentUser.id==1){
+                return true
+            }else if(this.currentUser.permissions!=undefined){
+                if(this.currentUser.permissions.includes(permission)){
+                    return true
+                }else{
+                    return false
+                }
+            }else{
+                return false
+            }
+        },
         pendiente(date){
             if(date>this.today){
                 return true
