@@ -247,7 +247,8 @@
                     <v-col cols="6">
                         <div style="background:#f4f5fa; max-height:40vh!important; min-height:40vh!important;" class="pa-4 mb-3">
                             <strong>Orden de las Fases</strong>
-                            <draggable class="mt-3" @end="changeFunnelPhaseOrder" :list="funnel_phases" draggable=".item" group="a" :scroll-sensitivity="200">
+
+                            <draggable style="overflow-y:scroll!important; height:230px!important;" class="mt-3" @end="changeFunnelPhaseOrder" :list="funnel_phases" draggable=".item" group="a" :scroll-sensitivity="900">
                                 <v-card style="margin:15px; background:transparent;" v-for="(funnel_phase, index) in funnel_phases" v-bind:key="index" :disabled="index==0" class="elevation-0 ma-1 item">
                                     <v-card-title class="py-1 px-3" :style="'border-bottom: 2px ' + funnel.color + ' solid; font-size:15px;' + 'background:white;'">
                                         {{funnel_phase.name}}
@@ -256,6 +257,7 @@
                                     </v-card-title>
                                 </v-card>
                             </draggable>
+                            
                         </div>
                     </v-col>
 
@@ -558,7 +560,7 @@ export default {
                     }
                     this.getFunnelPhasesFromApi()
                 })
-            }else if(this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0){
+            }else if((this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0)&&this.currentUser.id!=1){
                 axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversation/mark_messages_as_read", {conversation_id:lead.conversation.id, user_id:this.currentUser.id}).then(resp=>{
                     this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}
                     this.conversation_dialog = true
@@ -578,7 +580,7 @@ export default {
             this.conversation_dialog = params
         },
         changeFunnelPhaseOrder: function (evt) {
-            //console.log(evt)
+            
         },
         changeLeadOfFunnelPhase: function (evt) {
             this.pause = true
@@ -643,10 +645,13 @@ export default {
             })
         },
         saveEditedFunnel(){
-            axios.put(process.env.VUE_APP_BACKEND + "api/v1/funnels", this.funnel)
+            for(var i=0; i<this.funnel_phases.length; i++){
+                axios.put(process.env.VUE_APP_BACKEND + "api/v1/funnel_phases/" + this.funnel_phases[i].id, {'order':i})
+            }
+            axios.put(process.env.VUE_APP_BACKEND + "api/v1/funnels/" + this.funnel.id, this.funnel)
             .then(response=>{
-                this.closeFunnelDialog()
                 this.$store.dispatch('funnel/getFunnels')
+                this.editFunnelDialog = false
             })
         },
         saveFunnelPhase(){
