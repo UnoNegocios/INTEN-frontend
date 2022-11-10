@@ -497,6 +497,21 @@ export default {
             else if(this.propData.lead.conversation.channel == 'instagram'){
                 var server = process.env.VUE_APP_ZENVIA_INSTAGRAM_SERVER
             }
+            if(this.fileMimeType!='png'&&this.fileMimeType!='jpg'&&this.fileMimeType!='jpeg'){
+                var zenvia_contents = [{
+                    type: "file",
+                    fileUrl: this.fileLink,
+                    fileMimeType: this.fileMimeType,
+                    fileName: this.fileName
+                }]
+            }else{
+                {
+                    var zenvia_contents = [{
+                        type: "file",
+                        fileUrl: this.fileLink
+                    }]
+                }
+            }
             axios({
                 method: "POST",
                 url: "https://api.zenvia.com/v2/channels/" + this.propData.lead.conversation.channel + "/messages",
@@ -507,12 +522,7 @@ export default {
                 data: {
                     from:server,
                     to:this.propData.lead.conversation.channelId,
-                    contents:[{
-                        type: "file",
-                        fileUrl: this.fileLink,
-                        fileMimeType: this.fileMimeType,
-                        fileName: this.fileName
-                    }]
+                    contents:zenvia_contents
                 },
             }).then(response => {
                 messageInput.statuses[0].code = 'SENT'
