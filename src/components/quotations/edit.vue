@@ -19,7 +19,7 @@
         <v-card-text class="pb-0">
             <v-container>
                 <v-row class="py-6">
-                    <v-col class="pt-0" cols="12" sm="6" md="4">
+                    <v-col class="pt-0" cols="12" sm="6" md="6">
                         <v-autocomplete v-model="quotation.client_id" :items="clientsList" :loading="isLoadingClients" :search-input.sync="searchClients" hide-no-data item-value="id" item-text="name" label="Cliente" placeholder="Escribe para buscar" attach>
                             <template v-slot:item="{item, attrs, on}">
                                 <v-list-item v-on="on" v-bind="attrs">
@@ -35,7 +35,7 @@
                             </template> 
                         </v-autocomplete>
                     </v-col>
-                    <v-col class="pt-0" cols="12" sm="6" md="4">
+                    <v-col class="pt-0" cols="12" sm="6" md="6">
                         <v-menu v-model="datePicker" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y min-width="290px" >
                             <template v-slot:activator="{ on }">
                                 <v-text-field :rules="[v => !!v || 'Campo requerido']" clearable required v-model="quotation.activation_date" label="Fecha de Activación" prepend-icon="mdi-calendar" readonly v-on="on"></v-text-field>
@@ -43,10 +43,10 @@
                             <v-date-picker color="primary" v-model="quotation.activation_date" @input="datePicker = false"></v-date-picker>
                         </v-menu>
                     </v-col>
-                    <v-col class="pt-0" cols="12" sm="6" md="4">
+                    <!--v-col class="pt-0" cols="12" sm="6" md="4">
                         <v-autocomplete clearable v-model="quotation.activation_hour" prepend-icon="mdi-clock-outline" :items="hours" label="Hora de Activación">               
                         </v-autocomplete>
-                    </v-col> 
+                    </v-col--> 
                 </v-row>
                 <!--ALAN-->
                 <!--v-row class="pb-6 mt-0 pt-0">
@@ -94,9 +94,9 @@
                         </v-container>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                        <v-autocomplete clearable  v-model="quotation.payment_method_id" :items="paymentMethods" item-value="id" item-text="method" label="Metodo de Pago">
+                        <!--v-autocomplete clearable  v-model="quotation.payment_method_id" :items="paymentMethods" item-value="id" item-text="method" label="Metodo de Pago">
                         <template slot="no-data" class="pa-2">No existen Metodos de Pago relacionados.</template>
-                        </v-autocomplete>
+                        </v-autocomplete-->
                         <v-text-field class="my-4" disabled v-if="quotation.subtotal=totalQuotation" v-model="quotation.subtotal" prefix="$" label="Monto en Pesos"></v-text-field>
                     </v-col>
                 </v-row>
