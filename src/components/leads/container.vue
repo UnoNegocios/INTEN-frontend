@@ -278,6 +278,9 @@
             
 
         </div>  
+        <v-snackbar :color="snackbar.color" v-model="snackbar.show">
+            {{ snackbar.message }}
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -300,6 +303,11 @@ export default {
     },
     data() {
         return {
+            snackbar: {
+                show: false,
+                message: null,
+                color: null
+            },
             leads_links:[{link:'', phase_id:''}],
             filter:false,
             filterMobile:false,
@@ -542,6 +550,13 @@ export default {
                         b=>b.conversation.id == lead.conversation.id
                     )[0].conversation.unread_messages = 0
                     //this.pause = false
+                }).catch(errors=>{
+                    this.snackbar = {
+                        message: errors.response.data.errors.message,
+                        color: 'error',
+                        show: true
+                    }
+                    this.getFunnelPhasesFromApi()
                 })
             }else if(this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0){
                 axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversation/mark_messages_as_read", {conversation_id:lead.conversation.id, user_id:this.currentUser.id}).then(resp=>{

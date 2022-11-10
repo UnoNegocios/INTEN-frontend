@@ -91,6 +91,10 @@
                                     <v-icon class="mr-2">mdi-file-document</v-icon><span>{{message_item.contents.fileName}}</span><v-icon class="ml-2">mdi-download-circle-outline</v-icon>
                                 </v-btn>
 
+                                <v-btn style="letter-spacing: 0px;" color="primary" text class="pt-6 pb-5 mr-8" v-else-if="message_item.contents.fileMimeType == 'pdf'||message_item.contents.fileMimeType == 'xlsx'||message_item.contents.fileMimeType == 'doc'||message_item.contents.fileMimeType == 'ppt'" v-bind:href="message_item.contents.fileUrl" target="_blank">
+                                    <v-icon class="mr-2">mdi-file-document</v-icon><span>{{message_item.contents.fileName}}</span><v-icon class="ml-2">mdi-download-circle-outline</v-icon>
+                                </v-btn>
+
                                 <span v-else-if="message_item.contents.type=='location'">
                                     <iframe :src="'https://maps.google.com/maps?q=' + message_item.contents.latitude + ',' + message_item.contents.longitude + '&hl=es;z=14&amp;output=embed'" 
                                         width="535" 
@@ -264,7 +268,8 @@ export default {
             },
             file:'',
             fileLink:'',
-            fileMimeType:''
+            fileMimeType:'',
+            fileName:''
         }
     },
     computed:{
@@ -470,7 +475,8 @@ export default {
                 contents:{
                     type: "file",
                     fileUrl: this.fileLink,
-                    fileMimeType: this.fileMimeType
+                    fileMimeType: this.fileMimeType,
+                    fileName: this.fileName
                 },
                 channel: this.propData.lead.conversation.channel,
                 uuid:'',
@@ -503,7 +509,9 @@ export default {
                     to:this.propData.lead.conversation.channelId,
                     contents:[{
                         type: "file",
-                        fileUrl: this.fileLink
+                        fileUrl: this.fileLink,
+                        fileMimeType: this.fileMimeType,
+                        fileName: this.fileName
                     }]
                 },
             }).then(response => {
@@ -680,6 +688,7 @@ export default {
             console.log('File Successfully Uploaded with file name: ' + response.file);
             this.fileLink = process.env.VUE_APP_BACKEND + 'zenvia-files/' + response.file;
             this.fileMimeType = response.extension
+            this.fileName = response.fileName
             this.disableButtonFileSend = false;
         },
         uploadError(file, message) {
@@ -690,6 +699,7 @@ export default {
             this.file = ''
             this.fileLink = ''
             this.fileMimeType = ''
+            this.fileName = ''
         },
     },
 
