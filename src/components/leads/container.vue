@@ -412,22 +412,32 @@ export default {
 
             let index_lead = this.leads.indexOf(this.leads.filter(lead=>lead.data.filter(dta=>this.checkmamadas(dta.conversation) == channelId).length>0)[0])
 
-            let conversation = this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)[0]
+            if(index_lead<0){
+                axios.get(process.env.VUE_APP_BACKEND + "api/v1/leads?filter[phone]=" + channelId)
+                .then(resp=>{
+                    index_lead = this.leads.indexOf(this.leads.filter(lead=>lead.funnel_phase_id == resp.data.data[0].funnel_phase.id)[0])
+                    console.log(index_lead)
+                    this.leads[index_lead].data.unshift(resp.data.data[0])
+                })
+            }else{
 
-            let index_conversation = this.leads[index_lead].data.indexOf(conversation)
-            
-            this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
-            [0].conversation.latest_message = new_message
+                let conversation = this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)[0]
 
-            this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
-            [0].conversation.latest_session_message_time = new_message.created_at
+                let index_conversation = this.leads[index_lead].data.indexOf(conversation)
+                
+                this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
+                [0].conversation.latest_message = new_message
 
-            this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
-            [0].conversation.unread_messages = this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
-            [0].conversation.unread_messages + 1
+                this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
+                [0].conversation.latest_session_message_time = new_message.created_at
 
-            this.leads[index_lead].data.splice(index_conversation, 1)
-            this.leads[index_lead].data.unshift(conversation)
+                this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
+                [0].conversation.unread_messages = this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
+                [0].conversation.unread_messages + 1
+
+                this.leads[index_lead].data.splice(index_conversation, 1)
+                this.leads[index_lead].data.unshift(conversation)
+            }
 
             new Audio('/mixkit-long-pop-2358.wav').play()
         })
