@@ -329,7 +329,7 @@ export default {
             //{ text: 'Estatus de Pago', value: 'paymentStatus' },
             //{ text: 'Fecha Factura', value: 'invoice_date' },
             //{ text: 'Fecha de Vencimiento', value: 'expiration' },
-            { text: 'Mostrador', value: 'bar' },
+            { text: 'Recarga', value: 'bar' },
             //{ text: 'Peso', value: 'kg' },
             { text: 'Fecha de Entrega', value: 'delivery' },
             //{ text: 'Serie', value: 'type' },
@@ -410,7 +410,7 @@ export default {
         },
         statuses(id, bar, total, companyId){
             if(bar==true){
-                return 'Mostrador'
+                return 'Recarga'
             }else if(new Date(this.delivery(id)) > new Date()){
                 return 'Por entregar'
             }else if(this.debt(total, id)<1){

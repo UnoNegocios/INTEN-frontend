@@ -55,7 +55,7 @@
             //{ text: 'Estatus', value: 'status' },
             { text: 'Estatus de Pago', value: 'paymentStatus' },
             { text: 'Vencimiento', value: 'expiration' },
-            { text: 'Mostrador', value: 'bar' },
+            { text: 'Recarga', value: 'bar' },
             { text: 'Peso', value: 'kg' },
             { text: 'Fecha de Entrega', value: 'delivery' },
             { text: 'Serie', value: 'type' },

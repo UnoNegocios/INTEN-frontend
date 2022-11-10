@@ -14,7 +14,7 @@
             <br>
             Vendedor: {{sale.user.name}} {{sale.user.last}}
             <br>
-            Mostrador: {{mostrador(sale.bar)}}
+            Recarga: {{recarga(sale.bar)}}
             <br>
             Fecha Programada: {{sale.date}}
             <br>
@@ -163,7 +163,7 @@ export default {
         })
     },
     methods:{
-        mostrador(bar){
+        recarga(bar){
             if(bar!=1){
                 return 'No'
             }else{

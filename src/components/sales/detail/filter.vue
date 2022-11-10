@@ -77,7 +77,7 @@
 
             <v-select label="Impreso" v-model="quotation.printed" :items="booleans"></v-select>
             <v-select label="Surtido" v-model="quotation.production_dispatched" :items="booleans"></v-select>
-            <v-select label="Mostrador" v-model="quotation.bar" :items="booleans"></v-select>
+            <v-select label="Recarga" v-model="quotation.bar" :items="booleans"></v-select>
             <v-select label="Serie" v-model="quotation.type" :items="series"></v-select>
 
             <v-text-field label="ID" v-model="quotation.id"></v-text-field>

@@ -19,11 +19,11 @@
                     <v-dialog v-model="invoiceDialog" max-width="900px">
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn class="elevation-0 mr-4" small color="primary" right v-bind="attrs" v-on="on" @click="editedBarSales = barSales">
-                                Corte Mostrador
+                                Corte Recarga
                             </v-btn> 
                         </template>
                         <v-toolbar flat class="px-6 py-3">
-                            <v-toolbar-title>Ventas Mostrador del Día</v-toolbar-title>
+                            <v-toolbar-title>Ventas Recarga del Día</v-toolbar-title>
                             <v-spacer></v-spacer>
                             <v-text-field 
                                 append-icon="mdi-magnify" 
@@ -314,7 +314,7 @@
                 </v-btn>
             </div>
         </v-dialog>
-        <!-- corte mostrador -->
+        <!-- corte recarga -->
         <v-snackbar :color="snackbar.color" v-model="snackbar.show">
             {{ snackbar.message }}
         </v-snackbar>
@@ -429,7 +429,7 @@ export default {
             { text: 'Estatus de Pago', value: 'paymentStatus' },
             { text: 'Fecha Factura', value: 'invoice_date' },
             { text: 'Fecha de Vencimiento', value: 'expiration' },
-            { text: 'Mostrador', value: 'bar' },
+            { text: 'Recarga', value: 'bar' },
             //{ text: 'Peso', value: 'kg' },
             { text: 'Fecha de Entrega', value: 'delivery' },
             { text: 'Serie', value: 'type' },
@@ -640,7 +640,7 @@ export default {
         /*
         statuses(id, bar, total, companyId){
             if(bar==true){
-                return 'Mostrador'
+                return 'Recarga'
             }
             else if(new Date(this.delivery(id)) > new Date()){
                 return 'Por entregar'

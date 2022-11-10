@@ -50,7 +50,7 @@
                 <v-date-picker v-model="quotation.updated_at" range></v-date-picker>
             </v-menu>
 
-            <v-select @keydown.enter="filter()" label="Mostrador" v-model="quotation.bar" :items="booleans"></v-select>
+            <v-select @keydown.enter="filter()" label="Recarga" v-model="quotation.bar" :items="booleans"></v-select>
             <v-select @keydown.enter="filter()" label="Serie" v-model="quotation.type" :items="series"></v-select>
 
         </v-row>

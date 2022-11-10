@@ -93,7 +93,7 @@
             <template v-slot:[`item.company_id`]="{ item }">
                 <v-list-item class="px-0" style="min-height:0px!important; font-size:14px;" :to="{ path: '/clients/client/'+ item.companyID}">{{item.company_id}}</v-list-item>
             </template>
-            <!-- Mostrador -->
+            <!-- Recarga -->
             <template v-slot:[`item.pos_sale`]="{ item }">
                 <v-icon v-if="item.pos_sale==true">mdi-check</v-icon>
                 <v-icon v-else>mdi-close</v-icon>
@@ -330,7 +330,7 @@ export default {
             { text: 'Subtotal', value: 'subtotal' },
             { text: 'IVA', value: 'iva' },
             { text: 'Total', value: 'total' },
-            { text: 'Mostrador', value: 'pos_sale' },
+            { text: 'Recarga', value: 'pos_sale' },
             { text: 'Usuario', value: 'user.name' },
             { text: 'Tipo de Usuario', value: 'user.job_position' },
             { text: 'Creación', value: 'created_at' },
@@ -608,7 +608,7 @@ export default {
                 return{
                     id:id.id,
                     empresa: id.company_id,
-                    mostrador: id.bar,
+                    recarga: id.bar,
                     fecha_programada: id.date,
                     serie: id.type,
                     subtotal: id.subtotal,

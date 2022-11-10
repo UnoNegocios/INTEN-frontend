@@ -47,7 +47,7 @@
                 <v-date-picker v-model="quotation.updated_at" range></v-date-picker>
             </v-menu>
             
-            <v-select @keydown.enter="filter()" label="Mostrador" v-model="quotation.bar" :items="booleans"></v-select>
+            <v-select @keydown.enter="filter()" label="Recarga" v-model="quotation.bar" :items="booleans"></v-select>
 
             <v-text-field @keydown.enter="filter()" label="Id" v-model="quotation.id"></v-text-field>
             <v-text-field @keydown.enter="filter()" label="IMEI" v-model="quotation.imei"></v-text-field>
