@@ -172,7 +172,7 @@
                             </draggable>
                         </div>
                     </v-card>
-                    <v-btn @click="createFunnelPhaseDialog=true" color="primary" fab class="elevation-0 my-auto ml-3" x-small><v-icon>mdi-plus</v-icon></v-btn>
+                    <v-btn v-if="permissions('addFunnelPhase')" @click="createFunnelPhaseDialog=true" color="primary" fab class="elevation-0 my-auto ml-3" x-small><v-icon>mdi-plus</v-icon></v-btn>
                 </vue-horizontal>
             </div>
             <v-dialog @click:outside="closeDialog" v-model="conversation_dialog" width="1250">
@@ -452,6 +452,19 @@ export default {
         },
     },
     methods: {
+        permissions(permission){
+            if(this.currentUser.id==1){
+                return true
+            }else if(this.currentUser.permissions!=undefined){
+                if(this.currentUser.permissions.includes(permission)){
+                    return true
+                }else{
+                    return false
+                }
+            }else{
+                return false
+            }
+        },
         getMoreLeads(phase) {
             var getLink = this.leads_links.filter(lead_link=>lead_link.phase_id == phase).map(lead_link=>lead_link.link)[0]
             var index_lead = this.leads.indexOf(this.leads.filter(lead=>lead.funnel_phase_id == phase)[0])
