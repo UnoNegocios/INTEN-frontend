@@ -535,7 +535,13 @@ export default {
         },
         getFunnelPhases() {
             return new Promise((resolve, reject) => {
-                axios.get(process.env.VUE_APP_BACKEND + "api/v1/funnel_phases?filter[funnel_id]=" + this.funnel.id)
+                var funnel_id = ''
+                if(this.funnel.id!=''){
+                    funnel_id = this.funnel.id
+                }else{
+                    funnel_id = 1
+                }
+                axios.get(process.env.VUE_APP_BACKEND + "api/v1/funnel_phases?filter[funnel_id]=" + funnel_id)
                 .then(response=>{
                     var items = response.data
                     resolve({
