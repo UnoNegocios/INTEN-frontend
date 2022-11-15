@@ -205,7 +205,7 @@ export default {
             if(this.quotation.sales_man.length>0){
                 count = count+1
                 //sale
-                filterSale = filterSale + '&filter[company.user_id]='
+                filterSale = filterSale + '&filter[client.user_id]='
                 var length = this.quotation.sales_man.length
                 for(var i=0; i<length; i++){
                     filterSale = filterSale + this.quotation.sales_man[i]
@@ -214,7 +214,7 @@ export default {
                     }
                 }
                 //past_due
-                filterPastDue = filterPastDue + '&filter[company.user_id]='
+                filterPastDue = filterPastDue + '&filter[client.user_id]='
                 var length = this.quotation.sales_man.length
                 for(var i=0; i<length; i++){
                     filterPastDue = filterPastDue + this.quotation.sales_man[i]
@@ -223,7 +223,7 @@ export default {
                     }
                 }
                 //collection
-                filterCollection = filterCollection + '&filter[company.user_id]='
+                filterCollection = filterCollection + '&filter[client.user_id]='
                 var length = this.quotation.sales_man.length
                 for(var i=0; i<length; i++){
                     filterCollection = filterCollection + this.quotation.sales_man[i]

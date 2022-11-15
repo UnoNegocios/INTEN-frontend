@@ -263,7 +263,7 @@ export default {
             }
             if(this.activity.sales_man.length>0){
                 count = count+1
-                filter = filter + '&filter[company.user_id]='
+                filter = filter + '&filter[client.user_id]='
                 var length = this.activity.sales_man.length
                 for(var i=0; i<length; i++){
                     filter = filter + this.activity.sales_man[i]
