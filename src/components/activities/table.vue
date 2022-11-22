@@ -264,8 +264,16 @@ export default {
                     user: id.id,
                     created_at: id.created_at.slice(0,10),
                     updated_at: id.updated_at.slice(0,10),
+                    companyID: this.getId(id.client)
                 }
             });
+        },
+        getId(client){
+            if(client!=undefined){
+                return client.id
+            }else{
+                return ''
+            }
         },
         cual(client, lead){
         if(client!=undefined){
