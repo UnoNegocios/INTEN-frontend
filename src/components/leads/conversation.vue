@@ -333,7 +333,7 @@ export default {
 
             var index = this.messages.indexOf(new_message)
 
-            if(channelId==this.lead.conversation.channelId&&index<0){
+            if(new_message.direction=='IN'&&channelId==this.lead.conversation.channelId&&index<0){
                 this.messages.push(new_message)
                 this.$nextTick(() => {
                     this.scroll()
