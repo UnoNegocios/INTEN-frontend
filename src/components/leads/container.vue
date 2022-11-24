@@ -161,7 +161,7 @@
                                 </v-list-item>
 
                                 
-                                <infinite-loading direction="bottom" :ref="'phase' + funnel_phase.id" @infinite="getMoreLeads(funnel_phase.id)">
+                                <infinite-loading v-if="leads[index].data.length>0&&((leads[index].data.length%50)==0)" direction="bottom" :ref="'phase' + funnel_phase.id" @infinite="getMoreLeads(funnel_phase.id)">
                                     <span slot="no-results">
                                         <span class="your-customize-class"></span>
                                     </span>
