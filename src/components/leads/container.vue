@@ -445,6 +445,7 @@ export default {
     watch: {
         buscar: {
             handler () {
+                
                 this.getFunnelPhasesFromApi()
                 this.buscar = false
             },
@@ -469,6 +470,9 @@ export default {
             var getLink = this.leads_links.filter(lead_link=>lead_link.phase_id == phase).map(lead_link=>lead_link.link)[0]
             var index_lead = this.leads.indexOf(this.leads.filter(lead=>lead.funnel_phase_id == phase)[0])
             var index_leads_links = this.leads_links.indexOf(this.leads_links.filter(lead_link=>lead_link.phase_id == phase)[0])
+
+            console.log(getLink)
+
             if(getLink!=undefined){
                 axios.get(getLink.replace('http://', 'https://')).then(response=>{
                     this.leads[index_lead].data = (JSON.parse(JSON.stringify(this.leads[index_lead].data))).concat(response.data.data)
@@ -621,6 +625,7 @@ export default {
             }
         },
         getLeads(i) {
+            this.leads_links = []
             var filter = ''
             if(this.filters.id!=''&&this.filters.id!=null){
                 filter = '&filter[id]=' + this.filters.id
@@ -647,7 +652,7 @@ export default {
                     this.leads[i].data = resp.data.data
                     this.leads[i].load_leads = false
                     
-                    //this.leads_links.push({link: resp.data.links.next, phase_id: this.leads[i].funnel_phase_id})
+                    this.leads_links.push({link: resp.data.links.next, phase_id: this.leads[i].funnel_phase_id})
                 
                 })
             }else{
