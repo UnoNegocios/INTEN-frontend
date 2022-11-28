@@ -291,7 +291,7 @@
       </v-list>
       <template v-slot:append>
         <div style="color:#9ca3a5; font-size: 12px;" class="pa-2">
-          UNOCRM | v4.0.73 <v-icon> mdi-settings</v-icon>
+          UNOCRM | v4.0.74 <v-icon> mdi-settings</v-icon>
         </div>
       </template>
     </v-navigation-drawer>
