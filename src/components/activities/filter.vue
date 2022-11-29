@@ -68,7 +68,7 @@
 
             <v-select @keydown.enter="filter()" label="Realizada" v-model="activity.status" :items="statuses"></v-select>
 
-            <v-text-field @keydown.enter="filter()" label="Nota" v-model="activity.note"></v-text-field>
+            <v-text-field @keydown.enter="filter()" label="Nota" v-model="activity.description"></v-text-field>
 
         </v-row>
         <v-card style="position:absolute; bottom:0; width:100%;" tile color="primary">
@@ -96,7 +96,7 @@ export default {
             last_updated_by_user_id:'',
             sales_man:'',
             //abierto
-            note:'',
+            description:'',
             //boolean
             status:'',
             //date
@@ -201,9 +201,9 @@ export default {
             var count = 0
             var filter = ''
             //abierto
-            if(this.activity.note!=''){
+            if(this.activity.description!=''){
                 count = count+1
-                filter = filter + '&filter[note]='+this.activity.note
+                filter = filter + '&filter[description]='+this.activity.description
             }
             //multiples
             if(this.activity.client_id.length>0){
@@ -310,7 +310,7 @@ export default {
                 last_updated_by_user_id:'',
                 sales_man:'',
                 //abierto
-                note:'',
+                description:'',
                 //boolean
                 status:'',
                 //date

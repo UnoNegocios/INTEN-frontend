@@ -601,12 +601,17 @@ export default {
             }
         },
         sendTemplateMessage(){
+            if(this.propData.lead.conversation.zenviaChannelId == "5218185263303"){
+                var zenviaTemplateId = "21fecd7d-2375-4e91-b8c1-fa3ae19b9f35"
+            }else if(this.propData.lead.conversation.zenviaChannelId == "5218137058408"){
+                var zenviaTemplateId = "e73c0b4a-191e-4fec-b636-f6461b147ffe"
+            }
             var messageInput = {
                 conversation_id: this.propData.lead.conversation.id,
                 user_id: this.currentUser.id,
                 contents:{
                     type:"template",
-                    templateId:"21fecd7d-2375-4e91-b8c1-fa3ae19b9f35",
+                    templateId:zenviaTemplateId,
                     fields:{
                         clientName:this.propData.lead.name,
                         currentUserName:this.currentUser.name

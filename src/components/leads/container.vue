@@ -79,11 +79,16 @@
                 <v-btn icon @click="openFilter()">
                     <v-icon>mdi-filter</v-icon>
                 </v-btn>
+                <v-btn class="ml-3" @click="only_unread_messages=!only_unread_messages" icon>
+                    <v-icon :color="unreadColor">mdi-filter-variant</v-icon>
+                </v-btn>
             </v-row>
+
+            <v-card-title v-if="only_unread_messages" class="ml-3 mb-0 pb-0" color="primary" style="font-size:18px; font-weight:400; margin-top:-10px;">FILTRADO POR NO LEIDOS</v-card-title>
 
             <v-progress-linear v-if="load_funnel_phases" color="primary" class="mt-4" indeterminate rounded height="6"></v-progress-linear>
             <div v-else>
-                <vue-horizontal class="ma-6">
+                <vue-horizontal class="ma-6 mt-3">
                     <v-card style="width:20%; margin:15px; background:transparent;" v-for="(funnel_phase, index) in funnel_phases" v-bind:key="index" class="elevation-0 ma-1 item">
                         <v-card-title class="py-1 px-3" :style="'border-bottom: 2px ' + funnel.color + ' solid; font-size:15px;' + 'background:white;'">
                             {{funnel_phase.name}}
@@ -305,6 +310,7 @@ export default {
     },
     data() {
         return {
+            only_unread_messages:false,
             snackbar: {
                 show: false,
                 message: null,
@@ -358,6 +364,13 @@ export default {
         this.$store.dispatch('funnel/getPhases')
     },
     computed:{
+        unreadColor(){
+            if(this.only_unread_messages){
+                return 'primary'
+            }else{
+                return 'grey'
+            }
+        },
         funnels(){
             var funnels = this.$store.state.funnel.funnels
             if(funnels.length>0){
@@ -443,6 +456,11 @@ export default {
         })
     },
     watch: {
+        only_unread_messages: {
+            handler(){
+                this.getFunnelPhasesFromApi()
+            },deep: true
+        },
         buscar: {
             handler () {
                 
@@ -642,6 +660,7 @@ export default {
             if(this.filters.phone!=''&&this.filters.phone!=null){
                 filter = filter + '&filter[phone]=' + this.filters.phone
             }
+            
             if(i==0){//&& this.funnel.id==1
                 if(filter!=''){
                     filter = filter.slice(1,filter.length)
@@ -656,6 +675,9 @@ export default {
                 
                 })
             }else{
+                if(this.only_unread_messages){
+                    filter = filter + '&filter[has_unread_messages]=1'
+                }
                 axios.get(process.env.VUE_APP_BACKEND + "api/v1/leads?filter[funnel_phase_id]=" + this.leads[i].funnel_phase_id + filter + '&sort=latest')
                 .then(resp=>{
                     
