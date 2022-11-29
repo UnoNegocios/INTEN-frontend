@@ -92,8 +92,8 @@
                 <v-list-item class="px-0" style="min-height:0px!important; font-size:14px;" :to="{ path: '/clients/client/'+ item.companyID}">{{item.company}}</v-list-item>
             </template>
             <!-- Empresa -->
-            <template v-slot:[`item.bar`]="{ item }">
-                <v-icon v-if="item.bar==true">mdi-check</v-icon>
+            <template v-slot:[`item.pos_sale`]="{ item }">
+                <v-icon v-if="item.pos_sale==true">mdi-check</v-icon>
                 <v-icon v-else>mdi-close</v-icon>
             </template>
             <!-- Detalle PC -->
@@ -360,7 +360,7 @@ export default {
                     pdf:id.pdf,
                     note:id.note,
                     serie:id.serie,
-                    bar:id.bar,
+                    bar:id.pos_sale,
                     //date:id.date.slice(0, 10),
                     type:id.type,
                     items:id.items,
@@ -383,7 +383,7 @@ export default {
                     debt:this.debt(id.total, id.id),//.toLocaleString('es-MX', { style: 'currency', currency: 'MXN',}),
                     expired_debt:this.expired_debt(id.id, id.total, id.invoice_date, id.company_id).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',}),
                     paymentStatus:this.paymentStatus(id.id, id.total, id.invoice_date, id.company_id),
-                    status:this.statuses(id.id, id.bar, id.total, id.company_id),
+                    status:this.statuses(id.id, id.pos_sale, id.total, id.company_id),
                 }
             });
             return quotations
@@ -1256,10 +1256,10 @@ export default {
                         var trece = ''
                         switch(params[i].como){
                             case 'es igual a':
-                                trece=filterQuotation.filter(quotation=>this.lowerCase(quotation.bar) == params[i].valor.toLowerCase())
+                                trece=filterQuotation.filter(quotation=>this.lowerCase(quotation.pos_sale) == params[i].valor.toLowerCase())
                             break;
                             case 'no es igual a':
-                                trece=filterQuotation.filter(quotation=>this.lowerCase(quotation.bar) != params[i].valor.toLowerCase())
+                                trece=filterQuotation.filter(quotation=>this.lowerCase(quotation.pos_sale) != params[i].valor.toLowerCase())
                             break;
                         }
                         filterQuotation = this.removeDuplicates(trece, "id");
@@ -1268,10 +1268,10 @@ export default {
                         var ocho = ''
                         switch(params[i].como){
                             case 'es igual a':
-                                ocho=filterQuotation.filter(quotation=>this.lowerCase(quotation.bar) == params[i].valor.toLowerCase())
+                                ocho=filterQuotation.filter(quotation=>this.lowerCase(quotation.pos_sale) == params[i].valor.toLowerCase())
                             break;
                             case 'no es igual a':
-                                ocho=filterQuotation.filter(quotation=>this.lowerCase(quotation.bar) != params[i].valor.toLowerCase())
+                                ocho=filterQuotation.filter(quotation=>this.lowerCase(quotation.pos_sale) != params[i].valor.toLowerCase())
                             break;
                         }
                         filterQuotation = this.removeDuplicates(ocho, "id");

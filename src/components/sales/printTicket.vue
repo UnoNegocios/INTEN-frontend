@@ -14,7 +14,7 @@
             <br>
             Vendedor: {{sale.user.name}} {{sale.user.last}}
             <br>
-            Recarga: {{recarga(sale.bar)}}
+            Recarga: {{recarga(sale.pos_sale)}}
             <br>
             Fecha Programada: {{sale.date}}
             <br>

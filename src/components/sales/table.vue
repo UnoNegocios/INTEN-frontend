@@ -185,8 +185,8 @@
                 <v-list-item class="px-0" style="min-height:0px!important; font-size:14px;" :to="{ path: '/clients/client/'+ item.companyID}">{{item.company}}</v-list-item>
             </template>
             <!-- Empresa -->
-            <template v-slot:[`item.bar`]="{ item }">
-                <v-icon v-if="item.bar==true">mdi-check</v-icon>
+            <template v-slot:[`item.pos_sale`]="{ item }">
+                <v-icon v-if="item.pos_sale==true">mdi-check</v-icon>
                 <v-icon v-else>mdi-close</v-icon>
             </template>
             <!-- Detalle PC -->
@@ -469,7 +469,7 @@ export default {
                     pdf:id.pdf,
                     note:id.note,
                     //serie:id.serie,
-                    bar:id.bar,
+                    bar:id.pos_sale,
                     date:id.date,
                     type:id.type,
                     items:id.quotation_items,
@@ -487,7 +487,7 @@ export default {
                     last_updated_by_user_id:this.salesman(id.last_updated_by_user_id),
                     priceList:this.priceList(id.company_id),
                     weight:this.weight(id.quotation_items),
-                    delivery:this.delivery(id.id, id.bar, id.date),
+                    delivery:this.delivery(id.id, id.pos_sale, id.date),
                     expiration:this.expiration(id.date, id.company_id),
                     invoice_date:id.invoice_date,
                     invoiceDays:this.invoiceDays(id.date),
@@ -496,7 +496,7 @@ export default {
                     debt:this.debt(this.sumTotal(id.quotation_items, id.type), id.id),//.toLocaleString('es-MX', { style: 'currency', currency: 'MXN',}),
                     expired_debt:this.expired_debt(id.id, this.sumTotal(id.quotation_items, id.type), id.date, id.company_id),//.toLocaleString('es-MX', { style: 'currency', currency: 'MXN',}),
                     paymentStatus:this.paymentStatus(id.id, this.sumTotal(id.quotation_items, id.type), id.date, id.company_id, id.type),
-                    //estatus:this.statuses(id.id, id.bar, id.total, id.company_id),
+                    //estatus:this.statuses(id.id, id.pos_sale, id.total, id.company_id),
                     status:id.status
                 }
             });
@@ -510,7 +510,7 @@ export default {
         },
         barSales(){
             return this.quotationsLists.filter(sale=>sale.invoice == '' && sale.remission == '' )
-            //.filter(sale=>sale.date == new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).split('T')[0].slice(0,10))// && sale.bar == true
+            //.filter(sale=>sale.date == new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).split('T')[0].slice(0,10))// && sale.pos_sale == true
         },
     },
     created () {
@@ -1463,10 +1463,10 @@ export default {
                         var ocho = ''
                         /*switch(params[i].como){
                             case 'es igual a':*/
-                                ocho=filterQuotation.filter(quotation=>this.sino(quotation.bar, params[i].valor))
+                                ocho=filterQuotation.filter(quotation=>this.sino(quotation.pos_sale, params[i].valor))
                             /*break;
                             case 'no es igual a':
-                                ocho=filterQuotation.filter(quotation=>this.lowerCase(quotation.bar) != params[i].valor.toLowerCase())
+                                ocho=filterQuotation.filter(quotation=>this.lowerCase(quotation.pos_sale) != params[i].valor.toLowerCase())
                             break;
                         }*/
                         filterQuotation = this.removeDuplicates(ocho, "id");

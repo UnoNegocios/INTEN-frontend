@@ -50,7 +50,7 @@
                 <v-date-picker v-model="quotation.updated_at" range></v-date-picker>
             </v-menu>
 
-            <v-select @keydown.enter="filter()" label="Recarga" v-model="quotation.bar" :items="booleans"></v-select>
+            <v-select @keydown.enter="filter()" label="Recarga" v-model="quotation.pos_sale" :items="booleans"></v-select>
             <v-select @keydown.enter="filter()" label="Serie" v-model="quotation.type" :items="series"></v-select>
 
         </v-row>
@@ -241,14 +241,14 @@ export default {
                 //collection
                 filterCollection = filterCollection + '&filter[sale.type]='+this.quotation.type
             }
-            if(this.quotation.bar!==''){
+            if(this.quotation.pos_sale!==''){
                 count = count+1
                 //sale
-                filterSale = filterSale + '&filter[bar]='+this.quotation.bar
+                filterSale = filterSale + '&filter[pos_sale]='+this.quotation.pos_sale
                 //past_due
-                filterPastDue = filterPastDue + '&filter[bar]='+this.quotation.bar
+                filterPastDue = filterPastDue + '&filter[pos_sale]='+this.quotation.pos_sale
                 //collection
-                filterCollection = filterCollection + '&filter[sale.bar]='+this.quotation.bar
+                filterCollection = filterCollection + '&filter[sale.pos_sale]='+this.quotation.pos_sale
             }
             //date
             if(this.quotation.date.length==2){

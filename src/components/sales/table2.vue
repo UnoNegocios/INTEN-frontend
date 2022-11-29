@@ -609,7 +609,7 @@ export default {
                 return{
                     id:id.id,
                     empresa: id.company_id,
-                    recarga: id.bar,
+                    recarga: id.pos_sale,
                     fecha_programada: id.date,
                     serie: id.type,
                     subtotal: id.subtotal,

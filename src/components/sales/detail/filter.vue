@@ -77,7 +77,7 @@
 
             <v-select label="Impreso" v-model="quotation.printed" :items="booleans"></v-select>
             <v-select label="Surtido" v-model="quotation.production_dispatched" :items="booleans"></v-select>
-            <v-select label="Recarga" v-model="quotation.bar" :items="booleans"></v-select>
+            <v-select label="Recarga" v-model="quotation.pos_sale" :items="booleans"></v-select>
             <v-select label="Serie" v-model="quotation.type" :items="series"></v-select>
 
             <v-text-field label="ID" v-model="quotation.id"></v-text-field>
@@ -280,8 +280,8 @@ export default {
             if(this.quotation.production_dispatched!==''){
                 filter = filter + '&filter[production_dispatched]='+this.quotation.production_dispatched
             }
-            if(this.quotation.bar!==''){
-                filter = filter + '&filter[bar]='+this.quotation.bar
+            if(this.quotation.pos_sale!==''){
+                filter = filter + '&filter[pos_sale]='+this.quotation.pos_sale
             }
             if(this.payment_status!==''){
                 filter = filter + '&filter[payment_status]='+this.quotation.payment_status

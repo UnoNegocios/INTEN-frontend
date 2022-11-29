@@ -47,7 +47,7 @@
                 <v-date-picker v-model="quotation.updated_at" range></v-date-picker>
             </v-menu>
             
-            <v-select @keydown.enter="filter()" label="Recarga" v-model="quotation.bar" :items="booleans"></v-select>
+            <v-select @keydown.enter="filter()" label="Recarga" v-model="quotation.pos_sale" :items="booleans"></v-select>
 
             <v-text-field @keydown.enter="filter()" label="Id" v-model="quotation.id"></v-text-field>
             <v-text-field @keydown.enter="filter()" label="IMEI" v-model="quotation.imei"></v-text-field>
@@ -89,7 +89,8 @@ export default {
             //date
             date:[],
             created_at:[],
-            updated_at:[]
+            updated_at:[],
+            bar:''
         },
         isLoadingClients: false,
         searchClients: null,
@@ -168,6 +169,10 @@ export default {
             if(this.quotation.sim!=''){
                 count = count+1
                 filter = filter + '&filter[sim]='+this.quotation.sim
+            }
+            if(this.quotation.pos_sale!==''){
+                count = count+1
+                filter = filter + '&filter[pos_sale]='+this.quotation.pos_sale
             }
             //multiples
             if(this.quotation.client_id.length>0){
