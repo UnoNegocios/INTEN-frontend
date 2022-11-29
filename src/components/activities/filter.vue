@@ -230,7 +230,7 @@ export default {
             }
             if(this.activity.created_by_user_id.length>0){
                 count = count+1
-                filter = filter + '&filter[created_by_user_id]='
+                filter = filter + '&filter[user_id]='
                 var length = this.activity.created_by_user_id.length
                 for(var i=0; i<length; i++){
                     filter = filter + this.activity.created_by_user_id[i]
@@ -241,7 +241,7 @@ export default {
             }
             if(this.activity.last_updated_by_user_id.length>0){
                 count = count+1
-                filter = filter + '&filter[last_updated_by_user_id]='
+                filter = filter + '&filter[user_id]='
                 var length = this.activity.last_updated_by_user_id.length
                 for(var i=0; i<length; i++){
                     filter = filter + this.activity.last_updated_by_user_id[i]
