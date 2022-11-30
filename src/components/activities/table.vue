@@ -260,7 +260,7 @@ export default {
                     activity: id.activity_type,
                     description: id.description,
                     status: id.status,
-                    salesman: this.user(id.user),
+                    salesman: this.user(id.salesman),
                     user: this.user(id.user),
                     created_at: id.created_at.slice(0,10),
                     updated_at: id.updated_at.slice(0,10),
