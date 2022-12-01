@@ -291,14 +291,14 @@
       </v-list>
       <template v-slot:append>
         <div style="color:#9ca3a5; font-size: 12px;" class="pa-2">
-          UNOCRM | v4.0.80 <v-icon> mdi-settings</v-icon>
+          UNOCRM | v4.0.81 <v-icon> mdi-settings</v-icon>
         </div>
       </template>
     </v-navigation-drawer>
     <!-- header -->
     <v-app-bar class="elevation-0 px-0" :clipped-left="$vuetify.breakpoint.lgAndUp" app  color="#f4f5fa" dark><!-- box-shadow: 0px 0px 5px 0px rgb(112 112 115 / 30%)!important; -->
         <v-icon @click.stop="drawer = !drawer" class="mr-5" color="grey"> mdi-menu</v-icon>
-        <img style="height: 24px;" src="/logo.png">
+        <img style="height: 30px;" src="https://unocrm.mx/wp-content/uploads/2020/08/unocrm_logo-1.svg">
         <v-spacer></v-spacer>  
         <v-btn class="hidden-sm-and-down pa-0" icon to="/" link>
           <v-icon color="#707073">mdi-apps</v-icon>
