@@ -44,11 +44,9 @@
             <template v-slot:[`item.weight`]="{ item }">
                 {{item.weight}}kg
             </template>
-            <template v-slot:[`item.is_published`]="{ item }">
-                <div v-if="item.product_type!='Variable'">
-                    <v-icon v-if="item.is_published==true" color="green">mdi-record</v-icon>
-                    <v-icon v-else color="red">mdi-record</v-icon>
-                </div>
+            <template v-slot:[`item.is_active`]="{ item }">
+                <v-icon v-if="item.is_active==true" color="green">mdi-record</v-icon>
+                <v-icon v-else color="red">mdi-record</v-icon>
             </template>
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon small class="mr-2" @click="edit(item.id)">mdi-pencil</v-icon>
@@ -115,14 +113,14 @@ export default {
         headers(){
             return [
                 {text: 'Nombre', value: 'name'},
-                {text: 'Codigo Macro', value: 'macro'},
+                //{text: 'Codigo Macro', value: 'macro'},
                 //{text: 'Tipo', value: 'type'},
-                {text: 'Proveedor', value: 'provider_id'},
-                {text: 'Peso', value: 'weight'},
+                //{text: 'Proveedor', value: 'provider_id'},
+                //{text: 'Peso', value: 'weight'},
                 {text: 'Precio', value: 'price'},
-                {text: 'Costo', value: 'cost'},
-                {text: 'Categoría', value: 'categories'},
-                {text: 'Publicado', value: 'is_published'},
+                //{text: 'Costo', value: 'cost'},
+                {text: 'Categoría', value: 'category'},
+                {text: 'Publicado', value: 'is_active'},
                 {text: 'Acciones', value: 'actions', sortable: false },
             ]
         },
@@ -142,17 +140,17 @@ export default {
                 var items = []
                 var total = 0
                 var link = ''
-                if(this.seach!=''){
-                    link = 'filter[name]=' + this.search + '&'
+                if(this.search!=''){
+                    link = 'filter[name]=' + this.search// + '&'
                 }
-                axios.get(process.env.VUE_APP_BACKEND + "api/v1/cellular_plans")//?" + link + "page=" + page + "&itemsPerPage=" + itemsPerPage)
+                axios.get(process.env.VUE_APP_BACKEND + "api/v1/cellular_plans?" + link)// + "page=" + page + "&itemsPerPage=" + itemsPerPage)
                 .then(response => {
                     items = this.mapItems(response.data)
                     total = response.data.length
                     if (sortBy.length === 1 && sortDesc.length === 1) {
                         if(sortDesc[0]){
                             axios
-                            .get(process.env.VUE_APP_BACKEND + "api/v1/cellular_plans")//?" + link + "page=" + page + "&sort=-" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
+                            .get(process.env.VUE_APP_BACKEND + "api/v1/cellular_plans?" + link)// + "page=" + page + "&sort=-" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
                             .then(response=>{
                                 items = this.mapItems(response.data)
                                 total = response.data.length
@@ -163,7 +161,7 @@ export default {
                             })
                         }else{
                             axios
-                            .get(process.env.VUE_APP_BACKEND + "api/v1/cellular_plans")//?" + link + "page=" + page + "&sort=" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
+                            .get(process.env.VUE_APP_BACKEND + "api/v1/cellular_plans?" + link)// + "page=" + page + "&sort=" + sortBy[0] + "&itemsPerPage=" + itemsPerPage)
                             .then(response=>{
                                 items = this.mapItems(response.data)
                                 total = response.data.length
@@ -183,7 +181,7 @@ export default {
             })
         },
         mapItems(items){
-            return items.map(id=>{
+            return items/*.map(id=>{
                 return{
                     id:id.id,
                     name: id.name,
@@ -197,7 +195,7 @@ export default {
                     is_published: id.is_published,
                     editedItem:id
                 }
-            });
+            });*/
         },
         /*filtersItem: function(params) {
             
@@ -219,8 +217,8 @@ export default {
         deleteItem (item) {
             let id = item.id
             if (confirm('¿Seguro que deseas borrar este producto/servicio?')) {
-                axios.delete(process.env.VUE_APP_BACKEND + "api/v1/item/delete/"+id).then(response => {
-                    this.$store.dispatch('item/getItems')
+                axios.delete(process.env.VUE_APP_BACKEND + "api/v1/cellular_plans/"+id).then(response => {
+                    this.getDataFromApi()
                 }).catch(error => {
                     this.snackbar = {
                         message: error.response.data.message,
