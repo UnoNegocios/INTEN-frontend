@@ -73,8 +73,8 @@
                         <v-spacer></v-spacer>
                         <span v-if="editUser==false&&lead.user!=null">{{lead.user.name}} {{lead.user.last}}</span>
 
-                        <v-text-field style="width:100px;" dense v-else-if="editUser&&lead.user!=null" v-model="lead.user.id" label="Responsable" placeholder="Responsable" outlined item-text="name" item-value="id" :items="usersList"></v-text-field>
-                        <v-text-field style="width:100px;" dense v-else-if="editUser&&playUser" v-model="user_id" label="Responsable" placeholder="Responsable" outlined item-text="name" item-value="id" :items="usersList"></v-text-field>
+                        <v-autocomplete style="width:100px;" dense v-else-if="editUser&&lead.user!=null" v-model="lead.user.id" label="Responsable" placeholder="Responsable" outlined item-text="name" item-value="id" :items="usersList"></v-autocomplete>
+                        <v-autocomplete style="width:100px;" dense v-else-if="editUser&&playUser" v-model="user_id" label="Responsable" placeholder="Responsable" outlined item-text="name" item-value="id" :items="usersList"></v-autocomplete>
 
                         <v-icon v-if="editUser==false" @click="editUser=true" small class="ml-2">mdi-pencil</v-icon>
                         <v-icon v-if="editUser==true" @click="saveUser()" small class="ml-2">mdi-content-save</v-icon>
