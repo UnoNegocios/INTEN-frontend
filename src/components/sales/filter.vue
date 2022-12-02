@@ -273,11 +273,11 @@ export default {
                 //date
                 date:[],
                 created_at:[],
-                updated_at:[]
+                updated_at:[],
+                bar:''
             },
             this.entries={
-                companies: [],
-                contacts:[]
+                clients: []
             },
             localStorage.removeItem("selectorFiltersSales")
             localStorage.removeItem("filtersSales")

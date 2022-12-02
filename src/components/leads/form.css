@@ -1,0 +1,19 @@
+.btn-primary {
+    color: #FFFFFF!important;
+    border-width: 12px!important;
+    border-color: RGBA(255,255,255,0)!important;
+    letter-spacing: 2px!important;
+    font-size: 14px!important;
+    font-family: 'Poppins',Helvetica,Arial,Lucida,sans-serif!important;
+    font-weight: 600!important;
+    text-transform: uppercase!important;
+    background-color: #0156AA!important;
+}
+
+.form-control {
+    background-color: #f1f5f9!important;
+    border: 1px solid #f1f5f9!important;
+    box-shadow: none!important;
+}
+
+

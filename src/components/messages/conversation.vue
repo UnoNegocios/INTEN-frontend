@@ -16,7 +16,7 @@
             </v-row>
         </v-toolbar>
         <v-row class="ma-0">
-            <v-col md=9 class="pa-0" style="border-right:solid #ccd2d4 2px;">
+            <v-col md=12 class="pa-0" style="border-right:solid #ccd2d4 2px;">
                 <div  style="border-top:solid #ccd2d4 1px; background-color: white; background-repeat: repeat; background-size: 412.5px 749.25px; background-image: linear-gradient(120deg,rgb(229 221 213 / 90%) 60%,rgb(229 221 213 / 90%) 60%),url(https://unocrm.mx/wp-content/uploads/2021/07/bg-chat-tile-light_04fcacde539c58cca6745483d4858c52.png)!important;">
                     <div style="height:72vh;" class="chat__body pl-7 pr-10 py-0" ref="container">
                         <infinite-loading direction="top" @infinite="getMessages"></infinite-loading>
@@ -157,9 +157,6 @@
                         </v-card>
                     </v-dialog>
                 </div>
-            </v-col>
-            <v-col md="3" class="pa-0">
-                <leadDetail v-bind:lead="lead"/>
             </v-col>
         </v-row>
     </v-card>

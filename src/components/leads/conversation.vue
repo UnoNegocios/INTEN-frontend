@@ -123,7 +123,7 @@
                                 <!-- Fecha y Hora -->
                                 <span :style="message_item.direction === 'OUT' ? 'position:absolute!important; right:50px!important;': ''">
                                     <!-- Hour -->
-                                    <span :style="message_item.direction === 'OUT' ? 'margin-left: 5px; bottom:-10px;': 'margin-left: 10px; bottom:2px;'" class="chat__timestamp">{{message_item.meessage_datetime.slice(11,16)}}</span>
+                                    <span :style="message_item.direction === 'OUT' ? 'margin-left: 0px; bottom:-12px;': 'margin-left: 5px; bottom:1px;'" class="chat__timestamp">{{message_item.meessage_datetime.slice(11,16)}}</span>
                                     <!-- Seen -->
                                     <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'CLOCK'" x-small color="grey" class="chat__checkmark">mdi-clock-outline</v-icon>
                                     <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'SENT'" x-small color="grey" class="chat__checkmark">mdi-check</v-icon>
@@ -729,7 +729,7 @@ export default {
         margin-top: -70px!important;
     }
     .chat__timestamp {
-        font-size: xx-small;
+        font-size: 11px;
         position:absolute;
     }
     .chat__checkmark {

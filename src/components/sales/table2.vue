@@ -5,7 +5,7 @@
             <filterSales v-bind:company="company" @filtersSale="filtersSale"/>
         </v-navigation-drawer>
         <!-- Totalizadores -->
-        <totals v-if="this.company==undefined"/>
+        <!--totals v-if="this.company==undefined"/-->
         <!--header-->
         <v-toolbar flat class="px-4 pt-3">
             <v-toolbar-title>
