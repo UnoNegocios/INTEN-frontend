@@ -10,7 +10,7 @@
     </v-row>
     <div v-else>
         <v-row class="ma-0" v-show="more">
-            <v-col md="2" class="px-2">
+            <!--v-col md="2" class="px-2">
                 <v-card class="py-2 px-4 elevation-0">
                     <v-icon x-small color="#47bdc6" class="mr-1">mdi-record</v-icon> 
                     <span style="font-size:12px;"><strong>Subtotal</strong></span>
@@ -25,8 +25,8 @@
                     <br/>{{(totals.sum_iva*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}
                     <br/><span style="font-size:12px; color:grey;">Promedio:<strong>{{(totals.avg_iva*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</strong></span>
                 </v-card>
-            </v-col>
-            <v-col md="2" class="px-2">
+            </v-col-->
+            <v-col md="6" class="px-2">
                 <v-card class="py-2 px-4 elevation-0">
                     <v-icon x-small color="#4385f3" class="mr-1">mdi-circle</v-icon> 
                     <span style="font-size:12px;"><strong>Total</strong></span>
@@ -34,7 +34,15 @@
                     <br/><span style="font-size:12px; color:grey;">Promedio:<strong>{{(totals.avg_total*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</strong></span>
                 </v-card>
             </v-col>
-            <v-col md="2" class="px-2">
+            <v-col md="6" class="px-2">
+                <v-card class="py-2 px-4 elevation-0">
+                    <v-icon x-small color="#4385f3" class="mr-1">mdi-circle</v-icon> 
+                    <span style="font-size:12px;"><strong>Recargas</strong></span>
+                    <br/>{{(totals.sum_recargas*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}
+                    <br/><span style="font-size:12px; color:grey;">Cantidad:<strong>{{totals.total_recargas}} recargas</strong></span>
+                </v-card>
+            </v-col>
+            <!--v-col md="2" class="px-2">
                 <v-card class="py-2 px-4 elevation-0">
                     <v-icon x-small color="#33a952" class="mr-1">mdi-circle</v-icon> 
                     <span style="font-size:12px;"><strong>Cobranza</strong></span>
@@ -55,59 +63,13 @@
                     <v-icon x-small color="#ea4435" class="mr-1">mdi-circle</v-icon> 
                     <span style="font-size:12px;"><strong>Cobranza Vencida</strong></span>
                     <br/>{{(totals.sum_past_due_balance*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}
-                    <!--br/><span style="font-size:12px; color:grey;">Promedio:<strong>{{(totals.avg_past_due_balance*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</strong></span-->
                 </v-card>
-            </v-col>
+            </v-col-->
         </v-row>
         <v-row class="ma-0 mb-2" v-show="!more">
             <v-spacer></v-spacer>
             <v-btn class="botonPerron" @click="buttonMore" icon><v-icon>mdi-chevron-down</v-icon></v-btn>
             <v-spacer></v-spacer>
-        </v-row>
-        <v-row class="ma-0" v-show="more && permissions('utilities')">
-            <v-col md="2" class="px-2">
-                <v-card class="py-2 px-4 elevation-0">
-                    <v-icon x-small color="#2fc5ff" class="mr-1">mdi-circle</v-icon> 
-                    <span style="font-size:12px;"><strong>Utilidades</strong></span>
-                    <br/>{{(totals.sum_utilities*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}
-                    <br/><span style="font-size:12px; color:grey;">Promedio:<strong>{{(totals.avg_utilities*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</strong></span>
-                </v-card>
-            </v-col>
-            <v-col md="2" class="px-2">
-                <v-card class="py-2 px-4 elevation-0">
-                    <v-icon x-small color="#9c27b0" class="mr-1">mdi-circle</v-icon> 
-                    <span style="font-size:12px;"><strong>Kilos</strong></span>
-                    <br/>{{(totals.sum_weights*1).toFixed(2)}}
-                    <br/><span style="font-size:12px; color:grey;">Promedio:<strong>{{(totals.avg_weights*1).toFixed(2)}}</strong></span>
-                </v-card>
-            </v-col>
-
-
-            <!--v-col md="2" class="px-2">
-                <v-card class="py-2 px-4 elevation-0">
-                    <v-icon x-small color="#ea4435" class="mr-1">mdi-circle</v-icon> 
-                    <span style="font-size:12px;"><strong>Pendientes De Pago</strong></span>
-                    <br/>{{(totals.sum_pendiente*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}
-                </v-card>
-            </v-col-->
-            <v-col md="2" class="px-2">
-                <v-card class="py-2 px-4 elevation-0">
-                    <v-icon x-small color="#ea4435" class="mr-1">mdi-circle</v-icon> 
-                    <span style="font-size:12px;"><strong>En Credito</strong></span>
-                    <br/>{{(totals.sum_credito*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}
-                    <!--br/><span style="font-size:12px; color:grey;">Promedio:<strong>{{(totals.avg_past_due_balance*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</strong></span-->
-                </v-card>
-            </v-col>
-            <v-col md="2" class="px-2">
-                <v-card class="py-2 px-4 elevation-0">
-                    <v-icon x-small color="#ea4435" class="mr-1">mdi-circle</v-icon> 
-                    <span style="font-size:12px;"><strong>Por Cobrar</strong></span>
-                    <br/>{{(totals.sum_cobrar*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}
-                    <!--br/><span style="font-size:12px; color:grey;">Promedio:<strong>{{(totals.avg_past_due_balance*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</strong></span-->
-                </v-card>
-            </v-col>
-
-
         </v-row>
         <v-row class="ma-0 mb-2" v-show="more">
             <v-spacer></v-spacer>
