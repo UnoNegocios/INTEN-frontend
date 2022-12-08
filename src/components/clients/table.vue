@@ -169,7 +169,9 @@ export default {
             { text: 'Fecha de Contrato', value: 'contract_date' },
             { text: 'Responsable', value: 'salesman' },
             { text: 'Creación', value: 'created_at' },
+            { text: 'Credor', value: 'created_by_user_id'},
             { text: 'Actualización', value: 'updated_at' },
+            { text: 'Editor', value: 'last_updated_by_user_id'},
             { value: 'actions', sortable: false, align: 'end', },
         ]},
     },
@@ -252,6 +254,8 @@ export default {
                     status: id.status,
                     contract_date: id.contract_date,
                     salesman: id.user.name + ' ' + id.user.last,
+                    created_by_user_id: id.created_by_user_id.name + ' ' + id.created_by_user_id.last,
+                    last_updated_by_user_id: id.last_updated_by_user_id.name + ' ' + id.last_updated_by_user_id.last,
                     created_at: id.created_at.slice(0,10),
                     updated_at: id.updated_at.slice(0,10),
                 }

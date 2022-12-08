@@ -1,24 +1,18 @@
 <template>
-    <v-card class="ma-0" v-if="propData.lead!=undefined">
+    <v-card class="ma-0" v-if="client!=undefined">
         <v-toolbar class="pl-3 pr-6" color="#ededed" elevation="0" style="border-bottom:solid #ccd2d4 2px;">
             <v-list-item-avatar size="30" color="#ccd2d4">
-                <v-img v-if="lead.conversation!=undefined && lead.conversation.client_picture!=null" :src="lead.conversation.client_picture"></v-img>
-                <span style="text-transform: uppercase; text-align: center; width: 30px;" class="white--text text-h6" v-else><strong>{{lead.name.slice(0,1)}}</strong></span>
+                <v-img v-if="conversation!=undefined && conversation.client_picture!=null" :src="conversation.client_picture"></v-img>
+                <span style="text-transform: uppercase; text-align: center; width: 30px;" class="white--text text-h6" v-else><strong>{{client.name.slice(0,1)}}</strong></span>
             </v-list-item-avatar>
-            <div v-if="lead.name!=undefined">
-                <span>{{lead.name}} {{lead.last}}</span> 
+            <div v-if="conversation!=undefined">
+                <span>{{conversation.client_name}}</span> 
             </div>
-            <v-spacer></v-spacer>
-            <v-row class="my-0" style="transform:scale(0.8); margin-right: -8%;">
-                <v-select style="width:80px;" class="mt-1" :items="funnels" rounded outlined dense v-model="newFunnel" small item-text="name" item-value="id"></v-select>
-                <v-select style="width:80px;" class="mt-1 mx-4" :items="phases" rounded outlined dense v-model="newPhase" small item-text="name" item-value="id"></v-select>
-                <v-btn rounded color="primary" :disabled="buttonDisabled" @click="saveFunelAndFace()" class="elevation-0 mt-1">MOVER</v-btn>
-            </v-row>
         </v-toolbar>
         <v-row class="ma-0">
             <v-col md=12 class="pa-0" style="border-right:solid #ccd2d4 2px;">
                 <div  style="border-top:solid #ccd2d4 1px; background-color: white; background-repeat: repeat; background-size: 412.5px 749.25px; background-image: linear-gradient(120deg,rgb(229 221 213 / 90%) 60%,rgb(229 221 213 / 90%) 60%),url(https://unocrm.mx/wp-content/uploads/2021/07/bg-chat-tile-light_04fcacde539c58cca6745483d4858c52.png)!important;">
-                    <div style="height:72vh;" class="chat__body pl-7 pr-10 py-0" ref="container">
+                    <div v-if="conversation!=undefined" style="height:calc(100vh - 350px);" class="chat__body pl-7 pr-10 py-0" ref="container">
                         <infinite-loading direction="top" @infinite="getMessages"></infinite-loading>
                         <!-- Message -->
                         <div v-for="(message_item, index) in messages" :key="index">
@@ -112,10 +106,52 @@
 
                         </div>
                     </div>
+
+                    <div v-else style="height:calc(100vh - 290px); padding-top:25vh; background-image: linear-gradient(45deg, rgb(0 0 0 / 30%), rgb(0 0 0 / 30%));" ref="container">
+                        <div style="text-align:center; color:white; font-weight:600;">
+                            <v-dialog v-model="dialogPlantilla" width="500">
+                                <template v-slot:activator="{ on, attrs }">
+                                    Este cliente aun no tiene una conversación
+                                    <a style="color:white; background:#1976d2; font-size:14px; font-weight:500; border-radius:5px; padding:5px 10px;" @click="getTemplates()" v-bind="attrs" v-on="on">Envía un mensaje de plantilla</a> 
+                                    y espera una respuesta para iniciar una conversación.
+                                </template>
+                                <v-card class="pt-2 pb-6">
+                                    <v-card-title>
+                                        Selecciona la plantilla a enviar
+                                    </v-card-title>
+
+                                    <v-progress-linear indeterminate rounded height="3" v-if="load_templates" style="width:90%; margin:auto;"></v-progress-linear>
+                                    <v-row class="ma-0 px-4" v-else>
+                                        <v-chip class="ma-1" v-for="template in templates" :key="template.id" @click="selectedTemplate = template" :color="templateColor(template.id)">
+                                            {{template.name}}
+                                        </v-chip>
+                                    </v-row>
+
+                                    <v-card-text class="mt-4" style="color:black;" v-if="selectedTemplate!=''">
+                                        {{selectedTemplate.components.body.text.replace('clientName', client.name).replace('currentUserName', currentUser.name).replace(/[{}]+/g, '')}}
+                                    </v-card-text>
+
+                                    <v-card-title>
+                                        Confirma el numero
+                                    </v-card-title>
+                                    
+                                    <v-card-subtitle style="font-size:18px; line-height:40px;" v-if="!editPhone">{{client.phone}} <v-icon class="ml-2" v-if="editPhone==false" @click="editPhone=true" small>mdi-pencil</v-icon></v-card-subtitle>
+                                    <v-text-field class="mx-6" v-else v-model="client.phone"  @click:append="editPhone = false" append-icon="mdi-content-save" label="Teléfono" placeholder="Teléfono" outlined></v-text-field>
+                                    
+                                    <v-card-actions>
+                                        <v-spacer/>
+                                            <v-btn disabled class="elevation-0" color="primary" @click="startConversation()">Comenzar Conversación</v-btn>
+                                        <v-spacer/>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </div>
+                    </div>
+
                     <!-- Type Message-->
-                    <v-row style="background:#f0f0f0; width:100%;" class="px-6 py-3 type ma-0">
+                    <v-row  v-if="conversation!=undefined" style="background:#f0f0f0; width:100%;" class="px-6 py-3 type ma-0">
                         <v-text-field 
-                        v-if="expiration(lead.conversation.channel, lead.conversation.latest_session_message_time)" 
+                        v-if="expiration" 
                         full-width 
                         rows="1" 
                         no-resize
@@ -128,7 +164,7 @@
                         hide-details 
                         label="Escribe un mensaje aquí" 
                         color="#919191" 
-                        @keydown.enter="sendMessage" 
+                        @keydown.enter="sendMessage()" 
                         prepend-icon="mdi-attachment" 
                         @click:prepend="fileDialog = true" 
                         append-outer-icon="mdi-send"
@@ -140,7 +176,6 @@
                             y espera una respuesta para continuar con la conversación.
                         </div>
                     </v-row>
-                    <div id="audio" class="audio" controls></div>
                     <v-dialog v-model="fileDialog" width="600">
                         <v-card class="pa-6">
                             <vue-dropzone 
@@ -166,60 +201,21 @@
 
 import vue2Dropzone from "vue2-dropzone";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
-import leadDetail from '../leads/detail.vue'
 import axios from "axios";
 import EmojiPicker from "vue-emoji-picker";
 export default {
     data() {
         return {
-            interests:['plug', 'movil', 'mifi'],
-            lead_interest:'',
+            load_templates:true,
+            templates:[],
+            dialogPlantilla:false,
+            editPhone:false,
             imageDilog:false,
             disableButtonFileSend: true,
             fileDialog:false,
-            newFunnel:'',
-            newPhase:'',
-            client:{
-                contract_date:'',
-                delivery_time:'',
-                user_id:'',
-                origin_id:'',
-                status_id:'',
-                name:'',
-                address:'',
-                phone:'',
-                email:'',
-                rfc:'',
-                razon_social:'',
-                payment_method_id:'',
-                payment_conditions:'',
-                opportunity_area:'',
-                consumptions:'',
-                delivery_address:'',
-                contact_medium:'',
-                special_note:'',
-                cfdi:'',
-                bank_account_number:'',
-                created_by_user_id:'',
-                last_updated_by_user_id:''
-            },
-            tab:null,
             messages:[],
-            asociarDialog:false,
             message:'',
-            lead:'',
-            funnel_phases:'',
-            editInterest:false,
-            editPhone:false,
-            editEmail:false,
             page:1,
-            pause:'no',
-            recorder: null,
-            chunks: [],
-            device: null,
-            blobObj: null,
-            recording:false,
-            pauseChange:true,
             dropzoneOptions: {
                 url: process.env.VUE_APP_BACKEND + "api/v1/message/upload-file",
                 addRemoveLinks: true,
@@ -238,71 +234,59 @@ export default {
             file:'',
             fileLink:'',
             fileMimeType:'',
-            fileName:''
+            fileName:'',
+            conversation:undefined,
+            selectedTemplate:''
         }
     },
     computed:{
-        funnels(){
-            return this.$store.state.funnel.funnels
-        },
-        users(){
-            return this.$store.state.user.users
-        },
         currentUser(){
             return this.$store.state.currentUser.user
         },
-        phases(){
-            return this.$store.state.funnel.phases.filter(phase=>phase.funnel_id == this.newFunnel).filter(phase=>phase.id>0)
-        },
-        buttonDisabled(){
-            if(this.newFunnel == this.lead.funnel_phase.funnel.id && this.newPhase == this.lead.funnel_phase.id){
-                return true
+        expiration(){
+            if(this.conversation!=undefined && this.conversation.channel == 'whatsapp'){
+                var fechaInicio = new Date(this.conversation.latest_session_message_time).getTime();
+                var fechaFin = new Date().getTime();
+                var diff = (fechaFin - fechaInicio)/(1000*60*60);
+                if(diff>24){
+                    return false
+                }else{
+                    return true
+                }
             }else{
-                return false
+                return true
             }
-        }
+        },
     },
     components: {
         EmojiPicker,
-        'leadDetail':leadDetail,
         vueDropzone: vue2Dropzone
     }, 
     props:{
-        propData:Object
+        client:Object
     }, 
     created(){
-        if(this.lead.additional_data!=null){
-            this.lead_interest = this.lead.additional_data.interest
-        }
-        this.lead = this.propData.lead
-
-        this.newPhase = this.lead.funnel_phase.id*1
-        this.newFunnel = this.lead.funnel_phase.funnel.id*1
-        this.funnel_phases = this.propData.funnel_phases
-        if(this.propData.lead.conversation!=undefined){
-            this.messages.push(this.propData.lead.conversation.latest_message)
-        }
-        this.scroll()
+        axios.get(process.env.VUE_APP_BACKEND + "api/v1/conversations?filter[client_id]=" + this.client.id).then(response=>{
+            this.conversation = response.data.data[0]
+            this.scroll()
+        })        
     },
     mounted() {
-        
         Echo.channel('new_message').listen('NewMessageEvent', (e) => {
             var new_message = {}
             new_message = e[0]
+            console.log(new_message)
+            console.log(this.conversation)
 
-            this.lead.conversation.latest_session_message_time = new_message.created_at
-
+            this.conversation.latest_session_message_time = new_message.created_at
 
             if(new_message.direction=='OUT'){
                 var channelId = new_message.to
             }else if(new_message.direction=='IN'){
                 var channelId = new_message.from
             }
-
-
             var index = this.messages.indexOf(new_message)
-
-            if(new_message.direction=='IN'&&channelId==this.lead.conversation.channelId&&index<0){
+            if(new_message.direction=='IN' && channelId==this.conversation.channelId && index<0){
                 this.messages.push(new_message)
                 this.$nextTick(() => {
                     this.scroll()
@@ -314,25 +298,42 @@ export default {
         })
     },
     methods:{
+        templateColor(template_id){
+            if(this.selectedTemplate.id == template_id){
+                return 'primary'
+            }
+        },
+        getTemplates(){
+            axios({
+                method: "GET",
+                url: "https://api.zenvia.com/v2/templates",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-API-TOKEN": process.env.VUE_APP_ZENVIA_X_API_TOKEN,
+                },
+                data: {
+                    channel: 'WHATSAPP',
+                    senderId: process.env.VUE_APP_ZENVIA_WHATSAPP_SERVER,
+                    status: 'APPROVED'
+                },
+            }).then(response=>{
+                this.load_templates = false
+                this.templates = response.data
+            })
+        },
+        startConversation(){
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversations" + {client_id:this.client.id, template_id:this.selectedTemplate,}).then(response=>{
+                axios.get(process.env.VUE_APP_BACKEND + "api/v1/conversations?filter[client_id]=" + this.client.id).then(response=>{
+                    this.conversation = response.data.data[0]
+                    this.scroll()
+                })     
+            })     
+        },
         imageMargin(direction){
             if(direction == 'OUT'){
                 return 'margin-right:-10px;'
             }else if(direction == 'IN'){
                 return 'margin-right:-30px;'
-            }
-        },
-        expiration(channel, date){
-            if(channel == 'whatsapp'){
-                var fechaInicio = new Date(date).getTime();
-                var fechaFin = new Date().getTime();
-                var diff = (fechaFin - fechaInicio)/(1000*60*60);
-                if(diff>24){
-                    return false
-                }else{
-                    return true
-                }
-            }else{
-                return true
             }
         },
         downloadWithAxios(url) {
@@ -352,48 +353,10 @@ export default {
             document.body.appendChild(link)
             link.click()
         },
-        saveFunelAndFace(){
-            axios.patch(process.env.VUE_APP_BACKEND + "api/v1/leads/"+this.lead.id, {funnel_phase_id:this.newPhase.toString()})
-        },
-        convertToClient(){
-
-        },
-        recordAudio() {
-            this.recording = true
-            this.device = navigator.mediaDevices.getUserMedia({ audio: true });
-            this.device.then((stream) => {
-                this.recorder = new MediaRecorder(stream);
-                this.recorder.ondataavailable = (e) => {
-                    this.chunks.push(e.data);
-                    if (this.recorder.state === "inactive") {
-                        var audio = document.getElementById("audio");
-                        var mainaudio = document.createElement("audio");
-                        mainaudio.setAttribute("controls", "controls");
-                        audio.appendChild(mainaudio);
-                        var url = URL.createObjectURL(new Blob(this.chunks, { type: "audio/wav" }))
-                        mainaudio.innerHTML = '<source src="' + url.slice(5,url.length) + '" type="audio/wav" />';
-                        //console.log(url.slice(5,url.length))
-                        this.chunks = [];
-                        this.blobObj = null;
-                    }
-                };
-                this.recorder.start();
-            });
-        },
-        stop() {
-            this.recording = false
-            this.recorder.stop();
-        },
-        callback (data) {
-            console.debug(data)
-        },
         dateFormat(date){
-
-            console.log(date)
             if(date!=undefined){
                 // Creamos el objeto fecha instanciándolo con la clase Date
                 const fecha = new Date(date.slice(0,10));
-                
                 // Creamos array con los días de la semana
                 const dias_semana = ['Lunes', 'martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
                 //Creamos constante para el dia de hoy
@@ -426,23 +389,9 @@ export default {
             ? this.scrollToEnd()
             : null;
         },
-        save(){
-            var editedItem = {
-                id: this.lead.id,
-                additional_data:{interest: this.lead_interest},
-                phone: this.lead.phone,
-                email: this.lead.email
-            }
-            axios.patch(process.env.VUE_APP_BACKEND + "api/v1/leads",Object.assign(editedItem)).then(response=>{
-                this.editInterest = false
-                this.lead_interest = ''
-                this.editPhone = false
-                this.editEmail = false
-            })
-        },
         sendImage(){
             var messageInput = {
-                conversation_id: this.propData.lead.conversation.id,
+                conversation_id: this.conversation.id,
                 user_id: this.currentUser.id,
                 contents:{
                     type: "file",
@@ -450,7 +399,7 @@ export default {
                     fileMimeType: this.fileMimeType,
                     fileName: this.fileName
                 },
-                channel: this.propData.lead.conversation.channel,
+                channel: this.conversation.channel,
                 uuid:'',
                 from:'',
                 to:'',
@@ -461,12 +410,12 @@ export default {
                 meessage_datetime: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
             }
             this.messages.push(messageInput)
-            if(this.propData.lead.conversation.channel == 'whatsapp'){
-                var server = this.propData.lead.conversation.zenviaChannelId
-            }else if(this.propData.lead.conversation.channel == 'facebook'){
+            if(this.conversation.channel == 'whatsapp'){
+                var server = this.conversation.zenviaChannelId
+            }else if(this.conversation.channel == 'facebook'){
                 var server = process.env.VUE_APP_ZENVIA_FACEBOOK_SERVER
             }
-            else if(this.propData.lead.conversation.channel == 'instagram'){
+            else if(this.conversation.channel == 'instagram'){
                 var server = process.env.VUE_APP_ZENVIA_INSTAGRAM_SERVER
             }
             if(this.fileMimeType!='png'&&this.fileMimeType!='jpg'&&this.fileMimeType!='jpeg'){
@@ -486,14 +435,14 @@ export default {
             }
             axios({
                 method: "POST",
-                url: "https://api.zenvia.com/v2/channels/" + this.propData.lead.conversation.channel + "/messages",
+                url: "https://api.zenvia.com/v2/channels/" + this.conversation.channel + "/messages",
                 headers: {
                     "Content-Type": "application/json",
                     "X-API-TOKEN": process.env.VUE_APP_ZENVIA_X_API_TOKEN,
                 },
                 data: {
                     from:server,
-                    to:this.propData.lead.conversation.channelId,
+                    to:this.conversation.channelId,
                     contents:zenvia_contents
                 },
             }).then(response => {
@@ -515,13 +464,13 @@ export default {
                 var message = this.message
                 this.message = ''
                 var messageInput = {
-                    conversation_id: this.propData.lead.conversation.id,
+                    conversation_id: this.conversation.id,
                     user_id: this.currentUser.id,
                     contents:{
                         type: "text",
                         text: message
                     },
-                    channel: this.propData.lead.conversation.channel,
+                    channel: this.conversation.channel,
                     uuid:'',
                     from:'',
                     to:'',
@@ -532,24 +481,24 @@ export default {
                     meessage_datetime: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
                 }
                 this.messages.push(messageInput)
-                if(this.propData.lead.conversation.channel == 'whatsapp'){
-                    var server = this.propData.lead.conversation.zenviaChannelId
-                }else if(this.propData.lead.conversation.channel == 'facebook'){
+                if(this.conversation.channel == 'whatsapp'){
+                    var server = this.conversation.zenviaChannelId
+                }else if(this.conversation.channel == 'facebook'){
                     var server = process.env.VUE_APP_ZENVIA_FACEBOOK_SERVER
                 }
-                else if(this.propData.lead.conversation.channel == 'instagram'){
+                else if(this.conversation.channel == 'instagram'){
                     var server = process.env.VUE_APP_ZENVIA_INSTAGRAM_SERVER
                 }
                 axios({
                     method: "POST",
-                    url: "https://api.zenvia.com/v2/channels/" + this.propData.lead.conversation.channel + "/messages",
+                    url: "https://api.zenvia.com/v2/channels/" + this.conversation.channel + "/messages",
                     headers: {
                         "Content-Type": "application/json",
                         "X-API-TOKEN": process.env.VUE_APP_ZENVIA_X_API_TOKEN,
                     },
                     data: {
                         from:server,
-                        to:this.propData.lead.conversation.channelId,
+                        to:this.conversation.channelId,
                         contents:[{
                             type:"text",
                             text:message
@@ -570,24 +519,24 @@ export default {
             }
         },
         sendTemplateMessage(){
-            if(this.propData.lead.conversation.zenviaChannelId == "5218185263303"){
+            if(this.conversation.zenviaChannelId == "5218185263303"){
                 var zenviaTemplateId = "21fecd7d-2375-4e91-b8c1-fa3ae19b9f35"
-            }else if(this.propData.lead.conversation.zenviaChannelId == "5218137058408"){
+            }else if(this.conversation.zenviaChannelId == "5218137058408"){
                 var zenviaTemplateId = "e73c0b4a-191e-4fec-b636-f6461b147ffe"
             }
             var messageInput = {
-                conversation_id: this.propData.lead.conversation.id,
+                conversation_id: this.conversation.id,
                 user_id: this.currentUser.id,
                 contents:{
                     type:"template",
                     templateId:zenviaTemplateId,
                     fields:{
-                        clientName:this.propData.lead.name,
+                        clientName:this.conversation.client_name,
                         currentUserName:this.currentUser.name
                     },
-                    text:this.propData.lead.name + ", soy " + this.currentUser.name + " de Grupo Inten. Te confirmo que cargamos tu información. Podemos hablar por aquí en cualquier momento.¿Recibiste correctamente este mensaje?"
+                    text:this.conversation.client_name + ", soy " + this.currentUser.name + " de Grupo Inten. Te confirmo que cargamos tu información. Podemos hablar por aquí en cualquier momento.¿Recibiste correctamente este mensaje?"
                 },
-                channel: this.propData.lead.conversation.channel,
+                channel: this.conversation.channel,
                 uuid:'',
                 from:'',
                 to:'',
@@ -598,29 +547,29 @@ export default {
                 meessage_datetime: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
             }
             this.messages.push(messageInput)
-            if(this.propData.lead.conversation.channel == 'whatsapp'){
-                var server = this.propData.lead.conversation.zenviaChannelId
-            }else if(this.propData.lead.conversation.channel == 'facebook'){
+            if(this.conversation.channel == 'whatsapp'){
+                var server = this.conversation.zenviaChannelId
+            }else if(this.conversation.channel == 'facebook'){
                 var server = process.env.VUE_APP_ZENVIA_FACEBOOK_SERVER
             }
-            else if(this.propData.lead.conversation.channel == 'instagram'){
+            else if(this.conversation.channel == 'instagram'){
                 var server = process.env.VUE_APP_ZENVIA_INSTAGRAM_SERVER
             }
             axios({
                 method: "POST",
-                url: "https://api.zenvia.com/v2/channels/" + this.propData.lead.conversation.channel + "/messages",
+                url: "https://api.zenvia.com/v2/channels/" + this.conversation.channel + "/messages",
                 headers: {
                     "Content-Type": "application/json",
                     "X-API-TOKEN": process.env.VUE_APP_ZENVIA_X_API_TOKEN,
                 },
                 data: {
                     from:server,
-                    to:this.propData.lead.conversation.channelId,
+                    to:this.conversation.channelId,
                     contents:[{
                         type:"template",
                         templateId:"0654aff4-1345-4fa3-934f-b5bde198c653",
                         fields:{
-                            clientName:this.propData.lead.name,
+                            clientName:this.conversation.client_name,
                             currentUserName:this.currentUser.name
                         }
                     }],
@@ -637,7 +586,7 @@ export default {
             })
         },
         getMessages($state) {
-            axios.get(process.env.VUE_APP_BACKEND + "api/v1/messages?filter[conversation_id]=" + this.propData.lead.conversation.id + "&page=" + this.page)
+            axios.get(process.env.VUE_APP_BACKEND + "api/v1/messages?filter[conversation_id]=" + this.conversation.id + "&page=" + this.page)
             .then(response=>{
                 if (response.data.data.length) {
                     var messages = response.data.data.sort(function(a,b){

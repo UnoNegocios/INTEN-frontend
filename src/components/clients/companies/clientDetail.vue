@@ -177,23 +177,29 @@
                   <v-tab-item>
                     <activities v-bind:company="companyDetail"/>
                   </v-tab-item>
-                  <v-tab background-color="transparent" color="basil" grow>
+                  <!--v-tab background-color="transparent" color="basil" grow>
                     Cotizaciones
                   </v-tab>
                   <v-tab-item>
                     <quotations v-bind:company="company"/>
-                  </v-tab-item>
+                  </v-tab-item-->
                   <v-tab background-color="transparent" color="basil" grow>
                     Ventas
                   </v-tab>
                   <v-tab-item>
                     <sales v-bind:company="companyDetail"/>
                   </v-tab-item>
-                  <v-tab background-color="transparent" color="basil" grow>
+                  <!--v-tab background-color="transparent" color="basil" grow>
                     Cancelaciones
                   </v-tab>
                   <v-tab-item>
                     <canceled v-bind:company="company"/>
+                  </v-tab-item-->
+                  <v-tab background-color="transparent" color="basil" grow>
+                    Mensajes
+                  </v-tab>
+                  <v-tab-item>
+                    <messages v-bind:client="companyDetail"/>
                   </v-tab-item>
                   <v-tab background-color="transparent" color="basil" grow>
                     Notas
@@ -201,12 +207,12 @@
                   <v-tab-item>
                     <notes v-bind:company="company"/>
                   </v-tab-item>
-                  <v-tab v-show="permissions('activityLog')" background-color="transparent" color="basil" grow>
+                  <!--v-tab v-show="permissions('activityLog')" background-color="transparent" color="basil" grow>
                     Bitacora
                   </v-tab>
                   <v-tab-item v-show="permissions('activityLog')">
                     <activitylog v-bind:company="company"/>
-                  </v-tab-item>
+                  </v-tab-item-->
                 </v-tabs>
             </v-col>
           </v-row>
@@ -260,6 +266,7 @@ import Sales from "../../sales/table2"
 import Canceled from "../../canceled/table"
 import Notes from "../../notes/container"
 import ActivityLog from "../../activitylog/container"
+import Messages from "../../messages/conversation.vue"
   export default {
     components: {
       'contacts':Contacts,
@@ -269,6 +276,7 @@ import ActivityLog from "../../activitylog/container"
       'canceled':Canceled,
       'notes':Notes,
       'activitylog':ActivityLog,
+      'messages':Messages
     }, 
     data () {
       return {
