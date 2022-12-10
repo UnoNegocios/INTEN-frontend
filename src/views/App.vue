@@ -122,7 +122,7 @@
                 <v-list-item-title>Clientes</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            </template>
+          </template>
           <span>Lista de empresas a las que se les ha cotizado/vendido</span>
         </v-tooltip>
         </div>
@@ -291,7 +291,7 @@
       </v-list>
       <template v-slot:append>
         <div style="color:#9ca3a5; font-size: 12px;" class="pa-2">
-          UNOCRM | v4.0.86 <v-icon> mdi-settings</v-icon>
+          UNOCRM | v4.0.87 <v-icon> mdi-settings</v-icon>
         </div>
       </template>
     </v-navigation-drawer>

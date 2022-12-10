@@ -341,7 +341,7 @@
                 this.quotation.status = this.status
                 this.$nextTick(() => {
                     
-                    axios.put(process.env.VUE_APP_BACKEND + "api/v1/sales/"+this.quotation.id,Object.assign(this.quotation)).then(response=>{
+                    axios.patch(process.env.VUE_APP_BACKEND + "api/v1/sales/"+this.quotation.id,Object.assign(this.quotation)).then(response=>{
                         this.close()
                     }).catch(error => {
                         this.snackbar = {
