@@ -160,7 +160,7 @@
                                         <img v-if="element.additional_data!=null" style="height: 20px!important;" :src="'/logo_'+element.additional_data.interest+'.png'"/>
                                         <v-spacer/>
                                         <v-list-item-avatar size="20" class="ma-0" :color="element.user.color">
-                                            <span style="text-transform: uppercase; text-align: center; width: 20px; font-size:12px;" class="white--text"><strong>{{element.user.name.slice(0,1)}}{{element.user.last.slice(0,1)}}</strong></span>
+                                            <span style="text-transform: uppercase; text-align: center; width: 20px; font-size:12px;" class="white--text"><strong>{{element.user.name.slice(0,1)}}<span v-if="element.user.last!=undefined">{{element.user.last.slice(0,1)}}</span></strong></span>
                                         </v-list-item-avatar>
                                     </v-row>
                                 </v-list-item>
