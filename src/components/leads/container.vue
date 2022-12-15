@@ -463,7 +463,6 @@ export default {
         },
         buscar: {
             handler () {
-                
                 this.getFunnelPhasesFromApi()
                 this.buscar = false
             },
@@ -550,7 +549,12 @@ export default {
                     this.leads.push({
                         load_leads: true, data:[], funnel_phase_id: this.funnel_phases[i].id,
                     })
-                    this.getLeads(i)
+                    if(this.funnel.name == "Clientes"){
+                        this.getClients(i)
+                    }
+                    if(this.funnel.name == "Prospectos"){
+                        this.getLeads(i)
+                    }
                 }
                 this.load_funnel_phases = false
             })
@@ -641,6 +645,39 @@ export default {
             if(funnel_phase_id!=new_funnel_phase_id){
                 axios.patch(process.env.VUE_APP_BACKEND + "api/v1/leads/" + element_id, {funnel_phase_id: new_funnel_phase_id.slice(17,new_funnel_phase_id.length)}).then(response=>{})
             }
+        },
+        getClients(i) {
+            this.leads_links = []
+            var filter = ''
+            /*
+            if(this.filters.id!=''&&this.filters.id!=null){
+                filter = '&filter[id]=' + this.filters.id
+            }
+            */
+            if(this.search!=''&&this.search!=null){
+                filter = filter + '&filter[name]=' + this.search
+            }
+            if(this.filters.user_id!=''&&this.filters.user_id!=null){
+                filter = filter + '&filter[user_id]=' + this.filters.user_id
+            }
+            if(this.filters.created_at!=''&&this.filters.created_at!=null){
+                filter = filter + '&filter[created_between]=' + this.filters.created_at
+            }
+            if(this.filters.phone!=''&&this.filters.phone!=null){
+                filter = filter + '&filter[conversation.channelId]=' + this.filters.phone
+            }
+            if(this.only_unread_messages){
+                filter = filter + '&filter[has_unread_messages]=1'
+            }
+            axios.get(process.env.VUE_APP_BACKEND + "api/v1/clients?filter[has_conversation]=1&include=conversation&filter[funnel_phase_id]=" + this.leads[i].funnel_phase_id + filter)// + '&sort=latest'
+            .then(resp=>{
+                
+                this.leads[i].data = resp.data.data
+                this.leads[i].load_leads = false
+                
+                this.leads_links.push({link: resp.data.links.next, phase_id: this.leads[i].funnel_phase_id})
+            
+            })
         },
         getLeads(i) {
             this.leads_links = []

@@ -10,7 +10,7 @@
             </div>
             <v-spacer></v-spacer>
             <v-row class="my-0" style="transform:scale(0.8); margin-right: -8%;">
-                <v-select style="width:80px;" class="mt-1" :items="funnels" rounded outlined dense v-model="newFunnel" small item-text="name" item-value="id"></v-select>
+                <!--v-select style="width:80px;" class="mt-1" :items="funnels" rounded outlined dense v-model="newFunnel" small item-text="name" item-value="id"></v-select-->
                 <v-select style="width:80px;" class="mt-1 mx-4" :items="phases" rounded outlined dense v-model="newPhase" small item-text="name" item-value="id"></v-select>
                 <v-btn rounded color="primary" :disabled="buttonDisabled" @click="saveFunelAndFace()" class="elevation-0 mt-1">MOVER</v-btn>
             </v-row>

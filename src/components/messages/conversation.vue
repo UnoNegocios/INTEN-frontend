@@ -8,6 +8,12 @@
             <div v-if="conversation!=undefined">
                 <span>{{conversation.client_name}}</span> 
             </div>
+            <v-spacer></v-spacer>
+            <v-row class="my-0" style="transform:scale(0.8); margin-right: -8%;">
+                <!--v-select style="width:80px;" class="mt-1" :items="funnels" rounded outlined dense v-model="newFunnel" small item-text="name" item-value="id"></v-select-->
+                <v-select style="width:80px;" class="mt-1 mx-4" :items="phases" rounded outlined dense v-model="newPhase" small item-text="name" item-value="id"></v-select>
+                <v-btn rounded color="primary" :disabled="buttonDisabled" @click="saveFunelAndFace()" class="elevation-0 mt-1">MOVER</v-btn>
+            </v-row>
         </v-toolbar>
         <v-row class="ma-0">
             <v-col md=12 class="pa-0" style="border-right:solid #ccd2d4 2px;">
@@ -136,11 +142,11 @@
                                     </v-card-title>
                                     
                                     <v-card-subtitle style="font-size:18px; line-height:40px;" v-if="!editPhone">{{client.phone}} <v-icon class="ml-2" v-if="editPhone==false" @click="editPhone=true" small>mdi-pencil</v-icon></v-card-subtitle>
-                                    <v-text-field class="mx-6" v-else v-model="client.phone"  @click:append="editPhone = false" append-icon="mdi-content-save" label="Teléfono" placeholder="Teléfono" outlined></v-text-field>
+                                    <v-text-field class="mx-6" v-else v-model="client.phone"  type="number" @click:append="editPhone = false" append-icon="mdi-content-save" label="Teléfono" placeholder="Teléfono" outlined></v-text-field>
                                     
                                     <v-card-actions>
                                         <v-spacer/>
-                                            <v-btn disabled class="elevation-0" color="primary" @click="startConversation()">Comenzar Conversación</v-btn>
+                                            <v-btn :disabled="selectedTemplate==''" class="elevation-0" color="primary" @click="startConversation()">Comenzar Conversación</v-btn>
                                         <v-spacer/>
                                     </v-card-actions>
                                 </v-card>
@@ -206,6 +212,7 @@ import EmojiPicker from "vue-emoji-picker";
 export default {
     data() {
         return {
+            newPhase:'',
             load_templates:true,
             templates:[],
             dialogPlantilla:false,
@@ -298,6 +305,9 @@ export default {
         })
     },
     methods:{
+        saveFunelAndFace(){
+            axios.patch(process.env.VUE_APP_BACKEND + "api/v1/clients/"+this.client.id, {funnel_phase_id:this.newPhase.toString()})
+        },
         templateColor(template_id){
             if(this.selectedTemplate.id == template_id){
                 return 'primary'
@@ -322,11 +332,55 @@ export default {
             })
         },
         startConversation(){
-            axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversations" + {client_id:this.client.id, template_id:this.selectedTemplate,}).then(response=>{
-                axios.get(process.env.VUE_APP_BACKEND + "api/v1/conversations?filter[client_id]=" + this.client.id).then(response=>{
-                    this.conversation = response.data.data[0]
-                    this.scroll()
-                })     
+            axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversations", {client_name:this.client.name, client_id:this.client.id, channel:'whatsapp', zenviaChannelId: process.env.VUE_APP_ZENVIA_WHATSAPP_SERVER, channelId: '521'+(this.client.phone*1)}).then(response=>{
+                const conversation = response.data
+                console.log(conversation)
+                axios({
+                    method: "POST",
+                    url: "https://api.zenvia.com/v2/channels/whatsapp/messages",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-API-TOKEN": process.env.VUE_APP_ZENVIA_X_API_TOKEN,
+                    },
+                    data: {
+                        from:process.env.VUE_APP_ZENVIA_WHATSAPP_SERVER,
+                        to:'521'+(this.client.phone*1),
+                        contents:[{
+                            type:"template",
+                            templateId:this.selectedTemplate.id,
+                            fields:{
+                                currentUserName:this.currentUser.name
+                            }
+                        }],
+                    },
+                }).then(resp => {
+                    var messageInput = {
+                        conversation_id: conversation.id,
+                        user_id: this.currentUser.id,
+                        contents:{
+                            type:"template",
+                            templateId:this.selectedTemplate,
+                            fields:{
+                                currentUserName:this.currentUser.name
+                            },
+                            text:this.selectedTemplate.text.replace('clientName', this.client.name).replace('currentUserName', this.currentUser.name).replace(/[{}]+/g, '')
+                        },
+                        channel: 'whatsapp',
+                        uuid:resp.data.id,
+                        from:resp.data.from,
+                        to:resp.data.to,
+                        direction:'OUT',
+                        statuses:[{code:'SENT'}],
+                        zenvia_timestamp: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
+                        created_at: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
+                        meessage_datetime: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
+                    }
+                    console.log('1')
+                    axios.post(process.env.VUE_APP_BACKEND + "api/v1/messages", messageInput).then(r=>{
+                        console.log('2')
+                        this.conversation = conversation
+                    })
+                })
             })     
         },
         imageMargin(direction){
