@@ -505,7 +505,7 @@ export default {
                 var zenvia_contents = [{
                     type: "file",
                     fileUrl: this.fileLink,
-                    fileMimeType: this.fileMimeType,
+                    fileMimeType: 'application/'+this.fileMimeType,
                     fileName: this.fileName
                 }]
             }else{
