@@ -208,7 +208,6 @@ export default {
                     }
                 }
             }
-            console.log('0')
             if(this.quotation.last_updated_by_user_id.length>0){
                 count = count+1
                 filter = filter + '&filter[last_updated_by_user_id]='
@@ -220,32 +219,26 @@ export default {
                     }
                 }
             }
-            console.log('1')
             //select
             if(this.quotation.pos_sale!==''){
                 count = count+1
                 filter = filter + '&filter[pos_sale]='+this.quotation.pos_sale
             }
-            console.log('2')
             //date
             if(this.quotation.date.length==2){
                 count = count+1
                 filter = filter + '&filter[date_between]=' + this.quotation.date[0] + ',' + this.quotation.date[1]
             }
-            console.log('3')
             if(this.quotation.created_at.length==2){
                 count = count+1
                 filter = filter + '&filter[created_between]=' + this.quotation.created_at[0] + ',' + this.quotation.created_at[1]
             }
-            console.log('4')
             if(this.quotation.updated_at.length==2){
                 count = count+1
                 filter = filter + '&filter[updated_between]=' + this.quotation.updated_at[0] + ',' + this.quotation.updated_at[1]
             }
-            console.log('5')
             localStorage.setItem('selectorFiltersSales', JSON.stringify(this.quotation));
             localStorage.setItem('entriesFiltersSales', JSON.stringify(this.entries));
-            console.log('6')
             localStorage.setItem('filtersSales', JSON.stringify(filter.slice(1,filter.length)));
             localStorage.setItem('filtersSalesLength', count)
 

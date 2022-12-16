@@ -382,9 +382,9 @@ import axios from "axios"
         }
     },
     mounted() {
-        Echo.channel('test').listen('Test', (e) => {
+        /*Echo.channel('test').listen('Test', (e) => {
             console.log(e)
-        })
+        })*/
     },
   }
 </script>

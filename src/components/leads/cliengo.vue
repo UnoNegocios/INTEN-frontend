@@ -323,7 +323,7 @@ export default {
             margin-top:-13px;
         }
         .chat__body{
-            max-height: 5vh!important;
+            max-height: 62vh!important;
             min-height: 5vh!important;
         }
         .altocel{

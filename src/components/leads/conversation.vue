@@ -335,6 +335,9 @@ export default {
 
             if(new_message.direction=='IN'&&channelId==this.lead.conversation.channelId&&index<0){
                 this.messages.push(new_message)
+                if(this.currentUser.id!=1&&this.currentUser.id!=2){
+                    axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversation/mark_messages_as_read", {conversation_id:this.lead.conversation.id, user_id:this.currentUser.id})
+                }
                 this.$nextTick(() => {
                     this.scroll()
                 })
@@ -419,8 +422,6 @@ export default {
             console.debug(data)
         },
         dateFormat(date){
-
-            console.log(date)
             if(date!=undefined){
                 // Creamos el objeto fecha instanciándolo con la clase Date
                 const fecha = new Date(date.slice(0,10));
@@ -597,7 +598,7 @@ export default {
                     })
                 })
             }else{
-                console.log(new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),)
+                //console.log(new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),)
             }
         },
         sendTemplateMessage(){
@@ -840,7 +841,7 @@ export default {
             margin-top:-13px;
         }
         .chat__body{
-            max-height: 5vh!important;
+            max-height: 62vh!important;
             min-height: 5vh!important;
         }
         .altocel{

@@ -282,8 +282,6 @@ export default {
         Echo.channel('new_message').listen('NewMessageEvent', (e) => {
             var new_message = {}
             new_message = e[0]
-            console.log(new_message)
-            console.log(this.conversation)
 
             this.conversation.latest_session_message_time = new_message.created_at
 
@@ -334,7 +332,6 @@ export default {
         startConversation(){
             axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversations", {client_name:this.client.name, client_id:this.client.id, channel:'whatsapp', zenviaChannelId: process.env.VUE_APP_ZENVIA_WHATSAPP_SERVER, channelId: '521'+(this.client.phone*1)}).then(response=>{
                 const conversation = response.data
-                console.log(conversation)
                 axios({
                     method: "POST",
                     url: "https://api.zenvia.com/v2/channels/whatsapp/messages",
@@ -375,9 +372,7 @@ export default {
                         created_at: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
                         meessage_datetime: new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),
                     }
-                    console.log('1')
                     axios.post(process.env.VUE_APP_BACKEND + "api/v1/messages", messageInput).then(r=>{
-                        console.log('2')
                         this.conversation = conversation
                     })
                 })
@@ -569,7 +564,7 @@ export default {
                     })
                 })
             }else{
-                console.log(new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),)
+                //console.log(new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}),)
             }
         },
         sendTemplateMessage(){
@@ -812,7 +807,7 @@ export default {
             margin-top:-13px;
         }
         .chat__body{
-            max-height: 5vh!important;
+            max-height: 62vh!important;
             min-height: 5vh!important;
         }
         .altocel{

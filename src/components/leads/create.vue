@@ -118,13 +118,11 @@ export default {
                     this.lead.user_id = this.currentUser.id
                 }
                 axios.post(process.env.VUE_APP_BACKEND + "api/v1/leads",Object.assign(this.lead)).then(response=>{
-                    console.log('1')
                     this.close()
                 })
             })
         },
         close(){
-            console.log('2')
             this.$emit("closeCreateDialogLead", this.lead);
             this.lead = Object.assign({}, this.defaultItem);
         },

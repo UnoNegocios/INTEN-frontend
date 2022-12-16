@@ -39,7 +39,6 @@
         <v-dialog v-model="filterMobile" fullscreen hide-overlay transition="dialog-bottom-transition">
             
         </v-dialog>
-
         <div class="py-4 px-12">
             <v-row class="ma-0">
                 <v-menu offset-y>
@@ -110,7 +109,7 @@
                                             <v-bind="attrs" v-on="on">
                                             <v-row class="ma-0"-->
 
-                                                <v-badge class="icon_style" avatar bordered overlap>
+                                                <v-badge class="icon_style" avatar bordered overlap style="z-index:9!important;">
                                                     <template v-slot:badge>
                                                         <v-avatar v-if="element.conversation!=undefined">
                                                             <v-img v-if="element.conversation.channel == 'whatsapp' " src="https://unocrm.mx/wp-content/uploads/2021/08/whatsapp-icon-seeklogo.com_.svg"></v-img>
@@ -282,16 +281,83 @@
                     </v-row>
                 </v-card>
             </v-dialog>
-            
-
         </div>  
         <v-snackbar :color="snackbar.color" v-model="snackbar.show">
             {{ snackbar.message }}
         </v-snackbar>
+
+
+        <v-snackbars
+            :messages.sync="notifications"
+            color="white"
+            :timeout="-1"
+            bottom
+            right
+        >
+            <template v-slot:default="{ message }">
+                <v-list-item @click="openConversation(message)" class="list-group-item item mt-0 pl-0 pr-4 elevation-0 mb-5" style="background:white; min-height: 60px;">
+                    <v-badge class="icon_style" avatar bordered overlap style="z-index:9!important;">
+                        <template v-slot:badge>
+                            <v-avatar v-if="message.conversation!=undefined">
+                                <v-img v-if="message.conversation.channel == 'whatsapp' " src="https://unocrm.mx/wp-content/uploads/2021/08/whatsapp-icon-seeklogo.com_.svg"></v-img>
+                                <v-img v-else-if="message.conversation.channel == 'facebook' " src="https://upload.wikimedia.org/wikipedia/commons/b/be/Facebook_Messenger_logo_2020.svg"></v-img>
+                                <v-img v-else-if="message.conversation.channel == 'instagram' " src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"></v-img>
+                                <v-img v-else-if="message.conversation.channel == 'cliengo' " src="/hand_cliengo.svg"></v-img>
+                            </v-avatar>
+                        </template>
+                        <v-list-item-avatar size="35" color="#ccd2d4">
+                            <v-img v-if="message.conversation!=undefined && message.conversation.client_picture!=null" :src="message.conversation.client_picture"></v-img>
+                            <span style="text-transform: uppercase; text-align: center; width: 35px;" class="white--text text-h6" v-else><strong>{{message.name.slice(0,1)}}</strong></span>
+                        </v-list-item-avatar>
+                    </v-badge>
+
+                    
+                    <v-list-item-content  style="display: block; color:black!important;">
+                        <v-list-item-title style="font-size:15px;">
+                            <div style="font-weight:500;" v-if="message.conversation!=undefined && message.conversation.unread_messages>0">
+                                {{message.name}} <span v-if="message.last!=null">{{message.last}}</span>
+                            </div>
+                            <div v-else>{{message.name}} <span v-if="message.last!=null">{{message.last}}</span></div>
+                        </v-list-item-title>
+                        <div style="font-size:12px;" v-if="message.conversation!=undefined && message.conversation!=undefined && message.conversation.latest_message!=null && message.conversation.latest_message.contents.text!=undefined">
+                            <div style="font-weight:600;" v-if="message.conversation.unread_messages>0">{{message.conversation.latest_message.contents.text.slice(0,45)}}<span v-if="message.conversation.latest_message.contents.text!=undefined && message.conversation.latest_message.contents.text.length>45">...</span></div>
+                            <div v-else>{{message.conversation.latest_message.contents.text.slice(0,45)}}<span v-if="message.conversation.latest_message.contents.text!=undefined && message.conversation.latest_message.contents.text.length>45">...</span></div>
+                        </div>
+                        <div style="font-size:12px;" v-else-if="message.conversation!=undefined && message.conversation!=undefined && message.conversation.latest_message!=null && message.conversation.latest_message.contents.body!=undefined">
+                            <div style="font-weight:600;" v-if="message.conversation.unread_messages>0">{{message.conversation.latest_message.contents.body.slice(0,45)}}<span v-if="message.conversation.latest_message.contents.text!=undefined && message.conversation.latest_message.contents.text.length>45">...</span></div>
+                            <div v-else>{{message.conversation.latest_message.contents.body.slice(0,45)}}<span v-if="message.conversation.latest_message.contents.body.length>45">...</span></div>
+                        </div>
+                        <div v-else-if="message.conversation!=undefined && message.conversation.latest_message.contents.type=='file'" style="font-size:12px;">
+                            <div style="font-weight:600;" v-if="message.conversation.unread_messages>0"><v-icon small>mdi-attachment</v-icon><span class="ml-1" style="line-height:19px;">Archivo Adjunto</span></div>
+                            <div v-else><v-icon small>mdi-attachment</v-icon><span class="ml-1" style="line-height:19px;">Archivo Adjunto</span></div>
+                        </div>
+                        <v-list-item-subtitle v-else-if="message.conversation!=undefined && message.conversation.channel == 'cliengo'" style="font-size:12px;">{{message.additional_data.final_question}} </v-list-item-subtitle>
+                    </v-list-item-content>
+
+                    <v-badge class="notification-badge" style="transform:scale(0.8); margin-top:-15px; margin-right:5px;" v-if="message.conversation!=undefined && message.conversation.unread_messages>0" :content="message.conversation.unread_messages"></v-badge>
+                    
+                    <v-row v-if="message.user!=undefined" class="user-label ma-0 py-1 px-2">
+                        <img v-if="message.additional_data!=null" style="height: 20px!important;" :src="'/logo_'+message.additional_data.interest+'.png'"/>
+                        <v-spacer/>
+                        <v-list-item-avatar size="20" class="ma-0" :color="message.user.color">
+                            <span style="text-transform: uppercase; text-align: center; width: 20px; font-size:12px;" class="white--text"><strong>{{message.user.name.slice(0,1)}}<span v-if="message.user.last!=undefined">{{message.user.last.slice(0,1)}}</span></strong></span>
+                        </v-list-item-avatar>
+                    </v-row>
+                </v-list-item>
+            </template>
+
+            <template v-slot:action="{ close }">
+                <v-btn icon text @click="close()"><v-icon small color="black">mdi-close</v-icon></v-btn>
+            </template>
+
+        </v-snackbars>
+
+
     </v-container>
 </template>
 
 <script>
+import VSnackbars from "v-snackbars";
 import axios from 'axios'
 import draggable from 'vuedraggable'
 import VueHorizontal from 'vue-horizontal';
@@ -306,10 +372,12 @@ export default {
         'conversation':Conversation,
         'cliengo':Cliengo,
         'create':CreateLead,
-        'detail': Detail
+        'detail': Detail,
+        "v-snackbars": VSnackbars,
     },
     data() {
         return {
+            notifications:[],
             only_unread_messages:false,
             snackbar: {
                 show: false,
@@ -392,7 +460,12 @@ export default {
             })
         },
     },
-    mounted() {      
+    mounted() {   
+        
+        Echo.channel('new_message_status').listen('IncomingMessageRead', (e) => {
+            console.log(e)
+        })   
+
         Echo.channel('lead_change').listen('LeadChangeEvent', (e) => {
             if(!this.pause){
                 let lead_id = e[0].id//correcto
@@ -408,30 +481,47 @@ export default {
             }
         })
         Echo.channel('new_lead').listen('BroadcastNewLead', (e) => {
-            
-            this.leads[0].data.unshift(e[0])
-            new Audio('/mixkit-sci-fi-reject-notification-896.wav').play()
+            if(this.funnel.name == 'Prospectos'){
+                this.leads[0].data.unshift(e[0])
+                new Audio('/mixkit-sci-fi-reject-notification-896.wav').play()
+            }else{
+                this.notifications.push(e)
+            }
         })
-        
         Echo.channel('new_message').listen('NewMessageEvent', (e) => {
             
             let new_message = e[0]
-
             if(new_message.direction=='OUT'){
                 var channelId = new_message.to
             }else if(new_message.direction=='IN'){
                 var channelId = new_message.from
             }
-
             let index_lead = this.leads.indexOf(this.leads.filter(lead=>lead.data.filter(dta=>this.checkmamadas(dta.conversation) == channelId).length>0)[0])
-
             if(index_lead<0){
-                axios.get(process.env.VUE_APP_BACKEND + "api/v1/leads?filter[phone]=" + channelId)
-                .then(resp=>{
-                    index_lead = this.leads.indexOf(this.leads.filter(lead=>lead.funnel_phase_id == resp.data.data[0].funnel_phase.id)[0])
-                    console.log(index_lead)
-                    this.leads[index_lead].data.unshift(resp.data.data[0])
-                })
+                if(new_message.lead!=null){
+                    axios.get(process.env.VUE_APP_BACKEND + "api/v1/leads?filter[phone]=" + channelId)
+                    .then(resp=>{
+                        const response = resp.data.data[0]
+                        index_lead = this.leads.indexOf(this.leads.filter(lead=>lead.funnel_phase_id == resp.data.data[0].funnel_phase.id)[0])
+                        if(index_lead>=0){
+                            this.leads[index_lead].data.unshift(response)
+                        }else if(response.funnel_phase.funnel.id != this.funnel.id){
+                            this.addNotification(response)
+                        }
+                    })
+                }else if(new_message.client!=null){
+                    axios.get(process.env.VUE_APP_BACKEND + "api/v1/clients?filter[id]=" + new_message.client.id)// + '&sort=latest'
+                    .then(resp=>{
+                        const response = resp.data.data[0]
+                        index_lead = this.leads.indexOf(this.leads.filter(lead=>lead.funnel_phase_id == resp.data.data[0].funnel_phase.id)[0])
+                        if(index_lead>=0){
+                            this.leads[index_lead].data.unshift(response)
+                        }else if(response.funnel_phase.funnel.id != this.funnel.id){
+                            this.addNotification(response)
+                        }
+                    })
+                }
+                
             }else{
 
                 let conversation = this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)[0]
@@ -450,12 +540,25 @@ export default {
 
                 this.leads[index_lead].data.splice(index_conversation, 1)
                 this.leads[index_lead].data.unshift(conversation)
+                /*
+                if(resp.data.data[0].funnel_phase.funnel.id != this.funnel.id){
+                    this.notifications.push(conversation)
+                }
+                */
+
             }
 
             new Audio('/mixkit-long-pop-2358.wav').play()
         })
     },
     watch: {
+        notifications(newQuestion, oldQuestion){
+            if(newQuestion.length>=oldQuestion.length){
+                setTimeout(() => {
+                    this.notifications.splice(0,1)
+                }, "7000")
+            }
+        },
         only_unread_messages: {
             handler(){
                 this.getFunnelPhasesFromApi()
@@ -470,6 +573,22 @@ export default {
         },
     },
     methods: {
+        addNotification(response){
+            var notification_index = this.notifications.indexOf(this.notifications.filter(notification=>notification.id == response.id)[0])
+            if(notification_index>=0){
+                this.notifications[notification_index].conversation = response.conversation
+
+                setTimeout(() => {
+                    notification_index = this.notifications.filter(notification=>notification.conversation==response.conversation)
+                    if(notification_index>=0){
+                        this.notifications.splice(notification_index,1)
+                    }
+                }, "7000")
+                
+            }else{
+                this.notifications.push(response)
+            }
+        },
         permissions(permission){
             if(this.currentUser.id==1){
                 return true
@@ -487,8 +606,6 @@ export default {
             var getLink = this.leads_links.filter(lead_link=>lead_link.phase_id == phase).map(lead_link=>lead_link.link)[0]
             var index_lead = this.leads.indexOf(this.leads.filter(lead=>lead.funnel_phase_id == phase)[0])
             var index_leads_links = this.leads_links.indexOf(this.leads_links.filter(lead_link=>lead_link.phase_id == phase)[0])
-
-            console.log(getLink)
 
             if(getLink!=undefined){
                 axios.get(getLink.replace('http://', 'https://')).then(response=>{
@@ -584,7 +701,7 @@ export default {
             this.propData = {'lead':undefined, 'funnel_phases':undefined, 'pause': 'no', 'reload': 'si'}
             this.conversation_dialog = false
         },
-        openConversation(lead){
+        openNotification(lead){
             //this.pause = true
             let index_lead = this.leads.indexOf(this.leads.filter(element=>element.data.filter(dta=>dta.id == lead.id).length>0)[0])
             if(lead.conversation.channel == 'whatsapp'){
@@ -615,7 +732,52 @@ export default {
                     }
                     this.getFunnelPhasesFromApi()
                 })
-            }else if((this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0)&&this.currentUser.id!=1){
+            }else if((this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0)&&(this.currentUser.id!=1&&this.currentUser.id!=2)){
+                axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversation/mark_messages_as_read", {conversation_id:lead.conversation.id, user_id:this.currentUser.id}).then(resp=>{
+                    this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}
+                    this.conversation_dialog = true
+                    this.leads[index_lead].data.filter(
+                        b=>b.conversation.id == lead.conversation.id
+                    )[0].conversation.unread_messages = 0
+                    //this.pause = false
+                })
+            }else{
+                this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}
+                this.conversation_dialog = true
+                //this.pause = false
+            }
+        },
+        openConversation(lead){
+            //this.pause = true
+            let index_lead = this.leads.indexOf(this.leads.filter(element=>element.data.filter(dta=>dta.id == lead.id).length>0)[0])
+            if(lead.conversation.channel == 'whatsapp'){
+                var server = lead.conversation.zenviaChannelId
+            }else if(lead.conversation.channel == 'facebook'){
+                var server = process.env.VUE_APP_ZENVIA_FACEBOOK_SERVER
+            }
+            else if(lead.conversation.channel == 'instagram'){
+                var server = process.env.VUE_APP_ZENVIA_INSTAGRAM_SERVER
+            }
+            
+            if((this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0)
+            && this.leads[index_lead].data.filter(dta=>dta.conversation.id == lead.conversation.id).filter(dta=>dta.user == undefined).length>0){
+                this.leads[index_lead].data.filter(dta=>dta.conversation.id == lead.conversation.id)[0].user = this.currentUser
+                axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversation/agent-first-interaction", {conversation_id:lead.conversation.id, user_id:this.currentUser.id, channel:lead.conversation.channel, sending_server:server, from:lead.conversation.channelId}).then(resp=>{
+                    this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}
+                    this.conversation_dialog = true
+                    this.leads[index_lead].data.filter(
+                        b=>b.conversation.id == lead.conversation.id
+                    )[0].conversation.unread_messages = 0
+                    //this.pause = false
+                }).catch(errors=>{
+                    this.snackbar = {
+                        message: errors.response.data.errors.message,
+                        color: 'error',
+                        show: true
+                    }
+                    this.getFunnelPhasesFromApi()
+                })
+            }else if((this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0)&&(this.currentUser.id!=1&&this.currentUser.id!=2)){
                 axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversation/mark_messages_as_read", {conversation_id:lead.conversation.id, user_id:this.currentUser.id}).then(resp=>{
                     this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}
                     this.conversation_dialog = true
@@ -778,6 +940,20 @@ export default {
 };
 </script>
 <style>
+.v-badge__badge {
+    line-height: 1.6;
+        font-weight: 700;
+}
+.v-sheet.v-snack__wrapper:not(.v-sheet--outlined) {
+    box-shadow: 0px 3px 5px -1px rgb(0 0 0 / 10%)!important;
+    max-width: 200px!important;
+}
+.theme--dark.v-badge .v-badge__badge::after {
+    border-color: rgb(255 255 255)!important;
+}
+[aria-live="polite"]{
+    padding:0px!important;
+}
     #scroll{
         overflow-y:scroll!important;
         max-height:70vh!important;

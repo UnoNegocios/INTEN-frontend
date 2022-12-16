@@ -1,6 +1,6 @@
 {
   "name": "UNOCRM",
-  "version": "4.0.90",
+  "version": "4.0.91",
   "private": true,
   "scripts": {
     "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service  serve",
@@ -17,6 +17,7 @@
     "pusher-js": "^7.0.6",
     "quagga": "^0.12.1",
     "register-service-worker": "^1.7.1",
+    "v-snackbars": "^3.2.8",
     "vue": "^2.6.11",
     "vue-apexcharts": "^1.6.0",
     "vue-audio-recorder": "^3.0.1",
