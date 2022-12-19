@@ -340,7 +340,7 @@ export default {
             }
         },*/
         deleteCompany(){
-            axios.delete(process.env.VUE_APP_BACKEND + "api/v1/company/"+this.deleteId).then(response => {
+            axios.delete(process.env.VUE_APP_BACKEND + "api/v1/clients/"+this.deleteId).then(response => {
                 this.deleteId = ''
                 this.sheet = false
                 this.getDataFromApi()
