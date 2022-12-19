@@ -326,7 +326,7 @@ import Messages from "../../messages/conversation.vue"
       saveNote(){
         this.gris = true
         this.$nextTick(() => {
-          axios.put(process.env.VUE_APP_BACKEND + "api/v1/company/update",Object.assign(this.companyDetail)).then(response=>{
+          axios.patch(process.env.VUE_APP_BACKEND + "api/v1/clients/" + this.companyDetail.id, {'special_note': this.companyDetail.special_note}).then(response=>{
             this.$store.dispatch('company/getCompanies')
           }).catch(error => {
             this.snackbar = {

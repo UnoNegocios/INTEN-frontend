@@ -6,7 +6,8 @@
                 <span style="text-transform: uppercase; text-align: center; width: 30px;" class="white--text text-h6" v-else><strong>{{lead.name.slice(0,1)}}</strong></span>
             </v-list-item-avatar>
             <div v-if="lead.name!=undefined">
-                <span>{{lead.name}} {{lead.last}}</span> 
+                <span v-if="this.lead.funnel_phase.funnel.name!='Clientes'">{{lead.name}} {{lead.last}}</span> 
+                <v-btn text v-else :to="{ path: '/clients/client/'+ lead.id}" target="_blank">{{lead.name}}</v-btn> 
             </div>
             <v-spacer></v-spacer>
             <v-row class="my-0" style="transform:scale(0.8); margin-right: -8%;">
@@ -19,7 +20,7 @@
             </v-btn-->
         </v-toolbar>
         <v-row class="ma-0">
-            <v-col md=9 class="pa-0" style="border-right:solid #ccd2d4 2px;">
+            <v-col :md="columnaSize" class="pa-0" style="border-right:solid #ccd2d4 2px;">
                 <!--v-toolbar class="px-2" color="white" elevation="0">
                     // :input="changePhase()"<v-select outlined dense class="mr-2" :items="funnel_phases" v-model="lead.funnel_phase.id" item-text="name" item-value="id" style="width:25%;"></v-select>
                     <v-select outlined dense class="mr-2" v-if="lead.user!=null" v-model="lead.user.id" :items="users" item-text="name" item-value="id" style="width:25%;">
@@ -185,7 +186,7 @@
                     </v-dialog>
                 </div>
             </v-col>
-            <v-col md="3" class="pa-0">
+            <v-col md="3" class="pa-0" v-if="this.lead.funnel_phase.funnel.name!='Clientes'">
                 <leadDetail v-bind:lead="lead"/>
             </v-col>
         </v-row>
@@ -273,6 +274,13 @@ export default {
         }
     },
     computed:{
+        columnaSize(){
+            if(this.lead.funnel_phase.funnel.name!='Clientes'){
+                return 9
+            }else{
+                return 12
+            }
+        },
         funnels(){
             return this.$store.state.funnel.funnels
         },
