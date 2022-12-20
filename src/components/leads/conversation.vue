@@ -8,6 +8,7 @@
             <div v-if="lead.name!=undefined">
                 <span v-if="this.lead.funnel_phase.funnel.name!='Clientes'">{{lead.name}} {{lead.last}}</span> 
                 <v-btn text v-else :to="{ path: '/clients/client/'+ lead.id}" target="_blank">{{lead.name}}</v-btn> 
+                <v-text-field v-model="propData.lead.conversation.channelId"></v-text-field>
             </div>
             <v-spacer></v-spacer>
             <v-row class="my-0" style="transform:scale(0.8); margin-right: -8%;">

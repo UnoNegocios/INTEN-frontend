@@ -332,13 +332,12 @@
                 })
             },
             save(){
+                this.quotation.last_updated_by_user_id = this.currentUser.id
+                this.quotation.status = this.status
                 for(var i=0; i<this.quotation.items.length; i++){
                     this.quotation.items[i].value = this.devicesList.filter(item=>item.id == this.quotation.items[i].cellular_plan_id).map(item=>item.price)[0]
                     //this.quotation.items[i].cost = this.devicesList.filter(item=>item.id == this.quotation.items[i].item).map(item=>item.cost)[0]
                 }
-
-                this.quotation.last_updated_by_user_id = this.currentUser.id
-                this.quotation.status = this.status
                 this.$nextTick(() => {
                     
                     axios.patch(process.env.VUE_APP_BACKEND + "api/v1/sales/"+this.quotation.id,Object.assign(this.quotation)).then(response=>{

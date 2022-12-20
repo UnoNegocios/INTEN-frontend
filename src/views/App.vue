@@ -150,7 +150,7 @@
             </v-expansion-panel-header>
             <v-expansion-panel-content>
                 <!-- cotizaciones -->
-                <div v-show="permissions('quotations')">
+                <!--div v-show="permissions('quotations')">
                 <v-tooltip right open-delay="1000">
                   <template v-slot:activator="{ on, attrs }">
                     <v-list-item v-bind="attrs" v-on="on" to="/quotations" link >
@@ -164,7 +164,7 @@
                   </template>
                   <span>Prospectos de venta</span>
                 </v-tooltip>
-                </div>
+                </div-->
                 <!-- ventas -->
                 <div v-show="permissions('sales')">
                 <v-tooltip right open-delay="1000">
@@ -182,7 +182,7 @@
                 </v-tooltip>
                 </div>
                 <!-- cancelaciones -->
-                <div v-show="permissions('cancelations')">
+                <!--div v-show="permissions('cancelations')">
                 <v-tooltip right open-delay="1000">
                   <template v-slot:activator="{ on, attrs }">
                     <v-list-item to="/canceled" link v-bind="attrs" v-on="on">
@@ -196,7 +196,7 @@
                     </template>
                   <span>Cotizaciones que no se cerraron por algun motivo</span>
                 </v-tooltip>
-                </div>
+                </div-->
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>

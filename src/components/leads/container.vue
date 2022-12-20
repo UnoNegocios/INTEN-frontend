@@ -760,7 +760,8 @@ export default {
             }
             
             if((this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0)
-            && this.leads[index_lead].data.filter(dta=>dta.conversation.id == lead.conversation.id).filter(dta=>dta.user == undefined).length>0){
+                && (this.leads[index_lead].data.filter(dta=>dta.conversation.id == lead.conversation.id).filter(dta=>dta.user == undefined).length>0)
+                && (this.currentUser.id!=1&&this.currentUser.id!=2)){
                 this.leads[index_lead].data.filter(dta=>dta.conversation.id == lead.conversation.id)[0].user = this.currentUser
                 axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversation/agent-first-interaction", {conversation_id:lead.conversation.id, user_id:this.currentUser.id, channel:lead.conversation.channel, sending_server:server, from:lead.conversation.channelId}).then(resp=>{
                     this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}

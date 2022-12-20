@@ -26,20 +26,29 @@
                     <br/><span style="font-size:12px; color:grey;">Promedio:<strong>{{(totals.avg_iva*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</strong></span>
                 </v-card>
             </v-col-->
-            <v-col md="6" class="px-2">
+            <v-col md="4" class="px-2">
                 <v-card class="py-2 px-4 elevation-0">
                     <v-icon x-small color="#4385f3" class="mr-1">mdi-circle</v-icon> 
                     <span style="font-size:12px;"><strong>Total</strong></span>
                     <br/>{{(totals.sum_total*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}
-                    <br/><span style="font-size:12px; color:grey;">Promedio:<strong>{{(totals.avg_total*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</strong></span>
+                    <!--br/><span style="font-size:12px; color:grey;">Promedio:<strong>{{(totals.avg_total*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}</strong></span-->
+                    <br/><span style="font-size:12px; color:grey;">Cantidad:<strong>{{totals.total_total}} ventas</strong></span>
                 </v-card>
             </v-col>
-            <v-col md="6" class="px-2">
+            <v-col md="4" class="px-2">
                 <v-card class="py-2 px-4 elevation-0">
                     <v-icon x-small color="#4385f3" class="mr-1">mdi-circle</v-icon> 
                     <span style="font-size:12px;"><strong>Recargas</strong></span>
                     <br/>{{(totals.sum_recargas*1).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}
                     <br/><span style="font-size:12px; color:grey;">Cantidad:<strong>{{totals.total_recargas}} recargas</strong></span>
+                </v-card>
+            </v-col>
+            <v-col md="4" class="px-2">
+                <v-card class="py-2 px-4 elevation-0">
+                    <v-icon x-small color="#4385f3" class="mr-1">mdi-circle</v-icon> 
+                    <span style="font-size:12px;"><strong>Nuevos Clientes</strong></span>
+                    <br/>{{((totals.sum_total*1)-(totals.sum_recargas*1)).toLocaleString('es-MX', { style: 'currency', currency: 'MXN',})}}
+                    <br/><span style="font-size:12px; color:grey;">Cantidad:<strong>{{(totals.total_total*1)-(totals.total_recargas*1)}} clientes nuevos</strong></span>
                 </v-card>
             </v-col>
             <!--v-col md="2" class="px-2">
