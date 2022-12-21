@@ -287,6 +287,7 @@ export default {
     }, 
     created(){
         this.newPhase = this.client.funnel_phase.id*1
+        this.client.phone = this.client.phone.replace(/ /g,'')*1
         axios.get(process.env.VUE_APP_BACKEND + "api/v1/conversations?filter[client_id]=" + this.client.id).then(response=>{
             this.conversation = response.data.data[0]
             this.scroll()
