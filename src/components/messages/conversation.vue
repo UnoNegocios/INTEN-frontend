@@ -142,7 +142,7 @@
                                     </v-card-title>
                                     
                                     <v-card-subtitle style="font-size:18px; line-height:40px;" v-if="!editPhone">{{client.phone}} <v-icon class="ml-2" v-if="editPhone==false" @click="editPhone=true" small>mdi-pencil</v-icon></v-card-subtitle>
-                                    <v-text-field class="mx-6" v-else v-model="client.phone"  type="number" @click:append="editPhone = false" append-icon="mdi-content-save" label="Teléfono" placeholder="Teléfono" outlined></v-text-field>
+                                    <v-text-field class="mx-6" v-else v-model="client.phone"  type="number" @click:append="savePhone()" append-icon="mdi-content-save" label="Teléfono" placeholder="Teléfono" outlined></v-text-field>
                                     
                                     <v-card-actions>
                                         <v-spacer/>
@@ -247,11 +247,21 @@ export default {
         }
     },
     computed:{
+        buttonDisabled(){
+            if(this.newPhase == this.client.funnel_phase.id){
+                return true
+            }else{
+                return false
+            }
+        },
+        phases(){
+            return this.$store.state.funnel.phases.filter(phase=>phase.funnel_id == 3)
+        },
         currentUser(){
             return this.$store.state.currentUser.user
         },
         expiration(){
-            if(this.conversation!=undefined && this.conversation.channel == 'whatsapp'){
+            if(this.conversation!=undefined && this.conversation.channel == 'whatsapp' && this.conversation.latest_session_message_time!=null){
                 var fechaInicio = new Date(this.conversation.latest_session_message_time).getTime();
                 var fechaFin = new Date().getTime();
                 var diff = (fechaFin - fechaInicio)/(1000*60*60);
@@ -260,8 +270,10 @@ export default {
                 }else{
                     return true
                 }
-            }else{
+            }else if(this.conversation!=undefined && this.conversation.latest_session_message_time!=null){
                 return true
+            }else{
+                return false
             }
         },
     },
@@ -273,6 +285,7 @@ export default {
         client:Object
     }, 
     created(){
+        this.newPhase = this.client.funnel_phase.id*1
         axios.get(process.env.VUE_APP_BACKEND + "api/v1/conversations?filter[client_id]=" + this.client.id).then(response=>{
             this.conversation = response.data.data[0]
             this.scroll()
@@ -280,10 +293,14 @@ export default {
     },
     mounted() {
         Echo.channel('new_message').listen('NewMessageEvent', (e) => {
+            console.log(e)
             var new_message = {}
             new_message = e[0]
 
-            this.conversation.latest_session_message_time = new_message.created_at
+            if(this.conversation!=undefined){
+                this.conversation.latest_session_message_time = new_message.created_at
+            }
+            
 
             if(new_message.direction=='OUT'){
                 var channelId = new_message.to
@@ -303,6 +320,12 @@ export default {
         })
     },
     methods:{
+        savePhone(){
+            axios.patch(process.env.VUE_APP_BACKEND + "api/v1/clients/"+this.client.id, {phone:this.client.phone}).then(resp=>{
+                editPhone = false
+            })
+            
+        },
         saveFunelAndFace(){
             axios.patch(process.env.VUE_APP_BACKEND + "api/v1/clients/"+this.client.id, {funnel_phase_id:this.newPhase.toString()})
         },
@@ -326,7 +349,7 @@ export default {
                 },
             }).then(response=>{
                 this.load_templates = false
-                this.templates = response.data
+                this.templates = response.data.filter(temp=>!temp.name.includes('Seguimiento'))
             })
         },
         startConversation(){

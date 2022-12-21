@@ -291,7 +291,7 @@
       </v-list>
       <template v-slot:append>
         <div style="color:#9ca3a5; font-size: 12px;" class="pa-2">
-          UNOCRM | v4.0.94 <v-icon> mdi-settings</v-icon>
+          UNOCRM | v4.0.95 <v-icon> mdi-settings</v-icon>
         </div>
       </template>
     </v-navigation-drawer>
@@ -425,6 +425,7 @@
       this.$store.dispatch('status/getStatuses')
       this.$store.dispatch('funnel/getFunnels')
       this.$store.dispatch('item/getItems')
+      this.$store.dispatch('funnel/getPhases')
       
       /*
       this.$store.dispatch('type/getTypes')
