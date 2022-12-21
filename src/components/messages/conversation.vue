@@ -138,12 +138,13 @@
                                     </v-card-text>
 
                                     <v-card-title>
-                                        Confirma el numero
+                                        Confirma el numero 
                                     </v-card-title>
                                     
                                     <v-card-subtitle style="font-size:18px; line-height:40px;" v-if="!editPhone">{{client.phone}} <v-icon class="ml-2" v-if="editPhone==false" @click="editPhone=true" small>mdi-pencil</v-icon></v-card-subtitle>
                                     <v-text-field class="mx-6" v-else v-model="client.phone"  type="number" @click:append="savePhone()" append-icon="mdi-content-save" label="Teléfono" placeholder="Teléfono" outlined></v-text-field>
                                     
+                                    <div class="mx-6 mb-6" style="font-size:12px; margin-top:-20px;">Verifica que el número este escrito a 10 dígitos sin espacios, guiones ni ningún tipo de caracteres especiales.</div>
                                     <v-card-actions>
                                         <v-spacer/>
                                             <v-btn :disabled="selectedTemplate==''" class="elevation-0" color="primary" @click="startConversation()">Comenzar Conversación</v-btn>

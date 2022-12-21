@@ -129,7 +129,7 @@
         <!-- Ventas y Cobranza -->
         <div v-show="permissions('sales')">
         <v-divider class="ma-4"></v-divider>
-        <v-expansion-panels class="sinsombra">
+        <!--v-expansion-panels class="sinsombra">
           <v-expansion-panel style="background:transparent!important;">
             <v-expansion-panel-header style="font-weight:500; font-size:0.8125rem; color:#202020; padding:0px!important;">
               <div>
@@ -197,9 +197,9 @@
                   <span>Cotizaciones que no se cerraron por algun motivo</span>
                 </v-tooltip>
                 </div-->
-            </v-expansion-panel-content>
+            <!--/v-expansion-panel-content>
           </v-expansion-panel>
-        </v-expansion-panels>
+        </v-expansion-panels-->
         </div>
         <!-- Productos -->
         <v-divider class="ma-4"></v-divider>
@@ -291,7 +291,7 @@
       </v-list>
       <template v-slot:append>
         <div style="color:#9ca3a5; font-size: 12px;" class="pa-2">
-          UNOCRM | v4.0.95 <v-icon> mdi-settings</v-icon>
+          UNOCRM | v4.0.96 <v-icon> mdi-settings</v-icon>
         </div>
       </template>
     </v-navigation-drawer>
