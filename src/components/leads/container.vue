@@ -732,7 +732,7 @@ export default {
                     }
                     this.getFunnelPhasesFromApi()
                 })
-            }else if((this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0)&&(this.currentUser.id!=1&&this.currentUser.id!=2)){
+            }else if((this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0)&&this.permissions('dont_mark_messages_as_read')){
                 axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversation/mark_messages_as_read", {conversation_id:lead.conversation.id, user_id:this.currentUser.id}).then(resp=>{
                     this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}
                     this.conversation_dialog = true
@@ -778,7 +778,7 @@ export default {
                     }
                     this.getFunnelPhasesFromApi()
                 })
-            }else if((this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0)&&(this.currentUser.id!=1&&this.currentUser.id!=2)){
+            }else if((this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0)&&this.permissions('dont_mark_messages_as_read')){
                 axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversation/mark_messages_as_read", {conversation_id:lead.conversation.id, user_id:this.currentUser.id}).then(resp=>{
                     this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}
                     this.conversation_dialog = true
@@ -881,7 +881,9 @@ export default {
                 axios.get(process.env.VUE_APP_BACKEND + "api/v1/leads?filter[funnel_phase_id]=" + this.leads[i].funnel_phase_id + filter + '&sort=latest')
                 .then(resp=>{
                     
-                    this.leads[i].data = resp.data.data
+                    this.leads[i].data = resp.data.data.sort((a, b) => new Date(b.conversation.latest_message.zenvia_timestamp) - new Date(a.conversation.latest_message.zenvia_timestamp))
+
+
                     this.leads[i].load_leads = false
                     
                     this.leads_links.push({link: resp.data.links.next, phase_id: this.leads[i].funnel_phase_id})

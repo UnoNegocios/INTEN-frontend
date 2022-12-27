@@ -7,6 +7,8 @@
             </v-list-item-avatar>
             <div v-if="lead.name!=undefined">
                 <span v-if="this.lead.funnel_phase.funnel.name!='Clientes'">{{lead.name}} {{lead.last}}</span> 
+
+                
             
                 <v-btn text v-else :to="{ path: '/clients/client/'+ lead.id}" target="_blank">{{lead.name}}</v-btn> <span style="font-size:12px; font-weight:500;">{{propData.lead.conversation.channelId}}</span>
             </div>
@@ -48,7 +50,7 @@
                             <v-row class="ma-0 mb-2">
                                 <v-spacer></v-spacer>
                                 <v-chip small style="font-weight:500;" color="#f0f0f0" class="elevation-1" light v-if="(index>=1 && message_item.created_at.slice(0,10)!=messages[index-1].created_at.slice(0,10)) || index==0">
-                                    {{dateFormat(message_item.meessage_datetime)}}
+                                    {{dateFormat(message_item.created_at)}}
                                 </v-chip>
                                 <v-spacer></v-spacer>   
                             </v-row>
@@ -125,7 +127,7 @@
                                 <!-- Fecha y Hora -->
                                 <span :style="message_item.direction === 'OUT' ? 'position:absolute!important; right:50px!important;': ''">
                                     <!-- Hour -->
-                                    <span :style="message_item.direction === 'OUT' ? 'margin-left: 0px; bottom:-12px;': 'margin-left: 5px; bottom:1px;'" class="chat__timestamp">{{message_item.meessage_datetime.slice(11,16)}}</span>
+                                    <span :style="message_item.direction === 'OUT' ? 'margin-left: 0px; bottom:-12px;': 'margin-left: 5px; bottom:1px;'" class="chat__timestamp">{{hourFormat(message_item.created_at, message_item.direction)}}</span>
                                     <!-- Seen -->
                                     <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'CLOCK'" x-small color="grey" class="chat__checkmark">mdi-clock-outline</v-icon>
                                     <v-icon style="margin-bottom:-10px;" v-if="message_item.statuses!=undefined && message_item.direction === 'OUT' && message_item.statuses[message_item.statuses.length-1]!=undefined && message_item.statuses[message_item.statuses.length-1].code == 'SENT'" x-small color="grey" class="chat__checkmark">mdi-check</v-icon>
@@ -430,10 +432,18 @@ export default {
         callback (data) {
             console.debug(data)
         },
+        hourFormat(date, direction){
+            if(direction=='IN'){
+                return date.slice(11,16)
+            }else if(direction=='OUT'){
+                return date.slice(11,16)
+            }
+
+        },
         dateFormat(date){
             if(date!=undefined){
                 // Creamos el objeto fecha instanciándolo con la clase Date
-                const fecha = new Date(date.slice(0,10));
+                const fecha = new Date(date.slice(0,10) + ' 00:00:00');
                 
                 // Creamos array con los días de la semana
                 const dias_semana = ['Lunes', 'martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
@@ -441,22 +451,29 @@ export default {
                 const hoy = new Date(new Date().toLocaleString("sv-SE", {timeZone: "America/Monterrey"}).slice(0,10))
                 //sacamos diferencia
                 const difference = (Date.UTC(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()) - Date.UTC(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()))/(1000*60*60*24)
+
+                if(!fecha.getDay()){
+                    var day = 6
+                }else{
+                    var day = fecha.getDay() - 1
+                }
+
                 if((difference)<7){
                     if(difference==0){
                         return 'Hoy'
                     }else if(difference==1){
                         return 'Ayer'
                     }else{
-                        return dias_semana[fecha.getDay()]
+                        return dias_semana[day]
                     }
                 }else{
                     // Creamos array con los meses del año
                     const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
                     // Construimos el formato de salida
                     if(fecha.getUTCFullYear()!=new Date().getUTCFullYear()){
-                        return dias_semana[fecha.getDay()] + ', ' + fecha.getDate() + ' de ' + meses[fecha.getMonth()];
+                        return dias_semana[day] + ', ' + fecha.getDate() + ' de ' + meses[fecha.getMonth()];
                     }else{
-                        return dias_semana[fecha.getDay()] + ', ' + fecha.getDate() + ' de ' + meses[fecha.getMonth()] + ' de ' + fecha.getUTCFullYear();
+                        return dias_semana[day] + ', ' + fecha.getDate() + ' de ' + meses[fecha.getMonth()] + ' de ' + fecha.getUTCFullYear();
                     }
                 }
             }
