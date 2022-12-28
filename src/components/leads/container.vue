@@ -732,7 +732,7 @@ export default {
                     }
                     this.getFunnelPhasesFromApi()
                 })
-            }else if((this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0)&&this.permissions('dont_mark_messages_as_read')){
+            }else if((this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0)&&!this.permissions('dont_mark_messages_as_read')){
                 axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversation/mark_messages_as_read", {conversation_id:lead.conversation.id, user_id:this.currentUser.id}).then(resp=>{
                     this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}
                     this.conversation_dialog = true
@@ -778,7 +778,7 @@ export default {
                     }
                     this.getFunnelPhasesFromApi()
                 })
-            }else if((this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0)&&this.permissions('dont_mark_messages_as_read')){
+            }else if((this.leads[index_lead].data.filter(b=>b.conversation.id == lead.conversation.id)[0].conversation.unread_messages>0)&&!this.permissions('dont_mark_messages_as_read')){
                 axios.post(process.env.VUE_APP_BACKEND + "api/v1/conversation/mark_messages_as_read", {conversation_id:lead.conversation.id, user_id:this.currentUser.id}).then(resp=>{
                     this.propData = {'lead':lead, 'funnel_phases':this.funnel_phases, 'pause': 'no', 'reload': 'no'}
                     this.conversation_dialog = true
