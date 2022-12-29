@@ -25,6 +25,7 @@
                     </v-menu>
 
                     <v-text-field v-model="filters.phone" label="Teléfono"></v-text-field>
+                    <v-text-field v-model="filters.email" label="Email"></v-text-field>
 
                 </div>
                 <v-card style="position:absolute; bottom:0; width:100%;" tile color="primary">
@@ -391,7 +392,8 @@ export default {
                 user_id:'',
                 created_at:[],
                 id:'',
-                phone:''
+                phone:'',
+                email:''
             },
             buscar:false,
             search:'',
@@ -829,6 +831,9 @@ export default {
             if(this.filters.phone!=''&&this.filters.phone!=null){
                 filter = filter + '&filter[conversation.channelId]=' + this.filters.phone
             }
+            if(this.filters.email!=''&&this.filters.email!=null){
+                filter = filter + '&filter[email]=' + this.filters.email
+            }
             if(this.only_unread_messages){
                 filter = filter + '&filter[has_unread_messages]=1'
             }
@@ -860,7 +865,9 @@ export default {
             if(this.filters.phone!=''&&this.filters.phone!=null){
                 filter = filter + '&filter[phone]=' + this.filters.phone
             }
-            
+            if(this.filters.email!=''&&this.filters.email!=null){
+                filter = filter + '&filter[email]=' + this.filters.email
+            }
             if(i==0){//&& this.funnel.id==1
                 if(filter!=''){
                     filter = filter.slice(1,filter.length)
