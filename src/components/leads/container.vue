@@ -104,11 +104,12 @@
                                 
                                 
                                 
-                                <v-list-item @click="openConversation(element)" :class="'list-group-item item mt-2 pl-0 pr-4 elevation-0 ' + mbCondition(element.user)" v-for="element in leads[index].data" :key="element.id" style="background:white; min-height: 60px;">
-                                    <!--v-tooltip right>
+                                <div @click="openConversation(element)" v-for="element in leads[index].data" :key="element.id" class="list-group-item item">
+                                    <v-tooltip right>
                                         <template v-slot:activator="{ on, attrs }">
-                                            <v-bind="attrs" v-on="on">
-                                            <v-row class="ma-0"-->
+                                            <v-list-item :class="'mt-2 pl-0 pr-4 elevation-0 ' + mbCondition(element.user)" style="background:white; min-height: 60px;">
+                                            
+                                           
 
                                                 <v-badge class="icon_style" avatar bordered overlap style="z-index:9!important;">
                                                     <template v-slot:badge>
@@ -119,14 +120,14 @@
                                                             <v-img v-else-if="element.conversation.channel == 'cliengo' " src="/hand_cliengo.svg"></v-img>
                                                         </v-avatar>
                                                     </template>
-                                                    <v-list-item-avatar size="35" color="#ccd2d4">
+                                                    <v-list-item-avatar size="35" color="#ccd2d4" v-bind="attrs" v-on="on">
                                                         <v-img v-if="element.conversation!=undefined && element.conversation.client_picture!=null" :src="element.conversation.client_picture"></v-img>
                                                         <span style="text-transform: uppercase; text-align: center; width: 35px;" class="white--text text-h6" v-else><strong>{{element.name.slice(0,1)}}</strong></span>
                                                     </v-list-item-avatar>
                                                 </v-badge>
 
                                                 
-                                                <v-list-item-content  style="display: block;">
+                                                <v-list-item-content  v-bind="attrs" v-on="on" style="display: block;">
                                                     <v-list-item-title style="font-size:15px;">
                                                         <div style="font-weight:500;" v-if="element.conversation!=undefined && element.conversation.unread_messages>0">
                                                             {{element.name}} <span v-if="element.last!=null">{{element.last}}</span>
@@ -148,22 +149,24 @@
                                                     <v-list-item-subtitle v-else-if="element.conversation!=undefined && element.conversation.channel == 'cliengo'" style="font-size:12px;">{{element.additional_data.final_question}} </v-list-item-subtitle>
                                                 </v-list-item-content>
 
-                                                <v-badge style="transform:scale(0.8); margin-top:-15px; margin-right:5px;" v-if="element.conversation!=undefined && element.conversation.unread_messages>0" :content="element.conversation.unread_messages"></v-badge>
+                                                <v-badge v-bind="attrs" v-on="on" style="transform:scale(0.8); margin-top:-15px; margin-right:5px;" v-if="element.conversation!=undefined && element.conversation.unread_messages>0" :content="element.conversation.unread_messages"></v-badge>
 
-                                            <!--/v-row>
-                                        </template>
-                                        <span v-if="currentUser.job_position == 'Administración' && element.user!=undefined">{{element.user.name}}</span>
-                                    </v-tooltip-->
+                                            
                                     
 
-                                    <v-row v-if="element.user!=undefined" class="user-label ma-0 py-1 px-2">
-                                        <img v-if="element.additional_data!=null" style="height: 20px!important;" :src="'/logo_'+element.additional_data.interest+'.png'"/>
-                                        <v-spacer/>
-                                        <v-list-item-avatar size="20" class="ma-0" :color="element.user.color">
-                                            <span style="text-transform: uppercase; text-align: center; width: 20px; font-size:12px;" class="white--text"><strong>{{element.user.name.slice(0,1)}}<span v-if="element.user.last!=undefined">{{element.user.last.slice(0,1)}}</span></strong></span>
-                                        </v-list-item-avatar>
-                                    </v-row>
-                                </v-list-item>
+                                                <v-row v-bind="attrs" v-on="on" v-if="element.user!=undefined" class="user-label ma-0 py-1 px-2">
+                                                    <img v-if="element.additional_data!=null" style="height: 20px!important;" :src="'/logo_'+element.additional_data.interest+'.png'"/>
+                                                    <v-spacer/>
+                                                    <v-list-item-avatar size="20" class="ma-0" :color="element.user.color">
+                                                        <span style="text-transform: uppercase; text-align: center; width: 20px; font-size:12px;" class="white--text"><strong>{{element.user.name.slice(0,1)}}<span v-if="element.user.last!=undefined">{{element.user.last.slice(0,1)}}</span></strong></span>
+                                                    </v-list-item-avatar>
+                                                </v-row>
+
+                                            </v-list-item>
+                                        </template>
+                                        <span>{{element.last_message_user}}</span>
+                                    </v-tooltip>
+                                </div>
 
                                 
                                 <infinite-loading v-if="leads[index].data.length>0&&((leads[index].data.length%50)==0)" direction="bottom" :ref="'phase' + funnel_phase.id" @infinite="getMoreLeads(funnel_phase.id)">
