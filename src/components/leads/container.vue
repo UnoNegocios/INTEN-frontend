@@ -47,7 +47,7 @@
                         <v-btn @click="removeFilter()" small class="elevation-0" style="border:solid 1px #dddddd;">
                             <v-icon small class="mr-1">mdi-filter-off</v-icon>Limpiar
                         </v-btn>
-                        <v-btn class="hidden-md-and-up elevation-0 ml-4" @click="close()" small>
+                        <v-btn class="elevation-0 ml-4" @click="filterMobile=false" small>
                             <v-icon class="mr-1">mdi-close</v-icon>
                         </v-btn>
                     </v-row>
@@ -66,7 +66,7 @@
 
                 </div>
                 <v-card style="position:absolute; bottom:0; width:100%;" tile color="primary">
-                    <v-list-item link @click="buscar=true, filter = false" dark>
+                    <v-list-item link @click="buscar=true, filter = false, filterMobile = false" dark>
                         <v-list-item-content>
                             <strong>Filtrar (0)</strong>
                         </v-list-item-content>
