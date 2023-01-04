@@ -237,11 +237,9 @@ export default {
         },
         saveUser(){
             if(this.user_id!=''){
-                this.lead.user={
-                    'id': this.user_id,
-                    'name': this.usersList.filter(user=>user.id == this.user_id).map(user=>user.name)[0],
-                    'last': this.usersList.filter(user=>user.id == this.user_id).map(user=>user.name)[0]
-                }
+                this.lead.user.id = this.user_id
+                this.lead.user.name = this.usersList.filter(user=>user.id == this.user_id).map(user=>user.name)[0]
+                this.lead.user.last = this.usersList.filter(user=>user.id == this.user_id).map(user=>user.name)[0]
             }
             var editedItem = {
                 id: this.lead.id,

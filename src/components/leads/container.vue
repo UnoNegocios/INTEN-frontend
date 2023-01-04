@@ -37,9 +37,44 @@
                 </v-card>
             </v-container>
         </v-navigation-drawer>
+
         <v-dialog v-model="filterMobile" fullscreen hide-overlay transition="dialog-bottom-transition">
-            
+            <v-container class="ma-0 pa-0 pb-8">
+                <div class="pt-6 px-8 pb-6" style="background:white!important; width:100vw!important; height:calc(100vh - 40px);">
+                    <v-row class="ma-0 mb-2">
+                        <strong>Filtros</strong>
+                        <v-spacer></v-spacer>
+                        <v-btn @click="removeFilter()" small class="elevation-0" style="border:solid 1px #dddddd;">
+                            <v-icon small class="mr-1">mdi-filter-off</v-icon>Limpiar
+                        </v-btn>
+                        <v-btn class="hidden-md-and-up elevation-0 ml-4" @click="close()" small>
+                            <v-icon class="mr-1">mdi-close</v-icon>
+                        </v-btn>
+                    </v-row>
+
+                    <v-autocomplete v-model="filters.user_id" :items="userList" hide-no-data item-value="id" item-text="name" label="Vendedor(es)" placeholder="Escribe para buscar" attach chips multiple></v-autocomplete>
+
+                    <v-menu offset-y :close-on-content-click="closeDatePicker(filters.created_at)">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-text-field  clearable  v-model="filters.created_at" label="Fecha" prepend-icon="mdi-calendar" v-bind="attrs" readonly v-on="on"></v-text-field>
+                        </template>
+                        <v-date-picker v-model="filters.created_at" range></v-date-picker>
+                    </v-menu>
+
+                    <v-text-field v-model="filters.phone" label="Teléfono"></v-text-field>
+                    <v-text-field v-model="filters.email" label="Email"></v-text-field>
+
+                </div>
+                <v-card style="position:absolute; bottom:0; width:100%;" tile color="primary">
+                    <v-list-item link @click="buscar=true, filter = false" dark>
+                        <v-list-item-content>
+                            <strong>Filtrar (0)</strong>
+                        </v-list-item-content>
+                    </v-list-item>    
+                </v-card>
+            </v-container>
         </v-dialog>
+
         <div class="py-4 px-12">
             <v-row class="ma-0">
                 <v-menu offset-y>
@@ -99,7 +134,7 @@
                             <div class="text-center py-6" v-if="leads[index].load_leads">
                                 <v-progress-circular indeterminate color="primary"></v-progress-circular>
                             </div>
-                            <draggable :disabled="index<1" id="scroll" v-else @end="changeLeadOfFunnelPhase" :list="leads[index].data" :class="'funnel_phase_id: '+funnel_phase.id" draggable=".item" group="a" :scroll-sensitivity="200">
+                            <draggable :disabled="index<1" id="scroll" v-else @end="changeLeadOfFunnelPhase" :list="leads[index].data" :class="'funnel_phase_id: '+funnel_phase.id" draggable=".item" group="a" :scroll-sensitivity="scrollSensitivity">
                                 
                                 
                                 
@@ -533,8 +568,10 @@ export default {
 
                 let index_conversation = this.leads[index_lead].data.indexOf(conversation)
                 
-                this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
-                [0].conversation.latest_message = new_message
+                if(this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)[0].conversation!=undefined){
+                    this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
+                    [0].conversation.latest_message = new_message
+                }
 
                 this.leads[index_lead].data.filter(lead=>lead.conversation.channelId == channelId)
                 [0].conversation.latest_session_message_time = new_message.created_at
@@ -646,6 +683,13 @@ export default {
                 return true
             }else{
                 return false
+            }
+        },
+        scrollSensitivity(){
+            if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                return 400
+            }else{
+                return 200
             }
         },
         openFilter(){
@@ -891,7 +935,7 @@ export default {
                 axios.get(process.env.VUE_APP_BACKEND + "api/v1/leads?filter[funnel_phase_id]=" + this.leads[i].funnel_phase_id + filter + '&sort=latest')
                 .then(resp=>{
                     
-                    this.leads[i].data = resp.data.data.sort((a, b) => new Date(b.conversation.latest_message.zenvia_timestamp) - new Date(a.conversation.latest_message.zenvia_timestamp))
+                    this.leads[i].data = resp.data.data//.sort((a, b) => new Date(b.conversation.latest_message.zenvia_timestamp) - new Date(a.conversation.latest_message.zenvia_timestamp))
 
 
                     this.leads[i].load_leads = false
