@@ -134,7 +134,7 @@
                             <div class="text-center py-6" v-if="leads[index].load_leads">
                                 <v-progress-circular indeterminate color="primary"></v-progress-circular>
                             </div>
-                            <draggable :disabled="index<1" id="scroll" v-else @end="changeLeadOfFunnelPhase" :list="leads[index].data" :class="'funnel_phase_id: '+funnel_phase.id" draggable=".item" group="a" :scroll-sensitivity="scrollSensitivity">
+                            <draggable :options="{delay:400}" :disabled="index<1" id="scroll" v-else @end="changeLeadOfFunnelPhase" :list="leads[index].data" :class="'funnel_phase_id: '+funnel_phase.id" draggable=".item" group="a" :scroll-sensitivity="scrollSensitivity">
                                 
                                 
                                 
