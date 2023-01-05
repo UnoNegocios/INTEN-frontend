@@ -381,7 +381,7 @@ export default {
                         user_id: this.currentUser.id,
                         contents:{
                             type:"template",
-                            templateId:this.selectedTemplate,
+                            templateId:this.selectedTemplate.id,
                             fields:{
                                 currentUserName:this.currentUser.name
                             },
@@ -641,7 +641,7 @@ export default {
                     to:this.conversation.channelId,
                     contents:[{
                         type:"template",
-                        templateId:"0654aff4-1345-4fa3-934f-b5bde198c653",
+                        templateId:zenviaTemplateId,
                         fields:{
                             clientName:this.conversation.client_name,
                             currentUserName:this.currentUser.name

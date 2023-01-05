@@ -676,7 +676,7 @@ export default {
                     to:this.propData.lead.conversation.channelId,
                     contents:[{
                         type:"template",
-                        templateId:"0654aff4-1345-4fa3-934f-b5bde198c653",
+                        templateId:zenviaTemplateId,
                         fields:{
                             clientName:this.propData.lead.name,
                             currentUserName:this.currentUser.name
